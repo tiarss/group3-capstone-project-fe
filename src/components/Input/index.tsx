@@ -1,10 +1,11 @@
 import React from "react";
+import { inputProps } from "../../types";
 
-export const InputText = () => {
+export const InputText = ({label, type, placeholder, onChange}: inputProps) => {
   return (
     <div>
-      <label htmlFor='input-text'>Label</label>
-      <input id="input-text" type='text' />
+      <label>{label}</label>
+      <input type={type} placeholder={placeholder} onChange={onChange} />
     </div>
   );
 };

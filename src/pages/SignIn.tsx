@@ -1,7 +1,35 @@
-import React from 'react'
+import React, { useState } from "react";
+import { InputText } from "../components/Input";
 
-export const SignIn = () => {
+const SignIn = () => {
+  const [userLogin, setUserLogin] = useState();
+  const [userPassword, setUserPassword] = useState();
+  
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    console.log(value);
+  };
+  const handlePhoneEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    console.log(value);
+  };
+
   return (
-    <div>SignIn</div>
-  )
-}
+    <>
+      <InputText
+        label='name'
+        type='text'
+        placeholder='Enter Name'
+        onChange={handlePhoneEmail}
+      />
+      <InputText
+        label='name'
+        type='text'
+        placeholder='Enter Name'
+        onChange={handlePassword}
+      />
+    </>
+  );
+};
+
+export default SignIn;

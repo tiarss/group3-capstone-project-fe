@@ -1,33 +1,46 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { InputText } from "../components/Input";
 
 const SignIn = () => {
-  const [userLogin, setUserLogin] = useState();
-  const [userPassword, setUserPassword] = useState();
+  const [userLogin, setUserLogin] = useState<string>("");
+  const [userPassword, setUserPassword] = useState<string>("");
   
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    console.log(value);
+    setUserPassword(value)
   };
   const handlePhoneEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    console.log(value);
+    setUserLogin(value)
   };
+
+  const handleSignIn = () =>{
+    axios.post('https://klender.xyz/login',{
+      input: userLogin,
+      password: userPassword
+    }).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err.response)
+    })
+  }
 
   return (
     <>
       <InputText
-        label='name'
+        label='Email/Phone'
         type='text'
         placeholder='Enter Name'
         onChange={handlePhoneEmail}
       />
       <InputText
-        label='name'
-        type='text'
+        label='Password'
+        type='password'
         placeholder='Enter Name'
         onChange={handlePassword}
       />
+      <button onClick={handleSignIn}>Login</button>
     </>
   );
 };

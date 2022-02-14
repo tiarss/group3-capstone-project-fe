@@ -28,3 +28,11 @@ export type inputSelectProps = {
    value: string | number
    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
 }
+
+export type userData = {
+   avatar: string
+   name: string
+   id: number
+   email: string
+   phone: string
+}

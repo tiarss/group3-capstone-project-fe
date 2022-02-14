@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { InputText } from "../components/Input";
 
@@ -9,23 +10,36 @@ const SignUp = () => {
 
   const handleName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    console.log(value);
+    setUserName(value)
   };
 
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    console.log(value);
+    setUserPassword(value)
   };
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    console.log(value);
+    setUserEmail(value)
   };
 
   const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    console.log(value);
+    setUserPhone(value)
   };
+
+  const handleRegister = () =>{
+    axios.post('https://klender.xyz/users',{
+      name: userName,
+      password: userPassword,
+      email: userEmail,
+      phone: userPhone
+    }).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err.response)
+    })
+  }
 
   return (
     <>
@@ -53,6 +67,7 @@ const SignUp = () => {
         placeholder='Enter Phone'
         onChange={handlePhone}
       />
+      <button onClick={handleRegister} >Create User</button>
     </>
   );
 };

@@ -56,7 +56,7 @@ const SignIn = () => {
         alignItems='center'
         justifyContent='center'
         flexDir="column">
-        <Box width='75%' padding={5} border='1px' borderColor='gray.200' borderRadius='lg'>
+        <Box w='450px' p="50px" bgColor="white" boxShadow="md">
             <FormControl isInvalid={userIsLoginError}>
                 <InputText
                     label='Email/Phone Number'

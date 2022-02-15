@@ -1,38 +1,43 @@
-import React from "react"
+import React from "react";
 
 export type buttonProps = {
-   title: string
-   onClick: ()=> void
-   isLoading: boolean
-   isDisabled: boolean
-}
+  title: string;
+  onClick: () => void;
+  isLoading: boolean;
+  isDisabled: boolean;
+};
 
 export type inputProps = {
-   label: string
-   type: string
-   placeholder: string
-   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
-}
+  label: string;
+  type: string;
+  placeholder: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
+export type inputPasswordProps = {
+  label: string;
+  placeholder: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
 export type inputTextAreaProps = {
-   label: string
-   type: string
-   placeholder: string
-   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-}
+  label: string;
+  type: string;
+  placeholder: string;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+};
 
 export type inputSelectProps = {
-   label: string
-   type: string
-   placeholder: string
-   value: string | number
-   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
-}
+  label: string;
+  type: string;
+  placeholder: string;
+  value: string | number;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+};
 
 export type userData = {
-   avatar: string
-   name: string
-   id: number
-   email: string
-   phone: string
-}
+  avatar: string;
+  name: string;
+  id: number;
+  email: string;
+  phone: string;
+};

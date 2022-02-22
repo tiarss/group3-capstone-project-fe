@@ -1,10 +1,16 @@
+import { Button } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { Header } from "../components/Header";
+import { userContext } from "../helper/UserContext";
 import { userData } from "../types";
+import moment from "moment";
+import { Input } from "@chakra-ui/react";
 
 export const Profile = () => {
   const [isLoading, setIsLoading] = useState(true);
-  const [userData, setUserData] = useState<userData>();
+  const [userDataProfile, setUserDataProfile] = useState<userData>();
+  const { userData, setUserData } = useContext(userContext);
 
   const [userName, setUserName] = useState<string>("");
   const [userAvatar, setUserAvatar] = useState<File>();
@@ -42,14 +48,18 @@ export const Profile = () => {
     axios
       .get("https://klender.xyz/users/2", {
         headers: {
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NDQ4NTkzNTcsImlkIjoyfQ.czrUGUPFe34DRoGotba2fjSVDlb_xg3cUkbp_rCivLQ",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => {
         const { data } = res.data;
-        setUserData(data);
-        console.log(data);
+        setUserDataProfile(data);
+        setUserData({
+          name: data.name,
+          avatar: data.avatar,
+          id: data.id,
+        });
+        localStorage.setItem("avatar", data.avatar);
         setIsLoading(false);
       })
       .catch((err) => {
@@ -61,9 +71,9 @@ export const Profile = () => {
   };
 
   const handleEdit = () => {
-    setUserName(userData!.name);
-    setUserPhone(userData!.phone);
-    setUserEmail(userData!.email);
+    setUserName(userDataProfile!.name);
+    setUserPhone(userDataProfile!.phone);
+    setUserEmail(userDataProfile!.email);
   };
 
   const handleSubmit = () => {
@@ -77,10 +87,9 @@ export const Profile = () => {
     axios
       .put("https://klender.xyz/users/2", formData, {
         headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization:
-            "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJleHAiOjE2NDQ4NTkzNTcsImlkIjoyfQ.czrUGUPFe34DRoGotba2fjSVDlb_xg3cUkbp_rCivLQ",
+          "Content-Type": "multipart/form-data",
+          Accept: "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => {
@@ -88,10 +97,24 @@ export const Profile = () => {
       })
       .catch((err) => {
         console.log(err.response);
+      })
+      .finally(() => {
+        fetchUserById();
       });
   };
+
+  const handleExpire = () => {
+    const expire = localStorage.getItem("expired");
+    if (expire) {
+      const parse: number = parseInt(expire);
+      const date = moment.unix(parse).format();
+      console.log(date);
+    }
+  };
+
   return (
     <>
+      <Header />
       <div>
         <p>Nama</p>
         <input type='text' onChange={handleName} value={userName} />
@@ -102,8 +125,15 @@ export const Profile = () => {
         <p>Avatar</p>
         <input type='file' onChange={handleAvatar} />
       </div>
+      <Button colorScheme="blue">
+        <label
+          htmlFor='file1'
+          style={{color: "red" }}>Pilih aku</label>
+      </Button>
+        <Input display='none' type='file' id='file1' />
       <button onClick={handleEdit}>Edit</button>
       <button onClick={handleSubmit}>Submit Edit</button>
+      <Button onClick={handleExpire}>Test convert expire</Button>
       {isLoading ? (
         <>
           <p>Nama</p>
@@ -113,13 +143,13 @@ export const Profile = () => {
         </>
       ) : (
         <>
-          <p>{userData?.name}</p>
-          <p>{userData?.email}</p>
-          <p>{userData?.phone}</p>
+          <p>{userDataProfile?.name}</p>
+          <p>{userDataProfile?.email}</p>
+          <p>{userDataProfile?.phone}</p>
           <img
             style={{ width: "100px" }}
-            src={userData?.avatar}
-            alt={`avatar ${userData?.id}`}
+            src={userDataProfile?.avatar}
+            alt={`avatar ${userDataProfile?.id}`}
           />
         </>
       )}

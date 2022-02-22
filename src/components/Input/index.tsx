@@ -14,26 +14,32 @@ import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
 export const InputText = ({
-  label,
-  type,
+  title,
   placeholder,
+  type,
+  size,
+  value,
   onChange,
 }: inputProps) => {
   return (
-    <Box display='flex' flexDir='column'>
-      <FormLabel>{label}</FormLabel>
+    <Box>
+      <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
       <Input
+        bgColor='white'
         border='2px solid #373737'
         _focus={{ border: "2px solid #000" }}
+        onChange={onChange}
+        size={size}
         type={type}
         placeholder={placeholder}
-        onChange={onChange}
+        value={value}
       />
     </Box>
   );
 };
 
 export const InputPassword = ({
+  onClick,
   onChange,
   label,
   placeholder,
@@ -44,11 +50,11 @@ export const InputPassword = ({
 
   return (
     <Box>
-      <FormLabel>{label}</FormLabel>
+      <FormLabel style={{ fontWeight: "bold" }}>{label}</FormLabel>
       <InputGroup size='md'>
         <Input
-          size='lg'
-          pr='4.5rem'
+          bgColor='white'
+          onClick={onClick}
           type={isShowPassword ? "text" : "password"}
           placeholder={placeholder}
           border='2px solid #373737'

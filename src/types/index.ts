@@ -1,19 +1,24 @@
 import React from "react";
 
-export type buttonProps = {
-  title: string;
-  onClick: () => void;
-  isLoading: boolean;
-  isDisabled: boolean;
+export type CustomButtonTypeProps = {
+  customFontSize?: string;
+  title?: string;
+  isDisabled?: boolean,
+  onclick?: () => void;
+  isloading?: boolean;
 };
 
 export type inputProps = {
-  label: string;
-  type: string;
-  placeholder: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  title?: string;
+  value?: string | number;
+  placeholder?: string;
+  type?: string;
+  size?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
+
 export type inputPasswordProps = {
+  onClick?: () => void;
   label: string;
   placeholder: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -41,3 +46,4 @@ export type userData = {
   email: string;
   phone: string;
 };
+

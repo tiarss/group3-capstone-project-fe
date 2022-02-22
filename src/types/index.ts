@@ -32,11 +32,11 @@ export type inputTextAreaProps = {
 };
 
 export type inputSelectProps = {
-  label: string;
-  type: string;
-  placeholder: string;
-  value: string | number;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  title?: string;
+  type?: string;
+  placeholder?: string;
+  value?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
 export type userData = {

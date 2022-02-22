@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { UserProvider } from "../helper/UserContext";
 import { Profile } from "../pages/Profile";
 import SignIn from "../pages/SignIn";
-import SignUp from "../pages/SignUp";
+import SignUp from "../pages/Signup";
 import { TestComponent } from "../pages/TestComponent";
 
 export const WebRoute = () => {

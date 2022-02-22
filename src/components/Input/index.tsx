@@ -6,10 +6,11 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  Select,
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { inputPasswordProps, inputProps } from "../../types";
+import { inputPasswordProps, inputProps, inputSelectProps } from "../../types";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
@@ -84,6 +85,23 @@ export const InputTextArea = () => {
   return <div>index</div>;
 };
 
-export const InputSelect = () => {
-  return <div>index</div>;
+// export type inputSelectProps = {
+//   label: string;
+//   type: string;
+//   placeholder: string;
+//   value: string | number;
+//   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+// };
+
+export const InputSelect = ({title, type, placeholder, value, onChange}: inputSelectProps) => {
+  return(
+    <Box>
+      <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
+      <Select placeholder={placeholder}>
+        <option value={value}>Option 1</option>
+        <option value='option2'>Option 2</option>
+        <option value='option3'>Option 3</option>
+      </Select>
+    </Box>
+  );
 };

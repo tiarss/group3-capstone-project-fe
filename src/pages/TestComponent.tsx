@@ -2,6 +2,7 @@ import { Box, Flex } from '@chakra-ui/react'
 import React from 'react'
 import { ButtonPrimary, ButtonSecondary, ButtonTertier } from '../components/Button'
 import { InputText } from '../components/Input'
+import ModalAddAssets from '../components/Modal'
 
 export const TestComponent = () => {
   return (
@@ -13,6 +14,7 @@ export const TestComponent = () => {
           <InputText title='Name'/>
           <InputText title='Password'/>
        </Box>
+       <ModalAddAssets/>
     </Flex>
   )
 }

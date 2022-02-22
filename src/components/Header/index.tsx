@@ -1,14 +1,11 @@
-import {
-  AddIcon,
-  ExternalLinkIcon,
-  HamburgerIcon,
-} from "@chakra-ui/icons";
+import { AddIcon, ExternalLinkIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   Avatar,
   Box,
   Button,
   Flex,
   IconButton,
+  Image,
   Menu,
   MenuButton,
   MenuItem,
@@ -18,16 +15,17 @@ import {
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../../helper/UserContext";
+import logoWhite from "../../assets/Logo-sirclo-white.png";
 
 export const Header = () => {
   const { userData, setUserData } = useContext(userContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    handleGetUser()
-  },[]);
+    handleGetUser();
+  }, []);
 
-  console.log(userData)
+  console.log(userData);
   const handleGetUser = () => {
     axios
       .get("https://klender.xyz/users/2", {
@@ -40,7 +38,7 @@ export const Header = () => {
         setUserData({
           name: data.name,
           avatar: data.avatar,
-          id: data.id
+          id: data.id,
         });
         setIsLoading(false);
       })
@@ -60,27 +58,36 @@ export const Header = () => {
       padding='16px 32px'
       boxSizing='border-box'
       justifyContent='space-between'
-      bgColor='teal.600'
+      bgColor='#2296CB'
       alignItems='center'>
-      <Flex gap='10px'>
-        <Text display='flex' alignItems='center'>
-          Logo
-        </Text>
+      <Flex gap='5px'>
+        <Image src={logoWhite} w='100px' mr='20px' />
         <Button
-          color='teal.50'
-          bgColor='teal.600'
-          _hover={{ bgColor: "#31979566" }}
+          color='white'
+          fontWeight='normal'
+          bgColor='#2296CB'
+          _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
-          _active={{ bgColor: "teal.500" }}>
-          About
+          _active={{ bgColor: "#1788BB" }}>
+          Beranda
         </Button>
         <Button
-          color='teal.50'
-          bgColor='teal.600'
-          _hover={{ bgColor: "#31979566" }}
+          fontWeight='medium'
+          color='white'
+          bgColor='#2296CB'
+          _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
-          _active={{ bgColor: "teal.500" }}>
-          Contact
+          _active={{ bgColor: "#1788BB" }}>
+          Direktori Aset
+        </Button>
+        <Button
+          display='none'
+          color='teal.50'
+          bgColor='#2296CB'
+          _hover={{ bgColor: "#3CA9DB" }}
+          _focus={{ border: "none" }}
+          _active={{ bgColor: "#1788BB" }}>
+          Pengguna Aset
         </Button>
       </Flex>
       <Box>

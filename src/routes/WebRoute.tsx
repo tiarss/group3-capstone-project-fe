@@ -1,9 +1,10 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { UserProvider } from "../helper/UserContext";
+import { Beranda } from "../pages/Beranda";
 import { Profile } from "../pages/Profile";
 import SignIn from "../pages/SignIn";
-import SignUp from "../pages/SignUp";
+
 import { TestComponent } from "../pages/TestComponent";
 
 export const WebRoute = () => {
@@ -11,10 +12,12 @@ export const WebRoute = () => {
     <BrowserRouter>
       <UserProvider>
         <Routes>
-          <Route path="/" element={<TestComponent />} />
+          <Route path="/test" element={<TestComponent />} />
           <Route path='/sign-in' element={<SignIn />} />
-          <Route path='/sign-up' element={<SignUp />} />
-          <Route path='/profile' element={<Profile />} />
+          {/* Employee */}
+          <Route path="/beranda" element={<Beranda />} />
+          {/* <Route path='/sign-up' element={<SignUp />} /> */}
+          {/* <Route path='/profile' element={<Profile />} /> */}
         </Routes>
       </UserProvider>
     </BrowserRouter>

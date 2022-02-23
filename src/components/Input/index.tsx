@@ -85,22 +85,21 @@ export const InputTextArea = () => {
   return <div>index</div>;
 };
 
-// export type inputSelectProps = {
-//   label: string;
-//   type: string;
-//   placeholder: string;
-//   value: string | number;
-//   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-// };
-
-export const InputSelect = ({title, type, placeholder, value, onChange}: inputSelectProps) => {
+export const InputSelect = ({title, placeholder, value, onChange, data}: inputSelectProps) => {
   return(
     <Box>
       <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
-      <Select placeholder={placeholder}>
-        <option value={value}>Option 1</option>
-        <option value='option2'>Option 2</option>
-        <option value='option3'>Option 3</option>
+      <Select 
+        bgColor='white'
+        border='2px solid #373737'
+        _focus={{ border: "2px solid #000" }}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+      >
+        {data !== undefined ? data.map((datas, index)=>(
+          <option key={datas.id} value={datas.id}>{datas.name}</option>
+        )) : <option value={0}>Kosong</option>}
       </Select>
     </Box>
   );

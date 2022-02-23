@@ -15,13 +15,18 @@ import {
     FormControl,
     Switch,
   } from '@chakra-ui/react';
-import { InputText } from "../Input";
+import { InputSelect, InputText } from "../Input";
 
-const ModalAddAssets = () => {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+type modalProps = {
+  isOpen:boolean
+  onClose:()=>void
+}
+
+const ModalAddAssets = ({isOpen, onClose}:modalProps) => {
+    //const { isOpen, onOpen, onClose } = useDisclosure();
     const [ namaAset, setNamaAset ] = useState<string>("");
     const [ deskripsiAset, setDeskripsiAset ] = useState<string>("");
-    const [ kategoriAset, setKategoriAset ] = useState<{id: number, deskripsi: string}[]>([{id:1, deskripsi: "Laptop"}, {id:2, deskripsi:"Alat"}]);
+    const [ kategoriAset, setKategoriAset ] = useState<{id: number, name: string}[]>([{id:1, name: "Laptop"}, {id:2, name:"Alat"}]);
     const [ selectedCategoryId, setSelectedCategoryId ] = useState<number>(0);
     const [ jumlahAset, setJumlahAset ] = useState<string | number>();
     const [ asetImage, setAsetImage ] = useState<File>();
@@ -37,7 +42,7 @@ const ModalAddAssets = () => {
         setDeskripsiAset(value);
     };
 
-    const handleKategori = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleKategori = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = parseInt(e.target.value);
         setSelectedCategoryId(value);
     };
@@ -56,8 +61,6 @@ const ModalAddAssets = () => {
 
     return (
         <>
-          <Button onClick={onOpen}>Open Modal</Button>
-    
           <Modal isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
             <ModalContent>
@@ -66,14 +69,7 @@ const ModalAddAssets = () => {
               <ModalBody>
                 <InputText title="Nama Aset" placeholder="Masukkan Nama Aset" onChange={handleNama}/>
                 <InputText title="Deskripsi Aset" placeholder="Masukkan Deskripsi Aset" onChange={handleDeskripsi}/>
-                <Box>
-                    <FormLabel style={{ fontWeight: "bold" }}>Kategori Aset</FormLabel>
-                    <Select placeholder='Pilih Kategori Aset' onChange={(e)=>handleKategori}>
-                        {kategoriAset.map((item:any)=>(
-                        <option key={item.id} value={item.id}>{item.deskripsi}</option>
-                        ))}
-                    </Select>
-                </Box>
+                <InputSelect title="Kategori Aset" placeholder="Pilih Kategori Aset" value={selectedCategoryId} onChange={handleKategori} data={kategoriAset}/>
                 <InputText title="Jumlah Aset" placeholder="Masukkan Jumlah Aset" onChange={handleJumlahAset}/>
                 <Box>
                     <FormLabel style={{ fontWeight: "bold" }}>Foto Aset</FormLabel>

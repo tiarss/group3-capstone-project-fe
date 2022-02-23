@@ -37,6 +37,7 @@ export type inputSelectProps = {
   placeholder?: string;
   value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  data?: {id:number, name:string}[];
 };
 
 export type userData = {

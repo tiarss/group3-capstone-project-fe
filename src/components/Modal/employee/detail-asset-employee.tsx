@@ -1,4 +1,4 @@
-import { Box, FormLabel } from "@chakra-ui/react";
+import { Box, FormLabel, Text } from "@chakra-ui/react";
 import React from "react";
 
 const DetailEmployee = () => {
@@ -20,7 +20,7 @@ const DetailEmployee = () => {
                  </Box>
             </Box>
             <Box height="32px" bg="#EFEFEF">
-                <p>Sedang dalam perbaikan</p>
+                <Text paddingTop={1} paddingLeft={5} color="#2296CB">Sedang dalam perbaikan</Text>
             </Box>
         </>
     )

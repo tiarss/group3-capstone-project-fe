@@ -1,6 +1,5 @@
 import { Button } from "@chakra-ui/react";
 import "@fontsource/open-sans";
-import "@fontsource/inter";
 import { CustomButtonTypeProps } from "../../types";
 
 export const ButtonPrimary = ({

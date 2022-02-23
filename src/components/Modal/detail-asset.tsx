@@ -4,6 +4,7 @@ import { modalProps } from "../../types";
 import { InputSelect, InputText } from "../Input";
 import DetailAdmin from "./admin/detail-asset-admin";
 import DetailEmployee from "./employee/detail-asset-employee";
+import HistoryAset from "./history/history";
 
 const ModalDetailAsset = ({isOpen, onClose}:modalProps) => {
     return (
@@ -33,7 +34,14 @@ const ModalDetailAsset = ({isOpen, onClose}:modalProps) => {
                         </TabPanel>
                     
                         <TabPanel>
-                            <h2>Duaaaaa</h2>
+                            <ModalBody mb={5}>
+                                <HistoryAset/>
+                            </ModalBody>
+                            <ModalFooter>
+                                <Button border="2px" borderColor='#2296CB' mr={3} onClick={onClose}>
+                                Kembali
+                                </Button>
+                            </ModalFooter>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

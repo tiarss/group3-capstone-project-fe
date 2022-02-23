@@ -48,3 +48,7 @@ export type userData = {
   phone: string;
 };
 
+export type modalProps = {
+  isOpen:boolean
+  onClose:()=>void
+}

@@ -16,14 +16,9 @@ import {
     Switch,
   } from '@chakra-ui/react';
 import { InputSelect, InputText } from "../Input";
-
-type modalProps = {
-  isOpen:boolean
-  onClose:()=>void
-}
+import { modalProps } from "../../types";
 
 const ModalAddAssets = ({isOpen, onClose}:modalProps) => {
-    //const { isOpen, onOpen, onClose } = useDisclosure();
     const [ namaAset, setNamaAset ] = useState<string>("");
     const [ deskripsiAset, setDeskripsiAset ] = useState<string>("");
     const [ kategoriAset, setKategoriAset ] = useState<{id: number, name: string}[]>([{id:1, name: "Laptop"}, {id:2, name:"Alat"}]);

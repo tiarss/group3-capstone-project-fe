@@ -90,7 +90,7 @@ export const ButtonTertier = ({
       isLoading={isloading}
       loadingText='Submitting'
       h='max-content'
-      bgColor='white'
+      bgColor='#00000000'
       padding='10px 15px'
       letterSpacing='1px'
       fontSize={customFontSize === undefined ? '12px' : customFontSize}

@@ -1,6 +1,8 @@
-import { Box, Button, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import Slider from "react-slick";
 import { InfoIcon } from "@chakra-ui/icons";
+import { ModalActivity } from "../ModalActivity";
+import { useState } from "react";
 
 function SampleNextArrow(props: any) {
   const { className, onClick } = props;
@@ -29,42 +31,71 @@ function SamplePrevArrow(props: any) {
 }
 
 function SliderImage() {
+  const [isOpen, setIsOpen] = useState(false);
+  const handleOpen = () => setIsOpen(true);
+  const handleClose = () => setIsOpen(false);
+
   let settings = {
     className: "slider variable-width",
     speed: 400,
     slidesToShow: 3,
     slidesToScroll: 1,
     infinite: false,
+    arrows: true,
     variableWidth: true,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
     //  responsive: [
     //    {
-    //      breakpoint: 1024,
+    //      breakpoint: 1124,
     //      settings: {
-    //        slidesToShow: 2,
+    //       variableWidth: true,
+    //        slidesToShow: 3,
     //        slidesToScroll: 1,
-    //        infinite: true,
+    //        infinite: false,
     //        arrows: false,
-    //        dots: true,
     //      },
     //    },
     //    {
-    //      breakpoint: 800,
+    //      breakpoint: 600,
     //      settings: {
     //        slidesToShow: 1,
     //        slidesToScroll: 1,
-    //        initialSlide: 1,
-    //        infinite: true,
+    //        infinite: false,
     //        arrows: false,
-    //        dots: true,
     //      },
     //    },
     //  ],
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true
+        }
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+          initialSlide: 2
+        }
+      },
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
   };
 
   return (
-    <Box width='100%' className='slides' mt='20px' padding="0px 50px 0px 20px">
+    <Box width='100%' className='slides' mt='20px' padding='0px 50px 0px 20px'>
       <Slider {...settings}>
         <Box
           textAlign='center'
@@ -136,6 +167,7 @@ function SliderImage() {
                 Menunggu Permohonan
               </Text>
               <InfoIcon
+                onClick={handleOpen}
                 cursor='pointer'
                 transition='all 0.3s ease'
                 _hover={{ color: "red" }}
@@ -535,6 +567,7 @@ function SliderImage() {
           </Box>
         </Box>
       </Slider>
+      <ModalActivity isOpen={isOpen} onClose={handleClose} activity="activity" role={1} status="Waiting approval" />
     </Box>
   );
 }

@@ -32,11 +32,12 @@ export type inputTextAreaProps = {
 };
 
 export type inputSelectProps = {
-  label: string;
-  type: string;
-  placeholder: string;
-  value: string | number;
-  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  title?: string;
+  type?: string;
+  placeholder?: string;
+  value?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  data?: {id:number, name:string}[];
 };
 
 export type userData = {
@@ -47,3 +48,7 @@ export type userData = {
   phone: string;
 };
 
+export type modalProps = {
+  isOpen:boolean
+  onClose:()=>void
+}

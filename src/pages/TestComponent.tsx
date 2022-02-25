@@ -23,7 +23,7 @@ export const TestComponent = () => {
           <InputText title='Password'/>
        </Box>
        <RequestModal /> */}
-       <CardDetail/>
+       {/* <CardDetail/> */}
        <ModalActivity role={0} status={''} activity={''} isOpen={isOpen} onClose={onClose} />
     </Flex>
   )

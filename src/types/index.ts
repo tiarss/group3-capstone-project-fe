@@ -52,3 +52,12 @@ export type modalProps = {
   isOpen:boolean
   onClose:()=>void
 }
+
+export type CardDetailProps = {
+  backgroundImage: string;
+  kategori: string;
+  name: string;
+  deskripsi: string;
+  pengguna: number;
+  stok: number;
+}

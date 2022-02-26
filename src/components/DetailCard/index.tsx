@@ -10,9 +10,9 @@ const CardDetail = ({backgroundImage, kategori, name, deskripsi, pengguna, stok}
                 <Box height={108} style={{
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  backgroundImage: backgroundImage,
+                  backgroundImage: `url(${backgroundImage})`,
                 }}>
-                    <Box width={50} ms={3} mb={9} paddingTop={2}>
+                    <Box width={100} ms={3} mb={9} paddingTop={2}>
                         <Text
                         fontWeight='semibold'
                         borderRadius='5px'
@@ -40,7 +40,7 @@ const CardDetail = ({backgroundImage, kategori, name, deskripsi, pengguna, stok}
                     </Text>
                     </Box>
                 </Box>
-                <Box mt={2} mx={3}>
+                <Box mt={2} height={150} mx={3}>
                     <Text fontSize='xs' lineHeight={1}>{deskripsi}</Text>
                 </Box>
                 <Flex mt={5}>

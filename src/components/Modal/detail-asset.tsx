@@ -6,7 +6,7 @@ import DetailAdmin from "./admin/detail-asset-admin";
 import DetailEmployee from "./employee/detail-asset-employee";
 import HistoryAset from "./history/history";
 
-const ModalDetailAsset = ({isOpen, onClose, deskripsi, kategori}:modalProps) => {
+const ModalDetailAsset = ({isOpen, onClose, nama, total_aset, deskripsi, kategori, backgroundimage}:modalProps) => {
     return (
         <>
             <Modal isOpen={isOpen} onClose={onClose}>
@@ -23,7 +23,7 @@ const ModalDetailAsset = ({isOpen, onClose, deskripsi, kategori}:modalProps) => 
                     <TabPanels>
                         <TabPanel>
                             <ModalBody mb={5}>
-                                <DetailEmployee deskripsi={deskripsi} kategori={kategori}/>
+                                <DetailEmployee nama={nama} total_aset={total_aset} deskripsi={deskripsi} kategori={kategori} backgroundImage={backgroundimage}/>
                             </ModalBody>
                             <ModalFooter>
                                 <Button border="2px" borderColor='#2296CB' mr={3} onClick={onClose}>
@@ -35,7 +35,7 @@ const ModalDetailAsset = ({isOpen, onClose, deskripsi, kategori}:modalProps) => 
                     
                         <TabPanel>
                             <ModalBody mb={5}>
-                                <HistoryAset/>
+                                {/* <HistoryAset category={category} asset_name={asset_name} asset_image={asset_image} id={id} user_name={user_name} request_date={request_date} status={status}/> */}
                             </ModalBody>
                             <ModalFooter>
                                 <Button border="2px" borderColor='#2296CB' mr={3} onClick={onClose}>

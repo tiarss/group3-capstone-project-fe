@@ -51,8 +51,12 @@ export type userData = {
 export type modalProps = {
   isOpen:boolean
   onClose:()=>void
+  nama?: string | undefined;
+  total_aset?: number | undefined;
   kategori?: string | undefined;
   deskripsi?: string | undefined;
+  backgroundimage?: string | undefined;
+  category: string | undefined;
 }
 
 export type CardDetailProps = {

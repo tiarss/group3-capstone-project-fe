@@ -9,7 +9,11 @@ import ModalDetailAsset from "../components/Modal/detail-asset";
 const DirektoriAset = () => {
     const [isOpen, setIsOpen] = useState(false);
     const [asset, setAsset] = useState<any[]>([])
-    const [details, setDetails] = useState<{category: string, description: string, image: string, name: string, total_aset: number}>()
+    const [details, setDetails] = useState<{category: string, description: string, image: string, name: string, total_asset: number}>()
+    const [categoryHistory, setCategoryHistory] = useState<string>("");
+    const [nameHistory, setNameHistory] = useState<string>("");
+    const [imageHistory, setImageHistory] = useState<string>("");
+    const [usersHistory, setUsersHistory] = useState<any[]>([]);
 
     useEffect(() => {
         fetchDataAset()
@@ -40,6 +44,23 @@ const DirektoriAset = () => {
         .catch((err) => {
         console.log(err.response);
         });
+        handleHistory(short_name);
+    }
+
+    const handleHistory = (short_name: string) => {
+        axios
+        .get(`https://klender.xyz/histories/assets/${short_name}` ,
+        {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
+        .then((res) => {
+        const { data } = res.data;
+        setCategoryHistory(data.category);
+        setNameHistory(data.asset_name);
+        setImageHistory(data.asset_image);
+        setUsersHistory(data.users)
+        })
+        .catch((err) => {
+        console.log(err.response);
+        });
     }
 
     const handleClose = () => {
@@ -48,6 +69,7 @@ const DirektoriAset = () => {
 
     return(
         <>  
+            {console.log(usersHistory)}
             <Header/>
             <Box bg="#EFEFEF" paddingBottom={9}>
             <Flex align="center" justify="center">
@@ -84,7 +106,7 @@ const DirektoriAset = () => {
                     </Flex>
                 </Box>
             </Flex>
-            <ModalDetailAsset isOpen={isOpen} onClose={handleClose} deskripsi={details?.description} kategori={details?.category}/>
+            {/* <ModalDetailAsset isOpen={isOpen} onClose={handleClose} nama={details?.name} total_aset={details?.total_asset} deskripsi={details?.description} kategori={details?.category} backgroundimage={details?.image}/> */}
             </Box>
         </>
     )

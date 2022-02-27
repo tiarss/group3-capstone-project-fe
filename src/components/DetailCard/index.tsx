@@ -3,7 +3,7 @@ import React from "react";
 import { CardDetailProps } from "../../types";
 import { ButtonSecondary } from "../Button";
 
-const CardDetail = ({backgroundImage, kategori, name, deskripsi, pengguna, stok}: CardDetailProps) => {
+const CardDetail = ({backgroundImage, kategori, name, deskripsi, pengguna, stok, onClick}: CardDetailProps) => {
     return(
         <>
             <Box width={200} minHeight={250} borderWidth='2px' borderColor='black' borderRadius='lg' overflow='hidden'>
@@ -53,7 +53,7 @@ const CardDetail = ({backgroundImage, kategori, name, deskripsi, pengguna, stok}
                     </Box>
                 </Flex>
                 <Flex width='100%' p={3}  align="center" justifyContent="center">
-                    <ButtonSecondary title="Lihat Detail" customFontSize="12px"/>
+                    <ButtonSecondary title="Lihat Detail" customFontSize="12px" onclick={onClick}/>
                 </Flex>
 
             </Box>

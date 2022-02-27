@@ -51,6 +51,8 @@ export type userData = {
 export type modalProps = {
   isOpen:boolean
   onClose:()=>void
+  kategori?: string | undefined;
+  deskripsi?: string | undefined;
 }
 
 export type CardDetailProps = {
@@ -60,4 +62,5 @@ export type CardDetailProps = {
   deskripsi: string;
   pengguna: number;
   stok: number;
+  onClick?: () => void;
 }

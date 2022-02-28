@@ -19,15 +19,16 @@ const DirektoriAset = () => {
     const [shortName, setShortName] = useState<string>("");
     const [search, setSearch] = useState<string>("")
     const [selectedCategory, setSelectedCategory] = useState<string>("");
-
+    
     const category = [
-        { id: 1, name: "Computer" },
-        { id: 2, name: "Computer Accessories" },
-        { id: 3, name: "Networking" },
-        { id: 4, name: "UPS" },
-        { id: 5, name: "Printer and Scanner" },
-        { id: 6, name: "Electronics" },
-        { id: 7, name: "Others" },
+        { id: 0, name: "All", value: ""},
+        { id: 1, name: "Computer", value: "Computer" },
+        { id: 2, name: "Computer Accessories", value: "Computer Accessories" },
+        { id: 3, name: "Networking", value: "Networking" },
+        { id: 4, name: "UPS", value: "UPS" },
+        { id: 5, name: "Printer and Scanner", value: "Printer and Scanner" },
+        { id: 6, name: "Electronics", value: "Electronics" },
+        { id: 7, name: "Others", value: "Others" },
       ];
 
     useEffect(() => {
@@ -136,7 +137,7 @@ const DirektoriAset = () => {
             <Flex align="center" justify="center">
                 <Text fontSize='xl' fontWeight='bold' mt={7}>Direktori Aset</Text>
             </Flex>
-            <Search title="All" data={category} onChangeSearch={handleSearch} onChangeSelect={handleSelect}/>
+            <Search data={category} value={selectedCategory} onChangeSearch={handleSearch} onChangeSelect={handleSelect}/>
             <Flex align="center" justify="center" mt={50}>
                 <Box bg="white" width={1080} maxHeight={605} borderRadius={7} shadow="xl" overflowY='scroll'>
                     <Flex align="center" justify="center" mt={50}>

@@ -111,16 +111,17 @@ export const InputSelect = ({title, placeholder, value, onChange, data}: inputSe
 type searchData = {
   id: number
   name: string
+  value: string
 }
 
 type searchProps = {
-  title: string;
   data: searchData[];
+  value: string;
   onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
-export const Search = ({title, data, onChangeSearch, onChangeSelect} : searchProps) => {
+export const Search = ({data, value, onChangeSearch, onChangeSelect} : searchProps) => {
   return(
     <Flex align="center" justify="center" mt={9}>
         <Flex>
@@ -129,11 +130,11 @@ export const Search = ({title, data, onChangeSearch, onChangeSelect} : searchPro
             borderColor='#2296CB'
             color='white'
             width={166}
-            placeholder={title}
             onChange={onChangeSelect}
+            value={value}
         >
           {data !== undefined ? data.map((datas)=>(
-              <option key={datas.id} value={datas.name}>{datas.name}</option>
+              <option key={datas.id} value={datas.value} style={{ color: 'black' }}>{datas.name}</option>
             )) : <option value={0}>Kosong</option>}
         </Select>
         <InputGroup>

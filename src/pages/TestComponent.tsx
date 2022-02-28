@@ -13,8 +13,8 @@ export const TestComponent = () => {
   return (
     <Flex gap="20px">
       <Button onClick={onOpen}>Open Modal</Button>
-      <ModalDetailAsset isOpen={isOpen} onClose={onClose}/>
-      <CardDetail/>
+      {/* <ModalDetailAsset isOpen={isOpen} onClose={onClose}/>
+      
        <ButtonPrimary title='Ajukan Permohonan' />
        <ButtonSecondary title='Kembali' />
        <ButtonTertier title='Kirim Permohonan' />
@@ -22,8 +22,9 @@ export const TestComponent = () => {
           <InputText title='Name'/>
           <InputText title='Password'/>
        </Box>
-       <RequestModal />
-       {/* <ModalActivity /> */}
+       <RequestModal /> */}
+       {/* <CardDetail/> */}
+       <ModalActivity role={0} status={''} activity={''} isOpen={isOpen} onClose={onClose} />
     </Flex>
   )
 }

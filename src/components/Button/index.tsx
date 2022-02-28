@@ -59,6 +59,7 @@ export const ButtonSecondary = ({
       borderRadius='7px'
       color='#2296CB'
       transition='all 0.5s ease'
+      width="100%"
       _hover={{
         color: "white",
         border: "2px solid #2296CB",

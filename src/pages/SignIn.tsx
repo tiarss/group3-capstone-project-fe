@@ -30,6 +30,7 @@ const SignIn = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("expired", data.expire);
         localStorage.setItem("isAuth", JSON.stringify(false));
+        localStorage.setItem("role", JSON.stringify(data.role));
         console.log(res);
       })
       .catch((err) => {

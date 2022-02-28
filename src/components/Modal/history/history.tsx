@@ -1,23 +1,25 @@
 import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import React from "react";
+import { history, modalProps } from "../../../types";
 
-type historyProps = {
-    category: string | undefined;
-    asset_name: string | undefined;
-    asset_image: string | undefined;
-    id: number | undefined;
-    user_name: string | undefined;
-    request_date: string | undefined;
-    status: string | undefined;
-}
+// type historyProps = {
+//     category: string | undefined;
+//     asset_name: string | undefined;
+//     asset_image: string | undefined;
+//     id: number | undefined;
+//     user_name: string | undefined;
+//     request_date: string | undefined;
+//     status: string | undefined;
+// }
 
-const HistoryAset = ({category, asset_name, asset_image, id, user_name, request_date, status}: historyProps) => {
+const HistoryAset = ({category, asset_name, asset_image, users}: history) => {
     return(
         <>
             <Box width='100%' height="93.4px" marginBottom={5} style={{
                   backgroundSize: "cover",
                   backgroundPosition: "center",
-                  backgroundImage: `url(${asset_image})`}}>
+                  backgroundImage: `url(${asset_image})`
+                }}>
                     <Box width={100} ms={3} mb={9} paddingTop={2}>
                         <Text
                         fontWeight='semibold'
@@ -56,12 +58,14 @@ const HistoryAset = ({category, asset_name, asset_image, id, user_name, request_
                     </Tr>
                 </Thead>
                 <Tbody>
+                    {users == null ? <p>Data tidak ada</p> : users.map((item:any) => 
                     <Tr>
-                        <Td>{id}</Td>
-                        <Td>{user_name}</Td>
-                        <Td>{request_date}</Td>
-                        <Td>{status}</Td>
+                        <Td>{item.id}</Td>
+                        <Td>{item.user_name}</Td>
+                        <Td>{item.request_date}</Td>
+                        <Td>{item.status}</Td>
                     </Tr>
+                    )}
                 </Tbody>
             </Table>
         </>

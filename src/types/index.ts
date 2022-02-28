@@ -48,15 +48,34 @@ export type userData = {
   phone: string;
 };
 
+export type userHistory = {
+  id: number | undefined;
+  user_name: string | undefined;
+  request_date: string | Date;
+  status: string | undefined;
+}
+
 export type modalProps = {
-  isOpen:boolean
-  onClose:()=>void
+  isOpen:boolean;
+  onClose:()=>void | undefined;
   nama?: string | undefined;
   total_aset?: number | undefined;
   kategori?: string | undefined;
   deskripsi?: string | undefined;
   backgroundimage?: string | undefined;
+  category?: string | undefined;
+  asset_name?: string | undefined;
+  asset_image?: string | undefined;
+  users?: userHistory[] | null | undefined;
+  onChangeUpdate?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickUpdate?: () => void;
+}
+
+export type history = {
   category: string | undefined;
+  asset_name: string | undefined;
+  asset_image: string | undefined;
+  users: userHistory[] | null | undefined;
 }
 
 export type CardDetailProps = {

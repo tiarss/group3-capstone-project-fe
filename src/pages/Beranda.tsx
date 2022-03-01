@@ -382,7 +382,7 @@ export const Beranda = () => {
         role={1}
         status='Approved by Admin'
       />
-      <AddAssets
+      {/* <AddAssets
         isOpen={isOpenAddAssets}
         onClose={handleCloseAddAssets}
         onChangeName={handleAddName}
@@ -390,7 +390,7 @@ export const Beranda = () => {
         onChangeKategori={handleCategory}
         onChangeJumlah={handleAddJumlah}
         onChangeImage={handleAddImage}
-      />
+      /> */}
     </div>
   );
 };

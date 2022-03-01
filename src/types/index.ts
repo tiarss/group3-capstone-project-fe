@@ -48,6 +48,13 @@ export type userData = {
   phone: string;
 };
 
+export type userHistory = {
+  id: number | undefined;
+  user_name: string | undefined;
+  request_date: string | Date;
+  status: string | undefined;
+}
+
 export type modalProps = {
   isOpen:boolean
   onClose:()=>void
@@ -55,11 +62,41 @@ export type modalProps = {
 
 export type addAssets = {
   role?: number;
-  isOpen: boolean;
-  onClose: () => void;
-  onChangeName: (e: React.ChangeEvent<HTMLInputElement>) => void
-  onChangeDeskripsi : (e: React.ChangeEvent<HTMLInputElement>) => void
-  onChangeKategori :(e: React.ChangeEvent<HTMLSelectElement>) => void
-  onChangeJumlah :(e: React.ChangeEvent<HTMLInputElement>) => void
-  onChangeImage :(e: React.ChangeEvent<HTMLInputElement>) => void
+  // isOpen: boolean;
+  // onClose: () => void;
+  // onChangeName: (e: React.ChangeEvent<HTMLInputElement>) => void
+  // onChangeDeskripsi : (e: React.ChangeEvent<HTMLInputElement>) => void
+  // onChangeKategori :(e: React.ChangeEvent<HTMLSelectElement>) => void
+  // onChangeJumlah :(e: React.ChangeEvent<HTMLInputElement>) => void
+  // onChangeImage :(e: React.ChangeEvent<HTMLInputElement>) => void
+  isOpen:boolean;
+  onClose:()=>void | undefined;
+  nama?: string | undefined;
+  total_aset?: number | undefined;
+  kategori?: string | undefined;
+  deskripsi?: string | undefined;
+  backgroundimage?: string | undefined;
+  category?: string | undefined;
+  asset_name?: string | undefined;
+  asset_image?: string | undefined;
+  users?: userHistory[] | null | undefined;
+  onChangeUpdate?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickUpdate?: () => void;
+}
+
+export type history = {
+  category: string | undefined;
+  asset_name: string | undefined;
+  asset_image: string | undefined;
+  users: userHistory[] | null | undefined;
+}
+
+export type CardDetailProps = {
+  backgroundImage: string;
+  kategori: string;
+  name: string;
+  deskripsi: string;
+  pengguna: number;
+  stok: number;
+  onClick?: () => void;
 }

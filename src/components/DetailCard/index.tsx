@@ -1,33 +1,60 @@
 import { Box, Button, Flex, Spacer, Text } from "@chakra-ui/react";
 import React from "react";
+import { CardDetailProps } from "../../types";
+import { ButtonSecondary } from "../Button";
 
-const CardDetail = () => {
+const CardDetail = ({backgroundImage, kategori, name, deskripsi, pengguna, stok, onClick}: CardDetailProps) => {
     return(
         <>
-            <Box width={200} borderWidth='2px' borderColor='black' borderRadius='lg' overflow='hidden'>
-                <Box bg='tomato'>
-                    <Box width={50} ms={3} mb={5} bg="#EFEFEF">
-                        <Text fontSize='xs'>Kategori</Text>
+            <Box width={200} minHeight={250} borderWidth='2px' borderColor='black' borderRadius='lg' overflow='hidden'>
+                <Box height={108} style={{
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundImage: `url(${backgroundImage})`,
+                }}>
+                    <Box width={100} ms={3} mb={9} paddingTop={2}>
+                        <Text
+                        fontWeight='semibold'
+                        borderRadius='5px'
+                        width='fit-content'
+                        fontSize='9px'
+                        textAlign='left'
+                        padding='5px'
+                        bgColor='white'
+                        >
+                        {kategori}
+                        </Text>
                     </Box>
-                    <Box width={175} ms={3} bg="#EFEFEF">
-                        <Text fontSize='sm' fontWeight='bold'>Lenovo Thinkpad Yoga 370 Core i7 7600U Ge..</Text>
+                    <Box width={175} ms={3}>
+                    <Text
+                        mt='5px'
+                        fontWeight='semibold'
+                        borderRadius='5px'
+                        width='fit-content'
+                        fontSize='11px'
+                        textAlign='left'
+                        padding='5px'
+                        bgColor='white'
+                        lineHeight={1}>
+                        {name}
+                    </Text>
                     </Box>
                 </Box>
-                <Box mt={2} mx={3}>
-                    <Text fontSize='xs'>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla a dui metus. Maecenas malesuada suscipit odio, id convallis enim ...</Text>
+                <Box mt={2} height={150} mx={3}>
+                    <Text fontSize='xs' lineHeight={1}>{deskripsi}</Text>
                 </Box>
                 <Flex mt={5}>
                     <Box ms={3}>
-                        <Text fontSize='xs' fontWeight='bold'>4 Pengguna</Text>
+                        <Text fontSize='xs' fontWeight='bold'>{pengguna} Pengguna</Text>
                     </Box>
                     <Spacer/>
                     <Box me={3}>
-                        <Text fontSize='xs' fontWeight='bold'>10 Tersedia</Text>
+                        <Text fontSize='xs' fontWeight='bold'>{stok} Tersedia</Text>
                     </Box>
                 </Flex>
-                <Box m={3}>
-                    <Button width='100%' colorScheme='blue' variant='outline'>Lihat Detail</Button>
-                </Box>
+                <Flex width='100%' p={3}  align="center" justifyContent="center">
+                    <ButtonSecondary title="Lihat Detail" customFontSize="12px" onclick={onClick}/>
+                </Flex>
 
             </Box>
         </>

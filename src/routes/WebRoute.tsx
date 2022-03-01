@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { UserProvider } from "../helper/UserContext";
 import { Beranda } from "../pages/Beranda";
+import DirektoriAset from "../pages/DirektoriAset";
 import { Profile } from "../pages/Profile";
 import { PenggunaAset } from "../pages/PenggunaAset";
 import SignIn from "../pages/SignIn";
@@ -22,11 +23,13 @@ export const WebRoute = () => {
             <>
               <Route path='/beranda' element={<Beranda />} />
               <Route path='*' element={<NotFound />} />
+              <Route path="/direktori-aset" element={<DirektoriAset />} />
             </>
           ) : role === "Administrator" ? (
             <>
               <Route path='/pengguna-aset' element={<PenggunaAset />} />
               <Route path='/beranda' element={<Beranda />} />
+            <Route path="/direktori-aset" element={<DirektoriAset />} />
               <Route path='*' element={<NotFound />} />
             </>
           ) : (

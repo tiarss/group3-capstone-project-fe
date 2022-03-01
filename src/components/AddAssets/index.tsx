@@ -27,15 +27,15 @@ export const AddAssets = ({
   role,
   isOpen,
   onClose,
-  onChangeName,
-  onChangeDeskripsi,
-  onChangeKategori,
-  onChangeJumlah,
-  onChangeImage,
+//   onChangeName,
+//   onChangeDeskripsi,
+//   onChangeKategori,
+//   onChangeJumlah,
+//   onChangeImage,
 }: addAssets ) => {
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='inside'>
+      {/* <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Tambah Aset</ModalHeader>
@@ -62,7 +62,7 @@ export const AddAssets = ({
               />
               <InputNumber title='Jumlah Aset' onChange={onChangeJumlah} />
               <InputText title="Gambar Aset" onChange={onChangeImage} type='file'/>
-            </Flex>
+            </Flex> */}
 
             {/* {role === 1 ? (
          <Flex flexDir='column' gap='10px'>
@@ -98,7 +98,9 @@ export const AddAssets = ({
              </Box>
              </Flex>
             )} */}
-          </ModalBody>
+
+
+          {/* </ModalBody>
           <ModalFooter>
             <Flex justifyContent='end' gap='10px'>
               <ButtonSecondary title='Batal' onclick={onClose} />
@@ -106,7 +108,7 @@ export const AddAssets = ({
             </Flex>
           </ModalFooter>
         </ModalContent>
-      </Modal>
+      </Modal> */}
     </>
   );
 };

@@ -47,6 +47,8 @@ const SignIn = () => {
           });
           navigate("/beranda");
         }
+        //localStorage.setItem("role", JSON.stringify(data.role));
+        //console.log(res);
       })
       .catch((err) => {
         const { data } = err.response;

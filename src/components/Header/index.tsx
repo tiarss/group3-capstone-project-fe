@@ -16,19 +16,34 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../../helper/UserContext";
 import logoWhite from "../../assets/Logo-sirclo-white.png";
+import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
+  const navigate = useNavigate()
   const { userData, setUserData } = useContext(userContext);
+  const [role, setRole] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    roleCondition();
     handleGetUser();
   }, []);
 
-  console.log(userData);
+  const roleCondition = () => {
+    const roles = localStorage.getItem("role");
+    if (roles === "Employee") {
+      setRole(1);
+    }else if(roles === "Administrator"){
+      setRole(2)
+    }else{
+      setRole(3)
+    }
+  };
+
   const handleGetUser = () => {
+    const id = localStorage.getItem('id')
     axios
-      .get("https://klender.xyz/users/2", {
+      .get(`https://klender.xyz/users/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -66,24 +81,29 @@ export const Header = () => {
           color='white'
           fontWeight='normal'
           bgColor='#2296CB'
+          onClick={()=> navigate('/beranda')}
           _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
           _active={{ bgColor: "#1788BB" }}>
           Beranda
         </Button>
         <Button
+          display={role === 1 || role === 2 ? "block": "none"}
           fontWeight='medium'
           color='white'
           bgColor='#2296CB'
+          onClick={()=> navigate('/direktori-aset')}
           _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
           _active={{ bgColor: "#1788BB" }}>
           Direktori Aset
         </Button>
         <Button
-          display='none'
-          color='teal.50'
+          display={role === 2 || role === 3 ? "block": "none"}
+          fontWeight='medium'
+          color='white'
           bgColor='#2296CB'
+          onClick={()=> navigate('/pengguna-aset')}
           _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
           _active={{ bgColor: "#1788BB" }}>
@@ -112,7 +132,7 @@ export const Header = () => {
           />
           <MenuList>
             <MenuItem icon={<AddIcon />}>Sign In</MenuItem>
-            <MenuItem icon={<ExternalLinkIcon />}>Sign Up</MenuItem>
+            <MenuItem icon={<ExternalLinkIcon />}>Log Out</MenuItem>
           </MenuList>
         </Menu>
       </Box>

@@ -22,8 +22,6 @@ export const TestComponent = () => {
           <InputText title='Name'/>
           <InputText title='Password'/>
        </Box>
-       <RequestModal />
-       {/* <ModalActivity /> */}
     </Flex>
   )
 }

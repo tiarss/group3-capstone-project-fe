@@ -80,13 +80,13 @@ const SignUp = () => {
         // console.log(res);
         if (data.code === 200) {
           toast({
-            title: "Account created.",
-            description: "We've created your account for you.",
+            title: "Sign In Successfull.",
+            description: "You are Sign In",
             status: "success",
             duration: 9000,
             isClosable: true,
           });
-          navigate("/sign-in");
+          navigate("/beranda");
         }
       })
       .catch((err) => {

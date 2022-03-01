@@ -16,28 +16,54 @@ import {
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { ButtonPrimary, ButtonSecondary } from "../Button";
-import { InputText } from "../Input";
+import { InputSelect, InputText } from "../Input";
 
-export const RequestModal = () => {
-  const [checked, setChecked] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const role: number = 2;
+export const RequestModal = ({
+  role,
+  isOpen,
+  onClose,
+}: {
+  role?: number;
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
+  // const [checked, setChecked] = useState(false);
+  // const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.checked;
+  //   setChecked(value);
+  // };
+  const category = [
+    { id: 1, name: "Computer" },
+    { id: 2, name: "Computer Accessories" },
+    { id: 3, name: "Networking" },
+    { id: 4, name: "UPS" },
+    { id: 5, name: "Printer and Scanner" },
+    { id: 6, name: "Electronics" },
+    { id: 7, name: "Others" },
+  ];
 
-  const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.checked;
-    setChecked(value);
-  };
   return (
     <>
-      <Button onClick={onOpen}>Open Modal</Button>
-
-      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior="inside">
+      <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Peminjaman Aset</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {role === 1 ? (
+            <Flex flexDir='column' gap='10px'>
+              <InputSelect
+                title='Pilih Aset'
+                placeholder='Pilih Aset'
+                data={category}
+              />
+              <InputSelect title='Pilih Kategory' placeholder='Pilih Aset' />
+              <InputText
+                title='Pilih Aset'
+                placeholder='Lenovo Thinkpad Yoga'
+              />
+            </Flex>
+
+            {/* {role === 1 ? (
               <Flex flexDir='column' gap='10px'>
                 <InputText title='Kategori Aset' placeholder='Laptop' />
                 <InputText
@@ -70,7 +96,7 @@ export const RequestModal = () => {
                   />
                 </Box>
               </Flex>
-            )}
+            )} */}
           </ModalBody>
           <ModalFooter>
             <Flex justifyContent='end' gap='10px'>

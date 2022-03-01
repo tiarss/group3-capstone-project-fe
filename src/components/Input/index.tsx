@@ -6,6 +6,11 @@ import {
   Input,
   InputGroup,
   InputRightElement,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   Text,
 } from "@chakra-ui/react";
@@ -81,25 +86,59 @@ export const InputPassword = ({
   );
 };
 
-export const InputTextArea = () => {
-  return <div>index</div>;
-};
-
-export const InputSelect = ({title, placeholder, value, onChange, data}: inputSelectProps) => {
-  return(
+export const InputNumber = ({
+  title,
+  placeholder,
+  value,
+  onChange,
+}: inputProps) => {
+  return (
     <Box>
       <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
-      <Select 
+      <NumberInput defaultValue={1} min={1} max={99}>
+        <NumberInputField
+          onChange={onChange}
+          placeholder={placeholder}
+          value={value}
+          bgColor='white'
+          border='2px solid #373737'
+          _focus={{ border: "2px solid #000" }}
+        />
+        <NumberInputStepper>
+          <NumberIncrementStepper />
+          <NumberDecrementStepper />
+        </NumberInputStepper>
+      </NumberInput>
+    </Box>
+  );
+};
+
+export const InputSelect = ({
+  title,
+  placeholder,
+  value,
+  onChange,
+  data,
+}: inputSelectProps) => {
+  return (
+    <Box>
+      <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
+      <Select
         bgColor='white'
         border='2px solid #373737'
         _focus={{ border: "2px solid #000" }}
         placeholder={placeholder}
         value={value}
-        onChange={onChange}
-      >
-        {data !== undefined ? data.map((datas, index)=>(
-          <option key={datas.id} value={datas.id}>{datas.name}</option>
-        )) : <option value={0}>Kosong</option>}
+        onChange={onChange}>
+        {data !== undefined ? (
+          data.map((datas, index) => (
+            <option key={datas.id} value={datas.id}>
+              {datas.name}
+            </option>
+          ))
+        ) : (
+          <option value={0}>Kosong</option>
+        )}
       </Select>
     </Box>
   );

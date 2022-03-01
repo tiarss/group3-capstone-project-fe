@@ -45,53 +45,29 @@ function SliderImage() {
     variableWidth: true,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
-    //  responsive: [
-    //    {
-    //      breakpoint: 1124,
-    //      settings: {
-    //       variableWidth: true,
-    //        slidesToShow: 3,
-    //        slidesToScroll: 1,
-    //        infinite: false,
-    //        arrows: false,
-    //      },
-    //    },
-    //    {
-    //      breakpoint: 600,
-    //      settings: {
-    //        slidesToShow: 1,
-    //        slidesToScroll: 1,
-    //        infinite: false,
-    //        arrows: false,
-    //      },
-    //    },
-    //  ],
     responsive: [
       {
-        breakpoint: 1024,
+        breakpoint: 1200,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 820,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          infinite: true,
-          dots: true
-        }
+        },
       },
       {
-        breakpoint: 600,
+        breakpoint: 580,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          initialSlide: 2
-        }
+        },
       },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
-      }
-    ]
+    ],
   };
 
   return (
@@ -567,7 +543,13 @@ function SliderImage() {
           </Box>
         </Box>
       </Slider>
-      <ModalActivity isOpen={isOpen} onClose={handleClose} activity="activity" role={1} status="Waiting approval" />
+      <ModalActivity
+        isOpen={isOpen}
+        onClose={handleClose}
+        activity='activity'
+        role={1}
+        status='Waiting approval'
+      />
     </Box>
   );
 }

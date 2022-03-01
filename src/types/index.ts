@@ -52,3 +52,14 @@ export type modalProps = {
   isOpen:boolean
   onClose:()=>void
 }
+
+export type addAssets = {
+  role?: number;
+  isOpen: boolean;
+  onClose: () => void;
+  onChangeName: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeDeskripsi : (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeKategori :(e: React.ChangeEvent<HTMLSelectElement>) => void
+  onChangeJumlah :(e: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeImage :(e: React.ChangeEvent<HTMLInputElement>) => void
+}

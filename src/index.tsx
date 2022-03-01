@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
+import axios from "axios";
 
 const theme = extendTheme({
   fonts:{
@@ -13,6 +14,8 @@ const theme = extendTheme({
     body:  "Open Sans"
   }
 })
+
+axios.defaults.baseURL = "https://klender.xyz";
 
 ReactDOM.render(
   <React.StrictMode>

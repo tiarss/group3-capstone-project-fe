@@ -1,12 +1,15 @@
-import { Box, Flex, Image, Text } from "@chakra-ui/react";
+import { Box, Flex, Image, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useState } from "react";
 import { ButtonPrimary } from "../components/Button";
 import { InputPassword, InputText } from "../components/Input";
 import bgLogin from "../assets/login.png";
 import logoBlue from "../assets/Logo-sirclo.png";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
+  const toast = useToast()
+  const navigate = useNavigate()
   const [userLogin, setUserLogin] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
 
@@ -21,19 +24,42 @@ const SignIn = () => {
 
   const handleSignIn = () => {
     axios
-      .post("https://klender.xyz/login", {
+      .post("/login", {
         input: userLogin,
         password: userPassword,
       })
       .then((res) => {
+        const code = res.data.code
         const { data } = res.data;
         localStorage.setItem("token", data.token);
         localStorage.setItem("expired", data.expire);
+        localStorage.setItem('role', data.role)
+        localStorage.setItem('id', data.id)
         localStorage.setItem("isAuth", JSON.stringify(false));
-        console.log(res);
+        console.log(data)
+        if (code === 200) {
+          toast({
+            title: "Account created.",
+            description: "We've created your account for you.",
+            status: "success",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/beranda");
+        }
       })
       .catch((err) => {
+        const { data } = err.response;
+        const message = data.message
+          .toLowerCase()
+          .replace(/(^\w{1})|(\s{1}\w{1})/g, (m: string) => m.toUpperCase());
         console.log(err.response);
+        toast({
+          title: `${message}`,
+          status: "error",
+          duration: 9000,
+          isClosable: true,
+        });
       });
   };
 

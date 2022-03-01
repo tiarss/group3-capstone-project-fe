@@ -48,6 +48,7 @@ const HistoryAset = ({category, asset_name, asset_image, users}: history) => {
                     </Text>
                     </Box>
             </Box>
+            {users == null ? <p>Data tidak ada</p> :
             <Table variant='simple' size='sm'>
                 <Thead>
                     <Tr>
@@ -58,7 +59,7 @@ const HistoryAset = ({category, asset_name, asset_image, users}: history) => {
                     </Tr>
                 </Thead>
                 <Tbody>
-                    {users == null ? <p>Data tidak ada</p> : users.map((item:any) => 
+                     {users.map((item:any) => 
                     <Tr>
                         <Td>{item.id}</Td>
                         <Td>{item.user_name}</Td>
@@ -68,6 +69,7 @@ const HistoryAset = ({category, asset_name, asset_image, users}: history) => {
                     )}
                 </Tbody>
             </Table>
+            }
         </>
     )
 }

@@ -23,7 +23,6 @@ import { RequestModal } from "../components/RequestModal";
 import { ResumeCard } from "../components/ResumeCard";
 import SliderImage from "../components/Slider";
 import axios from "axios";
-import { AddAssets } from "../components/AddAssets";
 
 export const Beranda = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -382,15 +381,6 @@ export const Beranda = () => {
         role={1}
         status='Approved by Admin'
       />
-      {/* <AddAssets
-        isOpen={isOpenAddAssets}
-        onClose={handleCloseAddAssets}
-        onChangeName={handleAddName}
-        onChangeDeskripsi={handleAddDeskripsi}
-        onChangeKategori={handleCategory}
-        onChangeJumlah={handleAddJumlah}
-        onChangeImage={handleAddImage}
-      /> */}
     </div>
   );
 };

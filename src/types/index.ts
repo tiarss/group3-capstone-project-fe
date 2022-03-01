@@ -58,19 +58,6 @@ export type userHistory = {
 export type modalProps = {
   isOpen:boolean
   onClose:()=>void
-}
-
-export type addAssets = {
-  role?: number;
-  // isOpen: boolean;
-  // onClose: () => void;
-  // onChangeName: (e: React.ChangeEvent<HTMLInputElement>) => void
-  // onChangeDeskripsi : (e: React.ChangeEvent<HTMLInputElement>) => void
-  // onChangeKategori :(e: React.ChangeEvent<HTMLSelectElement>) => void
-  // onChangeJumlah :(e: React.ChangeEvent<HTMLInputElement>) => void
-  // onChangeImage :(e: React.ChangeEvent<HTMLInputElement>) => void
-  isOpen:boolean;
-  onClose:()=>void | undefined;
   nama?: string | undefined;
   total_aset?: number | undefined;
   kategori?: string | undefined;
@@ -82,6 +69,17 @@ export type addAssets = {
   users?: userHistory[] | null | undefined;
   onChangeUpdate?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClickUpdate?: () => void;
+}
+
+export type addAssets = {
+  role?: number;
+  isOpen: boolean;
+  onClose: () => void;
+  onChangeName: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeDeskripsi : (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeKategori :(e: React.ChangeEvent<HTMLSelectElement>) => void
+  onChangeJumlah :(e: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeImage :(e: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export type history = {

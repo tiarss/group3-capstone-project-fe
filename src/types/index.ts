@@ -58,6 +58,17 @@ export type userHistory = {
 export type modalProps = {
   isOpen:boolean
   onClose:()=>void
+  nama?: string | undefined;
+  total_aset?: number | undefined;
+  kategori?: string | undefined;
+  deskripsi?: string | undefined;
+  backgroundimage?: string | undefined;
+  category?: string | undefined;
+  asset_name?: string | undefined;
+  asset_image?: string | undefined;
+  users?: userHistory[] | null | undefined;
+  onChangeUpdate?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickUpdate?: () => void;
 }
 
 export type addAssets = {

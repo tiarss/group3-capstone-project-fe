@@ -254,31 +254,31 @@ export const Beranda = () => {
       });
   };
 
-  const handleAcceptReqAdmin = (id: number) =>{
+  const handleAcceptReqAdmin = (id: number) => {
     axios
-    .put(
-      `/requests/borrow/${id}`,
-      {
-        approved: true,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: true,
         },
-      }
-    )
-    .then((res) => {
-      console.log(res);
-      const temp = selectedData;
-      if (temp !== undefined) {
-        setSelectedData({ ...temp, status: "Approved by Admin" });
-      }
-      handleGetAllRequest();
-    })
-    .catch((err) => {
-      console.log(err.response);
-    });
-  }
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Approved by Admin" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
   // End of Admin Logic
 
   // Manager Logic
@@ -299,7 +299,7 @@ export const Beranda = () => {
       });
   };
 
-  const handleAcceptReqManager = (id: number) =>{
+  const handleAcceptReqManager = (id: number) => {
     axios
       .put(
         `/requests/borrow/${id}`,
@@ -323,12 +323,9 @@ export const Beranda = () => {
       .catch((err) => {
         console.log(err.response);
       });
-  }
+  };
 
-  const handleRejectReqManager = (id: number) =>{
-
-  }
-
+  const handleRejectReqManager = (id: number) => {};
 
   // End of Manager Logic
 
@@ -447,29 +444,56 @@ export const Beranda = () => {
                       </Tr>
                     ) : (
                       <>
-                        {requestData!.map((value) => (
-                          <Tr key={value.id}>
+                        {requestData === null ? (
+                          <Tr>
                             <Td>1</Td>
+                            <Td>12:22 WIB, 11 Jan 2022</Td>
+                            <Td>Peminjaman Aset</Td>
+                            <Td>Headphone</Td>
+                            <Td>dBe DJ80 Foldable DJ...</Td>
                             <Td>
-                              {moment(value.request_time).format(
-                                "h:mm a, DD MMM YYYY"
-                              )}
-                            </Td>
-                            <Td>
-                              {value.activity === "Borrow"
-                                ? "Peminjaman Aset"
-                                : "Peminjaman Aset"}
-                            </Td>
-                            <Td>{value.Asset.category}</Td>
-                            <Td>{`${value.Asset.name.substring(0, 20)}+..`}</Td>
-                            <Td>
-                              <ButtonTertier
-                                title='Details'
-                                onclick={() => handleOpen(value.id)}
-                              />
+                              <ButtonTertier title='Details' />
                             </Td>
                           </Tr>
-                        ))}
+                        ) : requestData !== undefined ? (
+                          requestData.map((value) => (
+                            <Tr key={value.id}>
+                              <Td>1</Td>
+                              <Td>
+                                {moment(value.request_time).format(
+                                  "h:mm a, DD MMM YYYY"
+                                )}
+                              </Td>
+                              <Td>
+                                {value.activity === "Borrow"
+                                  ? "Peminjaman Aset"
+                                  : "Peminjaman Aset"}
+                              </Td>
+                              <Td>{value.Asset.category}</Td>
+                              <Td>{`${value.Asset.name.substring(
+                                0,
+                                20
+                              )}+..`}</Td>
+                              <Td>
+                                <ButtonTertier
+                                  title='Details'
+                                  onclick={() => handleOpen(value.id)}
+                                />
+                              </Td>
+                            </Tr>
+                          ))
+                        ) : (
+                          <Tr>
+                            <Td>1</Td>
+                            <Td>12:22 WIB, 11 Jan 2022</Td>
+                            <Td>Peminjaman Aset</Td>
+                            <Td>Headphone</Td>
+                            <Td>dBe DJ80 Foldable DJ...</Td>
+                            <Td>
+                              <ButtonTertier title='Details' />
+                            </Td>
+                          </Tr>
+                        )}
                       </>
                     )}
                   </Tbody>
@@ -504,23 +528,55 @@ export const Beranda = () => {
                       </Tr>
                     ) : (
                       <>
-                        {requestData!.map((value) => (
-                          <Tr key={value.id}>
+                        {requestData === null ? (
+                          <Tr>
                             <Td>1</Td>
-                            <Td>{moment(value.request_time).format(
-                                "h:mm a, DD MMM YYYY"
-                              )}</Td>
-                            <Td>{value.User.name}</Td>
-                            <Td>{value.Asset.category}</Td>
-                            <Td>{`${value.Asset.name.substring(0, 20)}+..`}</Td>
+                            <Td>12:22 WIB, 11 Jan 2022</Td>
+                            <Td>Peminjaman Aset</Td>
+                            <Td>Headphone</Td>
+                            <Td>dBe DJ80 Foldable DJ...</Td>
                             <Td>
-                              <Tag>{value.status}</Tag>
-                            </Td>
-                            <Td>
-                              <ButtonTertier title='Details' onclick={() => handleOpen(value.id)} />
+                              <ButtonTertier title='Details' />
                             </Td>
                           </Tr>
-                        ))}
+                        ) : requestData !== undefined ? (
+                          requestData!.map((value) => (
+                            <Tr key={value.id}>
+                              <Td>1</Td>
+                              <Td>
+                                {moment(value.request_time).format(
+                                  "h:mm a, DD MMM YYYY"
+                                )}
+                              </Td>
+                              <Td>{value.User.name}</Td>
+                              <Td>{value.Asset.category}</Td>
+                              <Td>{`${value.Asset.name.substring(
+                                0,
+                                20
+                              )}+..`}</Td>
+                              <Td>
+                                <Tag>{value.status}</Tag>
+                              </Td>
+                              <Td>
+                                <ButtonTertier
+                                  title='Details'
+                                  onclick={() => handleOpen(value.id)}
+                                />
+                              </Td>
+                            </Tr>
+                          ))
+                        ) : (
+                          <Tr>
+                            <Td>1</Td>
+                            <Td>12:22 WIB, 11 Jan 2022</Td>
+                            <Td>Peminjaman Aset</Td>
+                            <Td>Headphone</Td>
+                            <Td>dBe DJ80 Foldable DJ...</Td>
+                            <Td>
+                              <ButtonTertier title='Details' />
+                            </Td>
+                          </Tr>
+                        )}
                       </>
                     )}
                   </Tbody>
@@ -547,8 +603,8 @@ export const Beranda = () => {
       <ModalActivity
         data={selectedData}
         handleToManager={() => handleToManager(selectedIdReq)}
-        handleAcceptReqManager={()=> handleAcceptReqManager(selectedIdReq)}
-        handleAcceptReqAdmin={()=> handleAcceptReqAdmin(selectedIdReq)}
+        handleAcceptReqManager={() => handleAcceptReqManager(selectedIdReq)}
+        handleAcceptReqAdmin={() => handleAcceptReqAdmin(selectedIdReq)}
         isOpen={isOpen}
         onClose={handleClose}
         role={role}

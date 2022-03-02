@@ -17,6 +17,7 @@ import { requestModalProps } from "../../types";
 import { ButtonPrimary, ButtonSecondary } from "../Button";
 
 export const ModalActivity = ({
+  dataActivities,
   data,
   role,
   isOpen,
@@ -25,8 +26,17 @@ export const ModalActivity = ({
   handleAcceptReqManager,
   handleAcceptReqAdmin,
 }: requestModalProps) => {
-  const status = data?.status;
-  console.log(role)
+  let status = "";
+
+  if (role === 1) {
+    if (dataActivities !== undefined) {
+      status = dataActivities?.status;
+    }
+  } else {
+    if (data !== undefined) {
+      status = data?.status;
+    }
+  }
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -44,7 +54,9 @@ export const ModalActivity = ({
                   backgroundSize: "cover",
                   backgroundPosition: "center",
                   backgroundImage: `${
-                    data !== undefined
+                    role === 1
+                      ? `url(${dataActivities?.asset_image})`
+                      : data !== undefined
                       ? `url(https://capstone-group3.s3.ap-southeast-1.amazonaws.com/${data.Asset.image})`
                       : `url(https://capstone-group3.s3.ap-southeast-1.amazonaws.com/asset-8-1645751450.png)`
                   }`,
@@ -57,9 +69,19 @@ export const ModalActivity = ({
                   textAlign='left'
                   padding='5px'
                   bgColor='white'>
-                  {data !== undefined
-                    ? moment(data.request_time).format("h:mm a, DD MMM YYYY")
-                    : `13:24 PM, 14 Feb 2022`}
+                  {role === 1 ? (
+                    moment(dataActivities?.request_date).format(
+                      "h:mm A, DD MMM YYYY"
+                    )
+                  ) : (
+                    <>
+                      {data !== undefined
+                        ? moment(data.request_time).format(
+                            "h:mm A, DD MMM YYYY"
+                          )
+                        : `13:24 PM, 14 Feb 2022`}
+                    </>
+                  )}
                 </Text>
                 <Text
                   mt='5px'
@@ -70,7 +92,13 @@ export const ModalActivity = ({
                   textAlign='left'
                   padding='5px'
                   bgColor='white'>
-                  {data !== undefined
+                  {role === 1
+                    ? dataActivities !== undefined
+                      ? dataActivities?.asset_name.length > 40
+                        ? `${dataActivities?.asset_name.substring(0, 40)}+...`
+                        : `${dataActivities?.asset_name}`
+                      : "tidak ada barang"
+                    : data !== undefined
                     ? data?.Asset.name.length > 40
                       ? `${data?.Asset.name.substring(0, 40)}+...`
                       : `${data?.Asset.name}`
@@ -83,7 +111,11 @@ export const ModalActivity = ({
                     Pemohon
                   </Text>
                   <Text fontSize='12px'>
-                    {data !== undefined
+                    {role === 1
+                      ? dataActivities !== undefined
+                        ? dataActivities.user_name
+                        : "Guest"
+                      : data !== undefined
                       ? data.User.name === ""
                         ? "-"
                         : data.User.name
@@ -130,7 +162,21 @@ export const ModalActivity = ({
                   <Text fontSize='12px' fontWeight='bold'>
                     Waktu Pengajuan
                   </Text>
-                  <Text fontSize='12px'>13:24 PM, 14 Feb 2022</Text>
+                  <Text fontSize='12px'>
+                    {role === 1 ? (
+                      moment(dataActivities?.request_date).format(
+                        "h:mm A, DD MMM YYYY"
+                      )
+                    ) : (
+                      <>
+                        {data !== undefined
+                          ? moment(data.request_time).format(
+                              "h:mm A, DD MMM YYYY"
+                            )
+                          : `13:24 PM, 14 Feb 2022`}
+                      </>
+                    )}
+                  </Text>
                   <Text
                     fontSize='12px'
                     fontWeight='bold'
@@ -210,7 +256,7 @@ export const ModalActivity = ({
                     </Text>
                   ) : (
                     <Text
-                      cursor="pointer"
+                      cursor='pointer'
                       onClick={handleToManager}
                       fontSize='12px'
                       fontWeight='bold'
@@ -266,7 +312,10 @@ export const ModalActivity = ({
               ) : status === "Approved by Manager" ? (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Tolak Permohonan' onclick={onClose} />
-                  <ButtonPrimary title='Terima Permohonan' onclick={handleAcceptReqAdmin} />
+                  <ButtonPrimary
+                    title='Terima Permohonan'
+                    onclick={handleAcceptReqAdmin}
+                  />
                 </Flex>
               ) : status === "Approved by Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
@@ -285,11 +334,11 @@ export const ModalActivity = ({
               )
             ) : status === "Waiting approval from Manager" ? (
               <Flex gap='10px' justifyContent='end'>
-                <ButtonSecondary
-                  title='Tolak'
-                  onclick={onClose}
+                <ButtonSecondary title='Tolak' onclick={onClose} />
+                <ButtonPrimary
+                  title='Terima Permohonan'
+                  onclick={handleAcceptReqManager}
                 />
-                <ButtonPrimary title='Terima Permohonan' onclick={handleAcceptReqManager} />
               </Flex>
             ) : status === "Approved by Manager" ? (
               <Flex gap='10px' justifyContent='end'>
@@ -301,7 +350,7 @@ export const ModalActivity = ({
               </Flex>
             ) : (
               <Flex gap='10px' justifyContent='end'>
-              <ButtonPrimary title='Tutup' onclick={onClose} />
+                <ButtonPrimary title='Tutup' onclick={onClose} />
               </Flex>
             )}
           </ModalFooter>

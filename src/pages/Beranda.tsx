@@ -294,7 +294,6 @@ export const Beranda = () => {
 
   }
 
-
   // End of Manager Logic
 
   return (
@@ -412,29 +411,56 @@ export const Beranda = () => {
                       </Tr>
                     ) : (
                       <>
-                        {requestData!.map((value) => (
-                          <Tr key={value.id}>
+                        {requestData === null ? (
+                          <Tr>
                             <Td>1</Td>
+                            <Td>12:22 WIB, 11 Jan 2022</Td>
+                            <Td>Peminjaman Aset</Td>
+                            <Td>Headphone</Td>
+                            <Td>dBe DJ80 Foldable DJ...</Td>
                             <Td>
-                              {moment(value.request_time).format(
-                                "h:mm a, DD MMM YYYY"
-                              )}
-                            </Td>
-                            <Td>
-                              {value.activity === "Borrow"
-                                ? "Peminjaman Aset"
-                                : "Peminjaman Aset"}
-                            </Td>
-                            <Td>{value.Asset.category}</Td>
-                            <Td>{`${value.Asset.name.substring(0, 20)}+..`}</Td>
-                            <Td>
-                              <ButtonTertier
-                                title='Details'
-                                onclick={() => handleOpen(value.id)}
-                              />
+                              <ButtonTertier title='Details' />
                             </Td>
                           </Tr>
-                        ))}
+                        ) : requestData !== undefined ? (
+                          requestData.map((value) => (
+                            <Tr key={value.id}>
+                              <Td>1</Td>
+                              <Td>
+                                {moment(value.request_time).format(
+                                  "h:mm a, DD MMM YYYY"
+                                )}
+                              </Td>
+                              <Td>
+                                {value.activity === "Borrow"
+                                  ? "Peminjaman Aset"
+                                  : "Peminjaman Aset"}
+                              </Td>
+                              <Td>{value.Asset.category}</Td>
+                              <Td>{`${value.Asset.name.substring(
+                                0,
+                                20
+                              )}+..`}</Td>
+                              <Td>
+                                <ButtonTertier
+                                  title='Details'
+                                  onclick={() => handleOpen(value.id)}
+                                />
+                              </Td>
+                            </Tr>
+                          ))
+                        ) : (
+                          <Tr>
+                            <Td>1</Td>
+                            <Td>12:22 WIB, 11 Jan 2022</Td>
+                            <Td>Peminjaman Aset</Td>
+                            <Td>Headphone</Td>
+                            <Td>dBe DJ80 Foldable DJ...</Td>
+                            <Td>
+                              <ButtonTertier title='Details' />
+                            </Td>
+                          </Tr>
+                        )}
                       </>
                     )}
                   </Tbody>
@@ -469,23 +495,55 @@ export const Beranda = () => {
                       </Tr>
                     ) : (
                       <>
-                        {requestData!.map((value) => (
-                          <Tr key={value.id}>
+                        {requestData === null ? (
+                          <Tr>
                             <Td>1</Td>
-                            <Td>{moment(value.request_time).format(
-                                "h:mm a, DD MMM YYYY"
-                              )}</Td>
-                            <Td>{value.User.name}</Td>
-                            <Td>{value.Asset.category}</Td>
-                            <Td>{`${value.Asset.name.substring(0, 20)}+..`}</Td>
+                            <Td>12:22 WIB, 11 Jan 2022</Td>
+                            <Td>Peminjaman Aset</Td>
+                            <Td>Headphone</Td>
+                            <Td>dBe DJ80 Foldable DJ...</Td>
                             <Td>
-                              <Tag>{value.status}</Tag>
-                            </Td>
-                            <Td>
-                              <ButtonTertier title='Details' onclick={() => handleOpen(value.id)} />
+                              <ButtonTertier title='Details' />
                             </Td>
                           </Tr>
-                        ))}
+                        ) : requestData !== undefined ? (
+                          requestData!.map((value) => (
+                            <Tr key={value.id}>
+                              <Td>1</Td>
+                              <Td>
+                                {moment(value.request_time).format(
+                                  "h:mm a, DD MMM YYYY"
+                                )}
+                              </Td>
+                              <Td>{value.User.name}</Td>
+                              <Td>{value.Asset.category}</Td>
+                              <Td>{`${value.Asset.name.substring(
+                                0,
+                                20
+                              )}+..`}</Td>
+                              <Td>
+                                <Tag>{value.status}</Tag>
+                              </Td>
+                              <Td>
+                                <ButtonTertier
+                                  title='Details'
+                                  onclick={() => handleOpen(value.id)}
+                                />
+                              </Td>
+                            </Tr>
+                          ))
+                        ) : (
+                          <Tr>
+                            <Td>1</Td>
+                            <Td>12:22 WIB, 11 Jan 2022</Td>
+                            <Td>Peminjaman Aset</Td>
+                            <Td>Headphone</Td>
+                            <Td>dBe DJ80 Foldable DJ...</Td>
+                            <Td>
+                              <ButtonTertier title='Details' />
+                            </Td>
+                          </Tr>
+                        )}
                       </>
                     )}
                   </Tbody>

@@ -33,7 +33,7 @@ const SignIn = () => {
         const { data } = res.data;
         localStorage.setItem("token", data.token);
         localStorage.setItem("expired", data.expire);
-        localStorage.setItem('role', JSON.stringify(data.role))
+        localStorage.setItem('role', data.role);
         localStorage.setItem('id', data.id)
         localStorage.setItem("isAuth", JSON.stringify(true));
         console.log(data)

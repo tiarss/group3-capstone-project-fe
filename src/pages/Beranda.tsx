@@ -25,6 +25,7 @@ import SliderImage from "../components/Slider";
 import axios from "axios";
 import { tableRequest } from "../types";
 import moment from "moment";
+import ModalAddAssets from "../components/Modal/tambah-asset";
 
 export const Beranda = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -54,6 +55,7 @@ export const Beranda = () => {
   const [selectedData, setSelectedData] = useState<tableRequest>();
   const [isLoadingTable, setIsLoadingTable] = useState(true);
   const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
+  const [isMaintained, setIsMaintained ] = useState<boolean>(false); 
   //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -166,6 +168,7 @@ export const Beranda = () => {
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
+    setAddAssetsCategory(value);
     console.log(value);
   };
 
@@ -182,7 +185,7 @@ export const Beranda = () => {
   const handleAddJumlah = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     setAddAssetsSum(value);
-    console.log(value);
+    console.log("sum: ", value);
   };
   const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.files;
@@ -191,7 +194,39 @@ export const Beranda = () => {
     console.log(value);
   };
 
-  const handleAddAssets = () => {};
+  const handleMaintenance = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    console.log(value)
+    setIsMaintained(value)
+  }
+
+  const handleAddAssets = () => {
+    axios
+    .post(
+      "/assets",
+      {
+        name: addAssetsName,
+        category: addAssetsCategory,
+        description: addAssetsDescription,
+        quantity: addAssetsSum,
+        under_maintenance: isMaintained,
+        image: addAssetsImage
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+      }
+    )
+    .then((res) => {
+      const { data } = res;
+      console.log(data);
+      handleCloseAddAssets();
+      })
+      .catch((err) => {
+      console.log(err.response);
+      });
+  };
 
   const handleToManager = (id: number) => {
     axios
@@ -518,6 +553,17 @@ export const Beranda = () => {
         onClose={handleClose}
         role={role}
         status='Approved by Admin'
+      />
+      <ModalAddAssets
+        isOpen={isOpenAddAssets}
+        onClose={handleCloseAddAssets}
+        onChangeName={handleAddName}
+        onChangeDeskripsi={handleAddDeskripsi}
+        onChangeKategori={handleCategory}
+        onChangeJumlah={handleAddJumlah}
+        onChangeMaintained={handleMaintenance}
+        onChangeImage={handleAddImage}
+        onClickAdd={handleAddAssets}
       />
     </div>
   );

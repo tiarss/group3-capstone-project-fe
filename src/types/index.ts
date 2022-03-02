@@ -112,7 +112,9 @@ export type addAssets = {
   onChangeDeskripsi: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeKategori: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onChangeJumlah: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeMaintained: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickAdd: () => void;
 };
 
 export type history = {

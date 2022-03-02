@@ -37,7 +37,9 @@ const ModalAddAssets = ({
   onChangeDeskripsi,
   onChangeKategori,
   onChangeJumlah,
+  onChangeMaintained,
   onChangeImage,
+  onClickAdd,
 }: addAssets) => {
   return (
     <>
@@ -77,7 +79,7 @@ const ModalAddAssets = ({
                   <FormLabel htmlFor='email-alerts' mb='0'>
                     Maintenance?
                   </FormLabel>
-                  <Switch id='email-alerts' />
+                  <Switch id='email-alerts' onChange={onChangeMaintained}/>
                 </FormControl>
               </Box>
             </Flex>
@@ -85,7 +87,7 @@ const ModalAddAssets = ({
           <ModalFooter>
             <Flex justifyContent='end' gap='10px'>
               <ButtonSecondary title='Batal' onclick={onClose} />
-              <ButtonPrimary title='Tambah Aset' />
+              <ButtonPrimary title='Tambah Aset' onclick={onClickAdd}/>
             </Flex>
           </ModalFooter>
         </ModalContent>

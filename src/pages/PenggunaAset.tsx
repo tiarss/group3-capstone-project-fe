@@ -334,13 +334,13 @@ export const PenggunaAset = () => {
           </Box>
         </Box>
       </Box>
-      <ModalActivity
+      {/* <ModalActivity
         isOpen={isOpen}
         onClose={handleClose}
         activity='history'
         role={1}
         status='Approved by Admin'
-      />
+      /> */}
     </div>
   );
 };

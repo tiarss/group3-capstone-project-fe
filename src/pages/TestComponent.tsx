@@ -24,7 +24,7 @@ export const TestComponent = () => {
        </Box>
        <RequestModal /> */}
        {/* <CardDetail/> */}
-       <ModalActivity role={0} status={''} activity={''} isOpen={isOpen} onClose={onClose} />
+       {/* <ModalActivity role={0} status={''} activity={''} isOpen={isOpen} onClose={onClose} /> */}
     </Flex>
   )
 }

@@ -35,6 +35,7 @@ export const ResumeCard = () => {
         const { data } = err.response;
         console.log(data);
         if (data.message === "invalid or expired jwt") {
+          console.log("test")
           localStorage.setItem("token", "");
           localStorage.setItem("expired", "");
           localStorage.setItem("role", "");

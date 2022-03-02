@@ -14,24 +14,57 @@ import {
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { getAllAssets } from "../../types";
 import { ButtonPrimary, ButtonSecondary } from "../Button";
-import { InputSelect, InputText } from "../Input";
+import { InputSelect, InputSelectData, InputText } from "../Input";
 
 export const RequestModal = ({
-  role,
   isOpen,
   onClose,
+  onChangeDeskripsi,
+  onChangeAset,
+  onClickRequest
 }: {
-  role?: number;
   isOpen: boolean;
   onClose: () => void;
+  onChangeDeskripsi: (e: React.ChangeEvent<HTMLInputElement>)=> void;
+  onChangeAset: (e: React.ChangeEvent<HTMLSelectElement>)=> void
+  onClickRequest: () => void;
 }) => {
   // const [checked, setChecked] = useState(false);
   // const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
   //   const value = e.target.checked;
   //   setChecked(value);
   // };
+  const [assetData, setAssetData] = useState();
+
+  useEffect(() => {}, []);
+
+  const fetchDataAset = (value: string) => {
+    axios
+      .get(`/assets?category=${value}`, {
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        console.log(data)
+        const filterAvailable = data.filter((value: getAllAssets) => value.stock_available !== 0)
+        console.log(filterAvailable)
+        setAssetData(filterAvailable);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    console.log(value);
+    fetchDataAset(value)
+  };
+
   const category = [
     { id: 1, name: "Computer" },
     { id: 2, name: "Computer Accessories" },
@@ -52,14 +85,16 @@ export const RequestModal = ({
           <ModalBody>
             <Flex flexDir='column' gap='10px'>
               <InputSelect
-                title='Pilih Aset'
-                placeholder='Pilih Aset'
                 data={category}
+                title='Kategori Aset'
+                placeholder='Pilih Kategori'
+                onChange={handleChangeCategory}
               />
-              <InputSelect title='Pilih Kategory' placeholder='Pilih Aset' />
+              <InputSelectData title='List Aset' placeholder='Pilih Aset' data={assetData} onChange={onChangeAset}/>
               <InputText
-                title='Pilih Aset'
+                title='Deskripsi Keperluan'
                 placeholder='Lenovo Thinkpad Yoga'
+                onChange={onChangeDeskripsi}
               />
             </Flex>
 
@@ -99,9 +134,9 @@ export const RequestModal = ({
             )} */}
           </ModalBody>
           <ModalFooter>
-            <Flex justifyContent='end' gap='10px'>
+            <Flex gap='10px'>
               <ButtonSecondary title='Batal' onclick={onClose} />
-              <ButtonPrimary title='Ajukan Peminjaman' />
+              <ButtonPrimary title='Ajukan Peminjaman' onclick={onClickRequest} />
             </Flex>
           </ModalFooter>
         </ModalContent>

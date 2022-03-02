@@ -35,12 +35,12 @@ const SignIn = () => {
         localStorage.setItem("expired", data.expire);
         localStorage.setItem('role', data.role)
         localStorage.setItem('id', data.id)
-        localStorage.setItem("isAuth", JSON.stringify(false));
+        localStorage.setItem("isAuth", JSON.stringify(true));
         console.log(data)
         if (code === 200) {
           toast({
-            title: "Account created.",
-            description: "We've created your account for you.",
+            title: "Sign In Success.",
+            description: "You are succest to Sign In",
             status: "success",
             duration: 9000,
             isClosable: true,

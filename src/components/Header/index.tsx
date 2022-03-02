@@ -19,7 +19,7 @@ import logoWhite from "../../assets/Logo-sirclo-white.png";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { userData, setUserData } = useContext(userContext);
   const [role, setRole] = useState(1);
   const [isLoading, setIsLoading] = useState(true);
@@ -33,15 +33,15 @@ export const Header = () => {
     const roles = localStorage.getItem("role");
     if (roles === "Employee") {
       setRole(1);
-    }else if(roles === "Administrator"){
-      setRole(2)
-    }else{
-      setRole(3)
+    } else if (roles === "Administrator") {
+      setRole(2);
+    } else {
+      setRole(3);
     }
   };
 
   const handleGetUser = () => {
-    const id = localStorage.getItem('id')
+    const id = localStorage.getItem("id");
     axios
       .get(`https://klender.xyz/users/${id}`, {
         headers: {
@@ -65,6 +65,15 @@ export const Header = () => {
       });
   };
 
+  const handleLogOut = () => {
+    localStorage.setItem("token", "");
+    localStorage.setItem("expired", "");
+    localStorage.setItem("role", "");
+    localStorage.setItem("id", "");
+    localStorage.setItem("isAuth", JSON.stringify(false));
+    navigate("/sign-in");
+  };
+
   return (
     <Box
       display='flex'
@@ -81,29 +90,29 @@ export const Header = () => {
           color='white'
           fontWeight='normal'
           bgColor='#2296CB'
-          onClick={()=> navigate('/beranda')}
+          onClick={() => navigate("/beranda")}
           _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
           _active={{ bgColor: "#1788BB" }}>
           Beranda
         </Button>
         <Button
-          display={role === 1 || role === 2 ? "block": "none"}
+          display={role === 1 || role === 2 ? "block" : "none"}
           fontWeight='medium'
           color='white'
           bgColor='#2296CB'
-          onClick={()=> navigate('/direktori-aset')}
+          onClick={() => navigate("/direktori-aset")}
           _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
           _active={{ bgColor: "#1788BB" }}>
           Direktori Aset
         </Button>
         <Button
-          display={role === 2 || role === 3 ? "block": "none"}
+          display={role === 2 || role === 3 ? "block" : "none"}
           fontWeight='medium'
           color='white'
           bgColor='#2296CB'
-          onClick={()=> navigate('/pengguna-aset')}
+          onClick={() => navigate("/pengguna-aset")}
           _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
           _active={{ bgColor: "#1788BB" }}>
@@ -125,14 +134,13 @@ export const Header = () => {
                 name={userData.name === "" ? "Guest" : userData.name}
                 width='40px'
                 height='40px'
-                src={userData.avatar}
+                // src={userData.avatar}
               />
             }
             variant='outline'
           />
           <MenuList>
-            <MenuItem icon={<AddIcon />}>Sign In</MenuItem>
-            <MenuItem icon={<ExternalLinkIcon />}>Log Out</MenuItem>
+            <MenuItem icon={<ExternalLinkIcon />} onClick={handleLogOut} >Log Out</MenuItem>
           </MenuList>
         </Menu>
       </Box>

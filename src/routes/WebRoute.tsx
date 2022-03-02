@@ -29,7 +29,7 @@ export const WebRoute = () => {
             <>
               <Route path='/pengguna-aset' element={<PenggunaAset />} />
               <Route path='/beranda' element={<Beranda />} />
-            <Route path="/direktori-aset" element={<DirektoriAset />} />
+            <Route path='/direktori-aset' element={<DirektoriAset />} />
               <Route path='*' element={<NotFound />} />
             </>
           ) : (

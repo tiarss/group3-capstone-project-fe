@@ -23,7 +23,8 @@ import { RequestModal } from "../components/RequestModal";
 import { ResumeCard } from "../components/ResumeCard";
 import SliderImage from "../components/Slider";
 import axios from "axios";
-import { AddAssets } from "../components/AddAssets";
+import { tableRequest } from "../types";
+import moment from "moment";
 
 export const Beranda = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,9 +37,8 @@ export const Beranda = () => {
   //Employee State
   //Create Request
 
-  const [assetName, setAssetName] = useState<string>("");
-  const [activity, setActivity] = useState<string>("Peminjaman Aset");
-  const [description, setDesciption] = useState<string>("");
+  const [assetShortName, setAssetShortName] = useState<string>("");
+  const [descriptionRequest, setDesciptionRequest] = useState<string>("");
 
   //End Employee State
 
@@ -47,15 +47,23 @@ export const Beranda = () => {
   const [addAssetsName, setAddAssetsName] = useState<string>("");
   const [addAssetsDescription, setAddAssetsDescription] = useState<string>("");
   const [addAssetsSum, setAddAssetsSum] = useState<number>(0);
-  const [addAssetsImage, setAddAssetsImage] = useState<File>();;
+  const [addAssetsImage, setAddAssetsImage] = useState<File>();
   const [addAssetsCategory, setAddAssetsCategory] = useState<string>("");
- 
 
-
+  const [requestData, setRequestData] = useState<tableRequest[]>();
+  const [selectedData, setSelectedData] = useState<tableRequest>();
+  const [isLoadingTable, setIsLoadingTable] = useState(true);
+  const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
   //End Admin State
 
+  let roles = localStorage.getItem("role");
   useEffect(() => {
     roleCondition();
+    if (roles === "Administrator") {
+      handleGetAllRequest();
+    } else if (roles === "Manager") {
+      handleGetManagerReq();
+    }
   }, []);
 
   const roleCondition = () => {
@@ -73,51 +81,81 @@ export const Beranda = () => {
     console.log(value);
     setPage(value);
   };
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
 
   //Logic as Employee
   const handleOpenRequest = () => {
-    axios
-      .get(`/activities/${idUser}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((err) => {
-        console.log(err.response);
-      })
-      .finally(() => {
-        setIsOpenRequest(true);
-      });
+    setIsOpenRequest(true);
   };
 
   const handleCloseRequest = () => setIsOpenRequest(false);
 
   const handleRequest = () => {
-    axios.put(
-      "/request/borrow",
-      {
-        // assets_name: assets_nama
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
+    axios
+      .post(
+        "/requests/borrow",
+        {
+          short_name: assetShortName,
+          description: descriptionRequest,
         },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
   };
 
-  const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.target.value
-    console.log(value)
+  const handleAssetName = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setAssetShortName(value);
+    console.log(value);
+  };
+
+  const handleDescriptionRequest = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setDesciptionRequest(value);
+    console.log(value);
   };
 
   // End of Employee Logic
+
   // Admin Logic
+
+  const handleOpen = (id: number) => {
+    const filtering = requestData?.find((value) => value.id === id);
+    setSelectedData(filtering);
+    if (filtering !== undefined) {
+      setSelectedIdReq(filtering?.id);
+    }
+    setIsOpen(true);
+  };
+  const handleClose = () => setIsOpen(false);
+
+  const handleGetAllRequest = () => {
+    setIsLoadingTable(true);
+    axios
+      .get("/requests/admin", {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setRequestData(data);
+        console.log(data);
+        setIsLoadingTable(false);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
   const handleOpenAddAssets = () => {
     setIsOpenAddAssets(true);
   };
@@ -126,32 +164,138 @@ export const Beranda = () => {
     setIsOpenAddAssets(false);
   };
 
-  const handleAddName = (e: React.ChangeEvent<HTMLInputElement>) =>{
-    const value = e.target.value
-    setAddAssetsName(value)
-    console.log(value)
-  }
-  const handleAddDeskripsi = (e: React.ChangeEvent<HTMLInputElement>) =>{
-    const value = e.target.value
-    setAddAssetsDescription(value)
-    console.log(value)
-  }
-  const handleAddJumlah = (e: React.ChangeEvent<HTMLInputElement>) =>{
-    const value = parseInt(e.target.value)
-    setAddAssetsSum(value)
-    console.log(value)
-  }
-  const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) =>{
-    const value = e.target.files
-    if(!value) return
-    setAddAssetsImage(value[0])
-    console.log(value)
-  }
+  const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    console.log(value);
+  };
 
-  const handleAddAssets = () =>{
+  const handleAddName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setAddAssetsName(value);
+    console.log(value);
+  };
+  const handleAddDeskripsi = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setAddAssetsDescription(value);
+    console.log(value);
+  };
+  const handleAddJumlah = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    setAddAssetsSum(value);
+    console.log(value);
+  };
+  const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.files;
+    if (!value) return;
+    setAddAssetsImage(value[0]);
+    console.log(value);
+  };
 
+  const handleAddAssets = () => {};
+
+  const handleToManager = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Waiting approval from Manager" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleAcceptReqAdmin = (id: number) =>{
+    axios
+    .put(
+      `/requests/borrow/${id}`,
+      {
+        approved: true,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+      const temp = selectedData;
+      if (temp !== undefined) {
+        setSelectedData({ ...temp, status: "Approved by Admin" });
+      }
+      handleGetAllRequest();
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
   }
   // End of Admin Logic
+
+  // Manager Logic
+
+  const handleGetManagerReq = () => {
+    setIsLoadingTable(true);
+    axios
+      .get(`/requests/manager/borrow`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setRequestData(data);
+        console.log(data);
+        setIsLoadingTable(false);
+      });
+  };
+
+  const handleAcceptReqManager = (id: number) =>{
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Approved by Manager" });
+        }
+        handleGetManagerReq();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }
+
+  const handleRejectReqManager = (id: number) =>{
+
+  }
+
+
+  // End of Manager Logic
 
   return (
     <div>
@@ -255,56 +399,44 @@ export const Beranda = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    <Tr>
-                      <Td>1</Td>
-                      <Td>12:22 WIB, 11 Jan 2022</Td>
-                      <Td>Peminjaman Aset</Td>
-                      <Td>Headphone</Td>
-                      <Td>dBe DJ80 Foldable DJ...</Td>
-                      <Td>
-                        <ButtonTertier title='Details' onclick={handleOpen} />
-                      </Td>
-                    </Tr>
-                    <Tr>
-                      <Td>1</Td>
-                      <Td>12:22 WIB, 11 Jan 2022</Td>
-                      <Td>Peminjaman Aset</Td>
-                      <Td>Headphone</Td>
-                      <Td>dBe DJ80 Foldable DJ...</Td>
-                      <Td>
-                        <ButtonTertier title='Details' />
-                      </Td>
-                    </Tr>
-                    <Tr>
-                      <Td>1</Td>
-                      <Td>12:22 WIB, 11 Jan 2022</Td>
-                      <Td>Peminjaman Aset</Td>
-                      <Td>Headphone</Td>
-                      <Td>dBe DJ80 Foldable DJ...</Td>
-                      <Td>
-                        <ButtonTertier title='Details' />
-                      </Td>
-                    </Tr>
-                    <Tr>
-                      <Td>1</Td>
-                      <Td>12:22 WIB, 11 Jan 2022</Td>
-                      <Td>Peminjaman Aset</Td>
-                      <Td>Headphone</Td>
-                      <Td>dBe DJ80 Foldable DJ...</Td>
-                      <Td>
-                        <ButtonTertier title='Details' />
-                      </Td>
-                    </Tr>
-                    <Tr>
-                      <Td>1</Td>
-                      <Td>12:22 WIB, 11 Jan 2022</Td>
-                      <Td>Peminjaman Aset</Td>
-                      <Td>Headphone</Td>
-                      <Td>dBe DJ80 Foldable DJ...</Td>
-                      <Td>
-                        <ButtonTertier title='Details' />
-                      </Td>
-                    </Tr>
+                    {isLoadingTable ? (
+                      <Tr>
+                        <Td>1</Td>
+                        <Td>12:22 WIB, 11 Jan 2022</Td>
+                        <Td>Peminjaman Aset</Td>
+                        <Td>Headphone</Td>
+                        <Td>dBe DJ80 Foldable DJ...</Td>
+                        <Td>
+                          <ButtonTertier title='Details' />
+                        </Td>
+                      </Tr>
+                    ) : (
+                      <>
+                        {requestData!.map((value) => (
+                          <Tr key={value.id}>
+                            <Td>1</Td>
+                            <Td>
+                              {moment(value.request_time).format(
+                                "h:mm a, DD MMM YYYY"
+                              )}
+                            </Td>
+                            <Td>
+                              {value.activity === "Borrow"
+                                ? "Peminjaman Aset"
+                                : "Peminjaman Aset"}
+                            </Td>
+                            <Td>{value.Asset.category}</Td>
+                            <Td>{`${value.Asset.name.substring(0, 20)}+..`}</Td>
+                            <Td>
+                              <ButtonTertier
+                                title='Details'
+                                onclick={() => handleOpen(value.id)}
+                              />
+                            </Td>
+                          </Tr>
+                        ))}
+                      </>
+                    )}
                   </Tbody>
                 </Table>
               ) : (
@@ -321,45 +453,41 @@ export const Beranda = () => {
                     </Tr>
                   </Thead>
                   <Tbody>
-                    <Tr>
-                      <Td>1</Td>
-                      <Td>12:22 WIB, 11 Jan 2022</Td>
-                      <Td>Bahtiar Subrata</Td>
-                      <Td>Headphone</Td>
-                      <Td>dBe DJ80 Foldable DJ...</Td>
-                      <Td>
-                        <Tag>Menunggu Persetujuan</Tag>
-                      </Td>
-                      <Td>
-                        <ButtonTertier title='Details' onclick={handleOpen} />
-                      </Td>
-                    </Tr>
-                    <Tr>
-                      <Td>1</Td>
-                      <Td>12:22 WIB, 11 Jan 2022</Td>
-                      <Td>Bahtiar Subrata</Td>
-                      <Td>Headphone</Td>
-                      <Td>dBe DJ80 Foldable DJ...</Td>
-                      <Td>
-                        <Tag colorScheme='green'>Disetujui</Tag>
-                      </Td>
-                      <Td>
-                        <ButtonTertier title='Details' onclick={handleOpen} />
-                      </Td>
-                    </Tr>
-                    <Tr>
-                      <Td>1</Td>
-                      <Td>12:22 WIB, 11 Jan 2022</Td>
-                      <Td>Bahtiar Subrata</Td>
-                      <Td>Headphone</Td>
-                      <Td>dBe DJ80 Foldable DJ...</Td>
-                      <Td>
-                        <Tag colorScheme='red'>Ditolak</Tag>
-                      </Td>
-                      <Td>
-                        <ButtonTertier title='Details' onclick={handleOpen} />
-                      </Td>
-                    </Tr>
+                    {isLoadingTable ? (
+                      <Tr>
+                        <Td>1</Td>
+                        <Td>12:22 WIB, 11 Jan 2022</Td>
+                        <Td>Bahtiar Subrata</Td>
+                        <Td>Headphone</Td>
+                        <Td>dBe DJ80 Foldable DJ...</Td>
+                        <Td>
+                          <Tag>Menunggu Persetujuan</Tag>
+                        </Td>
+                        <Td>
+                          <ButtonTertier title='Details' />
+                        </Td>
+                      </Tr>
+                    ) : (
+                      <>
+                        {requestData!.map((value) => (
+                          <Tr key={value.id}>
+                            <Td>1</Td>
+                            <Td>{moment(value.request_time).format(
+                                "h:mm a, DD MMM YYYY"
+                              )}</Td>
+                            <Td>{value.User.name}</Td>
+                            <Td>{value.Asset.category}</Td>
+                            <Td>{`${value.Asset.name.substring(0, 20)}+..`}</Td>
+                            <Td>
+                              <Tag>{value.status}</Tag>
+                            </Td>
+                            <Td>
+                              <ButtonTertier title='Details' onclick={() => handleOpen(value.id)} />
+                            </Td>
+                          </Tr>
+                        ))}
+                      </>
+                    )}
                   </Tbody>
                 </Table>
               )}
@@ -374,23 +502,23 @@ export const Beranda = () => {
           </Box>
         </Box>
       </Box>
-      <RequestModal isOpen={isOpenRequest} onClose={handleCloseRequest} />
+      <RequestModal
+        isOpen={isOpenRequest}
+        onClose={handleCloseRequest}
+        onChangeAset={handleAssetName}
+        onChangeDeskripsi={handleDescriptionRequest}
+        onClickRequest={handleRequest}
+      />
       <ModalActivity
+        data={selectedData}
+        handleToManager={() => handleToManager(selectedIdReq)}
+        handleAcceptReqManager={()=> handleAcceptReqManager(selectedIdReq)}
+        handleAcceptReqAdmin={()=> handleAcceptReqAdmin(selectedIdReq)}
         isOpen={isOpen}
         onClose={handleClose}
-        activity='history'
-        role={1}
+        role={role}
         status='Approved by Admin'
       />
-      {/* <AddAssets
-        isOpen={isOpenAddAssets}
-        onClose={handleCloseAddAssets}
-        onChangeName={handleAddName}
-        onChangeDeskripsi={handleAddDeskripsi}
-        onChangeKategori={handleCategory}
-        onChangeJumlah={handleAddJumlah}
-        onChangeImage={handleAddImage}
-      /> */}
     </div>
   );
 };

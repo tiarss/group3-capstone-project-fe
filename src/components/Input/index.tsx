@@ -17,7 +17,12 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
-import { inputPasswordProps, inputProps, inputSelectProps } from "../../types";
+import {
+  inputPasswordProps,
+  inputProps,
+  inputSelectDataProps,
+  inputSelectProps,
+} from "../../types";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { SearchIcon } from "@chakra-ui/icons";
@@ -135,7 +140,7 @@ export const InputSelect = ({
         onChange={onChange}>
         {data !== undefined ? (
           data.map((datas, index) => (
-            <option key={datas.id} value={datas.id}>
+            <option key={index} value={datas.name}>
               {datas.name}
             </option>
           ))
@@ -147,43 +152,93 @@ export const InputSelect = ({
   );
 };
 
+export const InputSelectData = ({
+  title,
+  placeholder,
+  value,
+  onChange,
+  data,
+}: inputSelectDataProps) => {
+  return (
+    <Box>
+      <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
+      <Select
+        bgColor='white'
+        border='2px solid #373737'
+        _focus={{ border: "2px solid #000" }}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}>
+        {data !== undefined ? data.length > 0 ? (
+          data.map((datas, index) => (
+            <option key={index} value={datas.short_name}>
+              {datas.name}
+            </option>
+          ))
+        ) : (
+          <option value={0}>Kosong</option>
+        ) : <option value={0}>Kosong</option> }
+      </Select>
+    </Box>
+  );
+};
+
 type searchData = {
-  id: number
-  name: string
-  value: string
-}
+  id: number;
+  name: string;
+  value: string;
+};
 
 type searchProps = {
   data: searchData[];
   value: string;
   onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-}
+};
 
-export const Search = ({data, value, onChangeSearch, onChangeSelect} : searchProps) => {
-  return(
-    <Flex align="center" justify="center" mt={9}>
-        <Flex>
-        <Select 
-            bg='#2296CB'
-            borderColor='#2296CB'
-            color='white'
-            width={166}
-            onChange={onChangeSelect}
-            value={value}
-        >
-          {data !== undefined ? data.map((datas)=>(
-              <option key={datas.id} value={datas.value} style={{ color: 'black' }}>{datas.name}</option>
-            )) : <option value={0}>Kosong</option>}
+export const Search = ({
+  data,
+  value,
+  onChangeSearch,
+  onChangeSelect,
+}: searchProps) => {
+  return (
+    <Flex align='center' justify='center' mt={9}>
+      <Flex>
+        <Select
+          bg='#2296CB'
+          borderColor='#2296CB'
+          color='white'
+          width={166}
+          onChange={onChangeSelect}
+          value={value}>
+          {data !== undefined ? (
+            data.map((datas) => (
+              <option
+                key={datas.id}
+                value={datas.value}
+                style={{ color: "black" }}>
+                {datas.name}
+              </option>
+            ))
+          ) : (
+            <option value={0}>Kosong</option>
+          )}
         </Select>
         <InputGroup>
-            <InputLeftElement
-                pointerEvents='none'
-                children={<SearchIcon color='#2296CB' />}
-            />
-            <Input width={700} bg='white' type='text' placeholder='Cari Barang' onChange={onChangeSearch}/>
+          <InputLeftElement
+            pointerEvents='none'
+            children={<SearchIcon color='#2296CB' />}
+          />
+          <Input
+            width={700}
+            bg='white'
+            type='text'
+            placeholder='Cari Barang'
+            onChange={onChangeSearch}
+          />
         </InputGroup>
-        </Flex>
+      </Flex>
     </Flex>
-  )
-}
+  );
+};

@@ -166,13 +166,28 @@ export type tableRequest = {
   updated_at: string;
 };
 
-export type requestModalProps ={
-  handleToManager?: () => void
-  handleAcceptReqManager?: ()=> void
-  handleAcceptReqAdmin?: ()=> void
+export type activitiesDetail = {
+  activity: string;
+  asset_image: string;
+  asset_name: string;
+  category: string;
+  description: string;
+  id: number;
+  request_date: string;
+  return_date: string;
+  status: string;
+  stock_left: string;
+  user_name: string;
+};
+
+export type requestModalProps = {
+  handleToManager?: () => void;
+  handleAcceptReqManager?: () => void;
+  handleAcceptReqAdmin?: () => void;
+  dataActivities?: activitiesDetail;
   data?: tableRequest;
   role: number;
   status: string;
   isOpen: boolean;
   onClose: () => void;
-}
+};

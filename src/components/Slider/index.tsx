@@ -4,7 +4,7 @@ import { InfoIcon } from "@chakra-ui/icons";
 import { ModalActivity } from "../ModalActivity";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { typeActivitiesData } from "../../types";
+import { activitiesDetail, typeActivitiesData } from "../../types";
 import moment from "moment";
 
 function SampleNextArrow(props: any) {
@@ -36,15 +36,19 @@ function SamplePrevArrow(props: any) {
 function SliderImage() {
   const [isOpen, setIsOpen] = useState(false);
   const [activitiesData, setActivitiesData] = useState<typeActivitiesData[]>();
+  const [selectedActivities, setSelectedActivities] = useState<activitiesDetail>();
+
   const handleOpen = (id: number) => {
     axios
-      .get(`/activities/${idUser}/1`, {
+      .get(`/activities/${idUser}/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => {
-        console.log(res);
+        const {data} = res.data
+        console.log(data);
+        setSelectedActivities(data)
       })
       .catch((err) => {
         console.log(err.response);
@@ -175,13 +179,13 @@ function SliderImage() {
                   bgColor='#EFEFEF'>
                   {value.status}
                 </Text>
-                <Tooltip label='Details' placement="top">
+                <Tooltip label='Details' placement='top'>
                   <InfoIcon
                     onClick={() => handleOpen(value.id)}
                     cursor='pointer'
                     transition='all 0.3s ease'
-                    _hover={{ color: '#222222' }}
-                    _active={{ color: '#2A2A2A' }}
+                    _hover={{ color: "#222222" }}
+                    _active={{ color: "#2A2A2A" }}
                   />
                 </Tooltip>
               </Flex>
@@ -189,13 +193,13 @@ function SliderImage() {
           </Box>
         ))}
       </Slider>
-      {/* <ModalActivity
+      <ModalActivity
+        dataActivities={selectedActivities}
         isOpen={isOpen}
         onClose={handleClose}
-        activity='activity'
         role={1}
         status='Waiting approval'
-      /> */}
+      />
     </Box>
   );
 }

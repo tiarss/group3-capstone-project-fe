@@ -1,6 +1,7 @@
 import {
   Box,
   Flex,
+  Skeleton,
   Table,
   Tag,
   Tbody,
@@ -32,7 +33,9 @@ export const Beranda = () => {
   const [isOpenAddAssets, setIsOpenAddAssets] = useState(false);
   const [role, setRole] = useState(1);
   const [activePage, setPage] = useState(1);
+  const [totalData, setTotalData] = useState(0);
   const idUser = localStorage.getItem("id");
+  const dummy = [1,2,3,4,5]
 
   //Employee State
   //Create Request
@@ -64,7 +67,7 @@ export const Beranda = () => {
     } else if (roles === "Manager") {
       handleGetManagerReq();
     }
-  }, []);
+  }, [activePage]);
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -138,16 +141,24 @@ export const Beranda = () => {
   const handleClose = () => setIsOpen(false);
 
   const handleGetAllRequest = () => {
+    const pageView = (activePage - 1) * 5 + 1
     setIsLoadingTable(true);
     axios
       .get("/requests/admin", {
+        params: {
+          p: pageView,
+          rp: 5,
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => {
         const { data } = res.data;
+        const { total_record } = res.data;
         setRequestData(data);
+        setTotalData(total_record)
+        console.log(total_record)
         console.log(data);
         setIsLoadingTable(false);
       })
@@ -397,29 +408,37 @@ export const Beranda = () => {
                   </Thead>
                   <Tbody>
                     {isLoadingTable ? (
-                      <Tr>
-                        <Td>1</Td>
-                        <Td>12:22 WIB, 11 Jan 2022</Td>
-                        <Td>Peminjaman Aset</Td>
-                        <Td>Headphone</Td>
-                        <Td>dBe DJ80 Foldable DJ...</Td>
-                        <Td>
-                          <ButtonTertier title='Details' />
-                        </Td>
-                      </Tr>
+                      <>
+                        {dummy.map((value:number) => (
+                        <Tr key={value}>
+                          <Td><Skeleton>1</Skeleton></Td>
+                          <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
+                          <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
+                          <Td><Skeleton>Headphone</Skeleton></Td>
+                          <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
+                          <Td>
+                          <Skeleton><ButtonTertier title='Details' /></Skeleton>
+                          </Td>
+                        </Tr>
+                          ))}
+                      </>
                     ) : (
                       <>
                         {requestData === null ? (
-                          <Tr>
-                            <Td>1</Td>
-                            <Td>12:22 WIB, 11 Jan 2022</Td>
-                            <Td>Peminjaman Aset</Td>
-                            <Td>Headphone</Td>
-                            <Td>dBe DJ80 Foldable DJ...</Td>
+                        <>
+                          {dummy.map((value:number) => (
+                          <Tr key={value}>
+                            <Td><Skeleton>1</Skeleton></Td>
+                            <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
+                            <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
+                            <Td><Skeleton>Headphone</Skeleton></Td>
+                            <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
                             <Td>
-                              <ButtonTertier title='Details' />
+                            <Skeleton><ButtonTertier title='Details' /></Skeleton>
                             </Td>
                           </Tr>
+                        ))}
+                        </>
                         ) : requestData !== undefined ? (
                           requestData.map((value) => (
                             <Tr key={value.id}>
@@ -449,13 +468,13 @@ export const Beranda = () => {
                           ))
                         ) : (
                           <Tr>
-                            <Td>1</Td>
-                            <Td>12:22 WIB, 11 Jan 2022</Td>
-                            <Td>Peminjaman Aset</Td>
-                            <Td>Headphone</Td>
-                            <Td>dBe DJ80 Foldable DJ...</Td>
+                            <Td><Skeleton>1</Skeleton></Td>
+                            <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
+                            <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
+                            <Td><Skeleton>Headphone</Skeleton></Td>
+                            <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
                             <Td>
-                              <ButtonTertier title='Details' />
+                            <Skeleton><ButtonTertier title='Details' /></Skeleton>
                             </Td>
                           </Tr>
                         )}
@@ -550,7 +569,7 @@ export const Beranda = () => {
             </Box>
             <Flex mt='10px' justifyContent='center'>
               <Pagination
-                total={Math.ceil(20 / 5)}
+                total={Math.ceil(totalData / 5)}
                 page={activePage}
                 onChange={handlePage}
               />

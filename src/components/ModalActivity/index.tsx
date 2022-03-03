@@ -25,6 +25,7 @@ export const ModalActivity = ({
   handleToManager,
   handleAcceptReqManager,
   handleAcceptReqAdmin,
+  handleRejectReqEmployee,
 }: requestModalProps) => {
   let status = "";
 
@@ -270,26 +271,30 @@ export const ModalActivity = ({
           </ModalBody>
           <ModalFooter>
             {role === 1 ? (
-              status === "Waiting approval from Admin" ? (
+              status === "Waiting approval" ? (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary
                     title='Batalkan Pengajuan'
-                    onclick={onClose}
+                    onclick={handleRejectReqEmployee}
                   />
-                  <ButtonPrimary title='Kembali' />
+                  <ButtonPrimary title='Kembali' onclick={onClose} />
                 </Flex>
               ) : status === "Approved by Manager" ? (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary
                     title='Batalkan Pengajuan'
-                    onclick={onClose}
+                    onclick={handleRejectReqEmployee}
                   />
-                  <ButtonPrimary title='Kembali' />
+                  <ButtonPrimary title='Kembali' onclick={onClose} />
                 </Flex>
               ) : status === "Approved by Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
                   <ButtonPrimary title='Ajukan Pengembalian' />
+                </Flex>
+              ) : status === "Cancelled" ? (
+                <Flex gap='10px' justifyContent='end'>
+                  <ButtonSecondary title='Kembali' onclick={onClose} />
                 </Flex>
               ) : (
                 <Flex gap='10px' justifyContent='end'>

@@ -36,9 +36,13 @@ function SamplePrevArrow(props: any) {
 function SliderImage() {
   const [isOpen, setIsOpen] = useState(false);
   const [activitiesData, setActivitiesData] = useState<typeActivitiesData[]>();
-  const [selectedActivities, setSelectedActivities] = useState<activitiesDetail>();
+  const [selectedActivities, setSelectedActivities] =
+    useState<activitiesDetail>();
+  const [selectedId, setSelectedId] = useState<number>(0);
+  const idUser = localStorage.getItem("id");
 
   const handleOpen = (id: number) => {
+    setSelectedId(id);
     axios
       .get(`/activities/${idUser}/${id}`, {
         headers: {
@@ -46,9 +50,9 @@ function SliderImage() {
         },
       })
       .then((res) => {
-        const {data} = res.data
+        const { data } = res.data;
         console.log(data);
-        setSelectedActivities(data)
+        setSelectedActivities(data);
       })
       .catch((err) => {
         console.log(err.response);
@@ -58,7 +62,6 @@ function SliderImage() {
       });
   };
   const handleClose = () => setIsOpen(false);
-  const idUser = localStorage.getItem("id");
 
   useEffect(() => {
     getAllActivities();
@@ -75,6 +78,32 @@ function SliderImage() {
         const { data } = res.data;
         setActivitiesData(data);
         console.log(data);
+      });
+  };
+
+  const handleRejectRequest = (id: number) => {
+    axios
+      .put(
+        `/activities/${idUser}/${id}`,
+        {
+          status: "cancel",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        const { data } = res.data;
+        console.log(data);
+        getAllActivities();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      })
+      .finally(() => {
+        setIsOpen(true);
       });
   };
 
@@ -197,6 +226,7 @@ function SliderImage() {
         dataActivities={selectedActivities}
         isOpen={isOpen}
         onClose={handleClose}
+        handleRejectReqEmployee={() => handleRejectRequest(selectedId)}
         role={1}
         status='Waiting approval'
       />

@@ -184,6 +184,7 @@ export type requestModalProps = {
   handleToManager?: () => void;
   handleAcceptReqManager?: () => void;
   handleAcceptReqAdmin?: () => void;
+  handleRejectReqEmployee?: ()=>void;
   dataActivities?: activitiesDetail;
   data?: tableRequest;
   role: number;

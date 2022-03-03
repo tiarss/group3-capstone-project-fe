@@ -15,7 +15,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import { ButtonPrimary, ButtonSecondary, ButtonTertier } from "../Button";
 import moment from "moment";
-import { requestModalProps } from "../../types";
+import { activitiesDetail, requestModalProps } from "../../types";
 
 export const ModalActivity = ({
   dataActivities,
@@ -34,6 +34,7 @@ export const ModalActivity = ({
   const [description, setDescription] = useState<string>("");
   const [returnTime, setReturnTime] = useState<string>("");
   const [isApproved, setIsApproved] = useState<boolean>(false);
+  const [dataAct, setDataAct] = useState<activitiesDetail|undefined>(dataActivities);
   
   const handleShortName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -123,6 +124,7 @@ export const ModalActivity = ({
   }
   return (
     <>
+      {console.log("data : ", data)}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -353,6 +355,7 @@ export const ModalActivity = ({
             </Box>
           </ModalBody>
           <ModalFooter>
+            {console.log(dataAct)}
             {role === 1 ? (
               status === "Waiting approval from Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
@@ -379,7 +382,7 @@ export const ModalActivity = ({
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
                   <Box display='none'>
-                    <ButtonPrimary title='Ajukan Pengembalian' />
+                    <ButtonPrimary title='Ajukan Pengembalian'/>
                   </Box>
                 </Flex>
               )

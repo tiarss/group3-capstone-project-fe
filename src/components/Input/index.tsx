@@ -34,6 +34,7 @@ export const InputText = ({
   size,
   value,
   onChange,
+  isDisabled
 }: inputProps) => {
   return (
     <Box>
@@ -47,6 +48,7 @@ export const InputText = ({
         type={type}
         placeholder={placeholder}
         value={value}
+        isDisabled={isDisabled}
       />
     </Box>
   );
@@ -127,6 +129,7 @@ export const InputSelect = ({
   value,
   onChange,
   data,
+  isDisabled
 }: inputSelectProps) => {
   return (
     <Box>
@@ -137,7 +140,8 @@ export const InputSelect = ({
         _focus={{ border: "2px solid #000" }}
         placeholder={placeholder}
         value={value}
-        onChange={onChange}>
+        onChange={onChange}
+        isDisabled={isDisabled}>
         {data !== undefined ? (
           data.map((datas, index) => (
             <option key={index} value={datas.name}>

@@ -15,6 +15,7 @@ export type inputProps = {
   type?: string;
   size?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isDisabled?: boolean;
 };
 
 export type inputPasswordProps = {
@@ -38,6 +39,7 @@ export type inputSelectProps = {
   value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   data?: { id: number; name: string }[];
+  isDisabled?: boolean;
 };
 
 export type inputSelectDataProps = {

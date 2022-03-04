@@ -212,33 +212,35 @@ export const Beranda = () => {
   }
 
   const handleAddAssets = () => {
+    const formData = new FormData();
+    formData.append("name", addAssetsName);
+    formData.append("category", addAssetsCategory);
+    formData.append("description", addAssetsDescription);
+    formData.append("quantity", addAssetsSum as any);
+    formData.append("under_maintenance", isMaintained as any);
+    if (addAssetsImage) {
+      formData.append("image", addAssetsImage);
+    }
     axios
-    .post(
-      "/assets",
-      {
-        name: addAssetsName,
-        category: addAssetsCategory,
-        description: addAssetsDescription,
-        quantity: addAssetsSum,
-        under_maintenance: isMaintained,
-        image: addAssetsImage
-      },
-      {
+      .post(
+        "/assets", formData, {
         headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-        }
-      }
-    )
-    .then((res) => {
-      const { data } = res;
-      console.log(data);
-      handleCloseAddAssets();
+        },
+      })
+      .then((res) => {
+        console.log(res);
       })
       .catch((err) => {
-      console.log(err.response);
+        console.log(err.response);
+      })
+      .finally(() => {
+        handleCloseAddAssets();
       });
   };
-
+  
   const handleToManager = (id: number) => {
     axios
       .put(

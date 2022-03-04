@@ -290,6 +290,29 @@ export const Beranda = () => {
         console.log(err.response);
       });
   };
+
+  const handleAjukanPengembalian = (id:number) => {
+    axios
+      .put(
+        `/request/return/${id}`,
+        {
+          askingreturn: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        const { data } = res;
+        console.log("respon: ", data);
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      })
+  }
   // End of Admin Logic
 
   // Manager Logic
@@ -335,6 +358,8 @@ export const Beranda = () => {
         console.log(err.response);
       });
   };
+
+  
 
   const handleRejectReqManager = (id: number) => {};
 
@@ -619,11 +644,13 @@ export const Beranda = () => {
         onChangeDeskripsi={handleDescriptionRequest}
         onClickRequest={handleRequest}
       />
+      {console.log("id : ", selectedIdReq)}
       <ModalActivity
         data={selectedData}
         handleToManager={() => handleToManager(selectedIdReq)}
         handleAcceptReqManager={() => handleAcceptReqManager(selectedIdReq)}
         handleAcceptReqAdmin={() => handleAcceptReqAdmin(selectedIdReq)}
+        handleAjukanPengembalian={()=>handleAjukanPengembalian(selectedIdReq)}
         isOpen={isOpen}
         onClose={handleClose}
         role={role}

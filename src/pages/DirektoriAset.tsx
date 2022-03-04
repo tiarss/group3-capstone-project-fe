@@ -1,11 +1,12 @@
 import { SearchIcon } from "@chakra-ui/icons";
 import { Box, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Spacer, Text, useDisclosure, Wrap } from "@chakra-ui/react";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import CardDetail from "../components/DetailCard";
 import { Header } from "../components/Header";
 import { Search } from "../components/Input";
 import ModalDetailAsset from "../components/Modal/detail-asset";
+import { MaintenanceContext } from "../helper/MaintenanceContext";
 
 const DirektoriAset = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +17,7 @@ const DirektoriAset = () => {
     const [imageHistory, setImageHistory] = useState<string>("");
     const [usersHistory, setUsersHistory] = useState<any[]>([]);
     const [isMaintained, setIsMaintained ] = useState<boolean>(false);
+    const {Maintained, setMaintained} = useContext(MaintenanceContext)
     const [shortName, setShortName] = useState<string>("");
     const [search, setSearch] = useState<string>("")
     const [selectedCategory, setSelectedCategory] = useState<string>("");
@@ -92,6 +94,7 @@ const DirektoriAset = () => {
         const value = e.target.checked;
         console.log(value)
         setIsMaintained(value)
+        setMaintained(value)
     }
 
     const handleUpdate = (short_name: string) => {

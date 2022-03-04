@@ -27,6 +27,8 @@ export const ModalActivity = ({
   handleAcceptReqManager,
   handleAcceptReqAdmin,
   handleRejectReqEmployee,
+  handleReturnEmployee,
+  handleAjukanPengembalian
 }: requestModalProps) => {
   console.log(role)
   
@@ -110,8 +112,7 @@ export const ModalActivity = ({
     console.log(err.response);
     });
   }
-
-  
+ 
   let status = "";
 
   if (role === 1) {
@@ -125,7 +126,7 @@ export const ModalActivity = ({
   }
   return (
     <>
-      {console.log("data : ", data)}
+      {console.log("data : ", dataAct)}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -356,7 +357,6 @@ export const ModalActivity = ({
             </Box>
           </ModalBody>
           <ModalFooter>
-            {console.log(dataAct)}
             {role === 1 ? (
               status === "Waiting approval" ? (
                 <Flex gap='10px' justifyContent='end'>
@@ -377,7 +377,7 @@ export const ModalActivity = ({
               ) : status === "Approved by Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
-                  <ButtonPrimary title='Ajukan Pengembalian' />
+                  <ButtonPrimary title='Ajukan Pengembalian' onclick={handleReturnEmployee}/>
                 </Flex>
               ) : status === "Cancelled" ? (
                 <Flex gap='10px' justifyContent='end'>
@@ -387,7 +387,7 @@ export const ModalActivity = ({
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
                   <Box display='none'>
-                    <ButtonPrimary title='Ajukan Pengembalian'/>
+                    <ButtonPrimary title='Ajukan Pengembalian' onclick={handleReturnEmployee}/>
                   </Box>
                 </Flex>
               )
@@ -412,7 +412,7 @@ export const ModalActivity = ({
               ) : status === "Approved by Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
-                  <ButtonPrimary title='Ajukan Pengembalian' />
+                  <ButtonPrimary title='Ajukan Pengembalian' onclick={handleAjukanPengembalian}/>
                 </Flex>
               ) : (
                 <Flex gap='10px' justifyContent='end'>

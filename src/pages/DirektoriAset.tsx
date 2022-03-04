@@ -58,6 +58,7 @@ const DirektoriAset = () => {
         .then((res) => {
         const { data } = res.data;
         setDetails(data);
+        handleHistory(short_name);
         })
         .catch((err) => {
         console.log(err.response);
@@ -65,7 +66,6 @@ const DirektoriAset = () => {
         .finally(()=> {
             setIsOpen(true);
         })
-        handleHistory(short_name);
     }
 
     const handleHistory = (short_name: string) => {
@@ -74,6 +74,7 @@ const DirektoriAset = () => {
         {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
         .then((res) => {
         const { data } = res.data;
+        console.log(data);
         setCategoryHistory(data.category);
         setNameHistory(data.asset_name);
         setImageHistory(data.asset_image);
@@ -136,6 +137,7 @@ const DirektoriAset = () => {
     return(
         <>  
             <Header/>
+            {console.log(usersHistory)}
             <Box bg="#EFEFEF" paddingBottom={9}>
             <Flex align="center" justify="center">
                 <Text fontSize='xl' fontWeight='bold' mt={7}>Direktori Aset</Text>

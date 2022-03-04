@@ -181,14 +181,15 @@ export type activitiesDetail = {
 };
 
 export type requestModalProps = {
+  handleRejectReqEmployee?: ()=>void;
   handleToManager?: () => void;
   handleAcceptReqManager?: () => void;
+  handleRejectReqManager?:()=>void;
   handleAcceptReqAdmin?: () => void;
-  handleRejectReqEmployee?: ()=>void;
+  handleRejectReqAdmin?:()=> void;
   dataActivities?: activitiesDetail;
   data?: tableRequest;
   role: number;
-  status: string;
   isOpen: boolean;
   onClose: () => void;
 };

@@ -12,7 +12,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { Pagination } from "@mantine/core";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import {
   ButtonPrimary,
   ButtonSecondary,
@@ -26,10 +26,14 @@ import SliderImage from "../components/Slider";
 import axios from "axios";
 import { tableRequest } from "../types";
 import moment from "moment";
+import {Trigger, triggerType} from "../helper/Trigger"
+import { AssignAssets } from "../components/AssignAssets";
 
 export const Beranda = () => {
+  const {trigger, setTrigger} = useContext(Trigger)
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenRequest, setIsOpenRequest] = useState(false);
+  const [isOpenAssign, setIsOpenAssign] = useState(false);
   const [isOpenAddAssets, setIsOpenAddAssets] = useState(false);
   const [role, setRole] = useState(1);
   const [activePage, setPage] = useState(1);
@@ -108,6 +112,8 @@ export const Beranda = () => {
       )
       .then((res) => {
         console.log(res);
+        const temp : number = trigger.trig
+        setTrigger({...trigger, trig: temp+1})
       })
       .catch((err) => {
         console.log(err.response);
@@ -139,6 +145,13 @@ export const Beranda = () => {
     setIsOpen(true);
   };
   const handleClose = () => setIsOpen(false);
+
+  const handleOpenAssign = () =>{
+    setIsOpenAssign(true)
+  }
+  const handleCloseAssign = () =>{
+    setIsOpenAssign(false)
+  }
 
   const handleGetAllRequest = () => {
     const pageView = (activePage - 1) * 5 + 1
@@ -255,23 +268,58 @@ export const Beranda = () => {
         console.log(err.response);
       });
   };
+
+  const handleRejectReqAdmin = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Rejected by Admin" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
   // End of Admin Logic
 
   // Manager Logic
 
   const handleGetManagerReq = () => {
+    const pageView = (activePage - 1) * 5 + 1;
     setIsLoadingTable(true);
     axios
       .get(`/requests/manager/borrow`, {
+        params: {
+          p: pageView,
+          rp: 5,
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => {
         const { data } = res.data;
+        const { total_record } = res.data;
         setRequestData(data);
+        setTotalData(total_record);
         console.log(data);
         setIsLoadingTable(false);
+      }).catch((err)=>{
+        console.log(err.response)
       });
   };
 
@@ -301,7 +349,31 @@ export const Beranda = () => {
       });
   };
 
-  const handleRejectReqManager = (id: number) => {};
+  const handleRejectReqManager = (id: number) => {
+    axios
+    .put(
+      `/requests/borrow/${id}`,
+      {
+        approved: false,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => {
+      console.log(res);
+      const temp = selectedData;
+      if (temp !== undefined) {
+        setSelectedData({ ...temp, status: "Rejected by Manager" });
+      }
+      handleGetManagerReq();
+    })
+    .catch((err) => {
+      console.log(err.response);
+    });
+  };
 
   // End of Manager Logic
 
@@ -381,8 +453,8 @@ export const Beranda = () => {
                   </>
                 ) : role === 2 ? (
                   <>
-                    <ButtonTertier title='Assign Aset Ke Karyawan' />
-                    <ButtonSecondary title='Pengajuan Aset Baru' />
+                    <ButtonTertier title='Assign Aset Ke Karyawan' onclick={handleOpenAssign} />
+                    <ButtonSecondary title='Pengajuan Aset Baru' onclick={handleOpenRequest} />
                     <ButtonPrimary
                       title='Tambah Aset'
                       onclick={handleOpenAddAssets}
@@ -440,9 +512,9 @@ export const Beranda = () => {
                         ))}
                         </>
                         ) : requestData !== undefined ? (
-                          requestData.map((value) => (
+                          requestData.map((value,index) => (
                             <Tr key={value.id}>
-                              <Td>1</Td>
+                              <Td>{(activePage - 1) * 5 + index + 1}</Td>
                               <Td>
                                 {moment(value.request_time).format(
                                   "h:mm a, DD MMM YYYY"
@@ -578,6 +650,7 @@ export const Beranda = () => {
         </Box>
       </Box>
       <RequestModal
+        role={role}
         isOpen={isOpenRequest}
         onClose={handleCloseRequest}
         onChangeAset={handleAssetName}
@@ -589,10 +662,15 @@ export const Beranda = () => {
         handleToManager={() => handleToManager(selectedIdReq)}
         handleAcceptReqManager={() => handleAcceptReqManager(selectedIdReq)}
         handleAcceptReqAdmin={() => handleAcceptReqAdmin(selectedIdReq)}
+        handleRejectReqAdmin={()=> handleRejectReqAdmin(selectedIdReq)}
+        handleRejectReqManager={()=> handleRejectReqManager(selectedIdReq)}
         isOpen={isOpen}
         onClose={handleClose}
         role={role}
-        status='Approved by Admin'
+      />
+      <AssignAssets 
+      isOpen={isOpenAssign}
+      onClose={handleCloseAssign}
       />
     </div>
   );

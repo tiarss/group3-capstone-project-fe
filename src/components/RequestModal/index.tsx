@@ -22,22 +22,24 @@ import { InputSelect, InputSelectData, InputText } from "../Input";
 
 export const RequestModal = ({
   isOpen,
+  role,
   onClose,
   onChangeDeskripsi,
   onChangeAset,
-  onClickRequest
+  onClickRequest,
 }: {
   isOpen: boolean;
+  role?: number;
   onClose: () => void;
-  onChangeDeskripsi: (e: React.ChangeEvent<HTMLInputElement>)=> void;
-  onChangeAset: (e: React.ChangeEvent<HTMLSelectElement>)=> void
+  onChangeDeskripsi: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeAset: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onClickRequest: () => void;
 }) => {
-  // const [checked, setChecked] = useState(false);
-  // const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.checked;
-  //   setChecked(value);
-  // };
+  const [checked, setChecked] = useState(false);
+  const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    setChecked(value);
+  };
   const [assetData, setAssetData] = useState();
 
   useEffect(() => {}, []);
@@ -49,9 +51,11 @@ export const RequestModal = ({
       })
       .then((res) => {
         const { data } = res.data;
-        console.log(data)
-        const filterAvailable = data.filter((value: getAllAssets) => value.stock_available !== 0)
-        console.log(filterAvailable)
+        console.log(data);
+        const filterAvailable = data.filter(
+          (value: getAllAssets) => value.stock_available !== 0
+        );
+        console.log(filterAvailable);
         setAssetData(filterAvailable);
       })
       .catch((err) => {
@@ -62,7 +66,7 @@ export const RequestModal = ({
   const handleChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     console.log(value);
-    fetchDataAset(value)
+    fetchDataAset(value);
   };
 
   const category = [
@@ -80,34 +84,27 @@ export const RequestModal = ({
       <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Peminjaman Aset</ModalHeader>
+          <ModalHeader>{role === 1 ? "Peminjaman Aset" : "Pengajuan Aset Baru"}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Flex flexDir='column' gap='10px'>
-              <InputSelect
-                data={category}
-                title='Kategori Aset'
-                placeholder='Pilih Kategori'
-                onChange={handleChangeCategory}
-              />
-              <InputSelectData title='List Aset' placeholder='Pilih Aset' data={assetData} onChange={onChangeAset}/>
-              <InputText
-                title='Deskripsi Keperluan'
-                placeholder='Lenovo Thinkpad Yoga'
-                onChange={onChangeDeskripsi}
-              />
-            </Flex>
-
-            {/* {role === 1 ? (
+            {role === 1 ? (
               <Flex flexDir='column' gap='10px'>
-                <InputText title='Kategori Aset' placeholder='Laptop' />
-                <InputText
-                  title='Pilih Aset'
-                  placeholder='Lenovo Thinkpad Yoga'
+                <InputSelect
+                  data={category}
+                  title='Kategori Aset'
+                  placeholder='Pilih Kategori'
+                  onChange={handleChangeCategory}
+                />
+                <InputSelectData
+                  title='List Aset'
+                  placeholder='Pilih Aset'
+                  data={assetData}
+                  onChange={onChangeAset}
                 />
                 <InputText
                   title='Deskripsi Keperluan'
-                  placeholder='Tuliskan Keperluan'
+                  placeholder='Lenovo Thinkpad Yoga'
+                  onChange={onChangeDeskripsi}
                 />
               </Flex>
             ) : (
@@ -124,20 +121,30 @@ export const RequestModal = ({
                 />
                 <Text>Gunakan Tanggal Pengembalian</Text>
                 <Switch id='isChecked' onChange={handleChecked} />
-                <Box display={checked? "block" : "none"}>
+                <Box display={checked ? "block" : "none"}>
                   <InputText
                     title='Tanggal Pengembalian'
                     placeholder='Tuliskan Keperluan'
                   />
                 </Box>
               </Flex>
-            )} */}
+            )}
           </ModalBody>
           <ModalFooter>
-            <Flex gap='10px'>
-              <ButtonSecondary title='Batal' onclick={onClose} />
-              <ButtonPrimary title='Ajukan Peminjaman' onclick={onClickRequest} />
-            </Flex>
+            {role === 1 ? (
+              <Flex gap='10px'>
+                <ButtonSecondary title='Batal' onclick={onClose} />
+                <ButtonPrimary
+                  title='Ajukan Peminjaman'
+                  onclick={onClickRequest}
+                />
+              </Flex>
+            ) : (
+              <Flex gap='10px'>
+                <ButtonSecondary title='Batal' onclick={onClose} />
+                <ButtonPrimary title='Ajukan Pengadaan' />
+              </Flex>
+            )}
           </ModalFooter>
         </ModalContent>
       </Modal>

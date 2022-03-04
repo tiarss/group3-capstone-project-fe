@@ -26,14 +26,12 @@ const category = [
   { id: 7, name: "Others" },
 ];
 
-export const AddProcurement = ({
+export const AssignAssets = ({
   isOpen,
   onClose,
-  role,
 }: {
   isOpen: boolean;
   onClose: () => void;
-  role?: string;
 }) => {
    const checked = false
   return (
@@ -41,7 +39,7 @@ export const AddProcurement = ({
       <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Tambah Aset</ModalHeader>
+          <ModalHeader>Assign Aset ke Karyawan</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
               <Flex flexDir='column' gap='10px'>
@@ -68,7 +66,7 @@ export const AddProcurement = ({
           <ModalFooter>
             <Flex justifyContent='end' gap='10px'>
               <ButtonSecondary title='Batal' onclick={onClose} />
-              <ButtonPrimary title='Tambah Aset' />
+              <ButtonPrimary title='Assign Aset' />
             </Flex>
           </ModalFooter>
         </ModalContent>

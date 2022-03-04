@@ -291,6 +291,32 @@ export const Beranda = () => {
       });
   };
 
+  const handleAcceptReturn = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Approved by Admin" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }
+
   const handleAjukanPengembalian = (id:number) => {
     axios
       .put(
@@ -644,13 +670,14 @@ export const Beranda = () => {
         onChangeDeskripsi={handleDescriptionRequest}
         onClickRequest={handleRequest}
       />
-      {console.log("id : ", selectedIdReq)}
+      
       <ModalActivity
         data={selectedData}
         handleToManager={() => handleToManager(selectedIdReq)}
         handleAcceptReqManager={() => handleAcceptReqManager(selectedIdReq)}
         handleAcceptReqAdmin={() => handleAcceptReqAdmin(selectedIdReq)}
         handleAjukanPengembalian={()=>handleAjukanPengembalian(selectedIdReq)}
+        handleAcceptReturn={()=>handleAcceptReturn(selectedIdReq)}
         isOpen={isOpen}
         onClose={handleClose}
         role={role}

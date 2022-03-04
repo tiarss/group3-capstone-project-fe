@@ -28,7 +28,8 @@ export const ModalActivity = ({
   handleAcceptReqAdmin,
   handleRejectReqEmployee,
   handleReturnEmployee,
-  handleAjukanPengembalian
+  handleAjukanPengembalian,
+  handleAcceptReturn
 }: requestModalProps) => {
   console.log(role)
   
@@ -391,39 +392,60 @@ export const ModalActivity = ({
                   </Box>
                 </Flex>
               )
-            ) : role === 2 ? (
+            ) : role === 2 ? data?.activity == "Borrow" ? ( 
+                status === "Waiting approval from Admin" ? (
+                  <Flex gap='10px' justifyContent='end'>
+                    <ButtonSecondary
+                      title='Tolak'
+                      onclick={onClose}
+                      isDisabled={true}
+                    />
+                    <ButtonPrimary title='Terima Permohonan' isDisabled={true} />
+                  </Flex>
+                ) : status === "Approved by Manager" ? (
+                  <Flex gap='10px' justifyContent='end'>
+                    <ButtonSecondary title='Tolak Permohonan' onclick={onClose} />
+                    <ButtonPrimary
+                      title='Terima Permohonan'
+                      onclick={handleAcceptReqAdmin}
+                    />
+                  </Flex>
+                ) : status === "Approved by Admin" ? (
+                  <Flex gap='10px' justifyContent='end'>
+                    <ButtonSecondary title='Kembali' onclick={onClose} />
+                    <ButtonPrimary title='Ajukan Pengembalian' onclick={handleAjukanPengembalian}/>
+                  </Flex>
+                ) : (
+                  <Flex gap='10px' justifyContent='end'>
+                    <ButtonSecondary
+                      title='Tolak'
+                      onclick={onClose}
+                      isDisabled={true}
+                    />
+                    <ButtonPrimary title='Terima Permohonan' isDisabled={true} />
+                  </Flex>
+                )
+              ) : 
               status === "Waiting approval from Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
-                  <ButtonSecondary
-                    title='Tolak'
+                  {/* <ButtonSecondary
+                    title='Kemb'
                     onclick={onClose}
                     isDisabled={true}
-                  />
-                  <ButtonPrimary title='Terima Permohonan' isDisabled={true} />
-                </Flex>
-              ) : status === "Approved by Manager" ? (
-                <Flex gap='10px' justifyContent='end'>
-                  <ButtonSecondary title='Tolak Permohonan' onclick={onClose} />
-                  <ButtonPrimary
-                    title='Terima Permohonan'
-                    onclick={handleAcceptReqAdmin}
-                  />
-                </Flex>
-              ) : status === "Approved by Admin" ? (
-                <Flex gap='10px' justifyContent='end'>
-                  <ButtonSecondary title='Kembali' onclick={onClose} />
-                  <ButtonPrimary title='Ajukan Pengembalian' onclick={handleAjukanPengembalian}/>
-                </Flex>
+                  /> */}
+                  <ButtonPrimary title='Terima Permohonan' onclick={handleAcceptReturn} />
+              </Flex> 
               ) : (
                 <Flex gap='10px' justifyContent='end'>
-                  <ButtonSecondary
-                    title='Tolak'
-                    onclick={onClose}
-                    isDisabled={true}
-                  />
-                  <ButtonPrimary title='Terima Permohonan' isDisabled={true} />
-                </Flex>
-              )
+                    <ButtonSecondary
+                      title='Tolak'
+                      onclick={onClose}
+                      isDisabled={true}
+                    />
+                    <ButtonPrimary title='Terima Permohonan' isDisabled={true} />
+                  </Flex>
+  
+            // Punya manajer
             ) : status === "Waiting approval from Manager" ? (
               <Flex gap='10px' justifyContent='end'>
                 <ButtonSecondary title='Tolak' onclick={onClose} />

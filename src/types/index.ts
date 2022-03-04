@@ -189,6 +189,7 @@ export type requestModalProps = {
   handleRejectReqEmployee?: ()=>void;
   handleReturnEmployee?: ()=>void;
   handleAjukanPengembalian?: ()=>void;
+  handleAcceptReturn?: ()=>void;
   dataActivities?: activitiesDetail;
   data?: tableRequest;
   role: number;

@@ -11,10 +11,11 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
+import axios from "axios";
+import React, { useState } from "react";
+import { ButtonPrimary, ButtonSecondary, ButtonTertier } from "../Button";
 import moment from "moment";
-import React from "react";
-import { requestModalProps } from "../../types";
-import { ButtonPrimary, ButtonSecondary } from "../Button";
+import { activitiesDetail, requestModalProps } from "../../types";
 
 export const ModalActivity = ({
   dataActivities,
@@ -26,7 +27,92 @@ export const ModalActivity = ({
   handleAcceptReqManager,
   handleAcceptReqAdmin,
   handleRejectReqEmployee,
+  handleReturnEmployee,
+  handleAjukanPengembalian
 }: requestModalProps) => {
+  console.log(role)
+  
+  const [shortName, setShortName] = useState<string>("");
+  const [employeeId, setEmployeeId] = useState<number>(0);
+  const [description, setDescription] = useState<string>("");
+  const [returnTime, setReturnTime] = useState<string>("");
+  const [isApproved, setIsApproved] = useState<boolean>(false);
+  const [dataAct, setDataAct] = useState<activitiesDetail|undefined>(dataActivities);
+  
+  const handleShortName = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setShortName(value);
+  }
+
+  const handleEmployeeId = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = parseInt(e.target.value);
+    setEmployeeId(value);
+  }
+
+  const handleDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setDescription(value);
+  }
+
+  const handleReturnTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setReturnTime(value);
+  }
+
+  const handleApproved = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    setIsApproved(value);
+  }
+
+  const handleEmployeeReturn = () => {
+    axios
+    .post(`https://klender.xyz/borrow`,{
+        short_name: shortName,
+        description: description
+    },
+    {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
+    .then((res) => {
+    const { data } = res;
+    console.log(data);
+    })
+    .catch((err) => {
+    console.log(err.response);
+    });
+  }
+
+  const handleAdminReturn = () => {
+    axios
+    .post(`https://klender.xyz/borrow`,{
+        short_name: shortName,
+        employee_id: employeeId,
+        description: description,
+        return_time: returnTime
+    },
+    {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
+    .then((res) => {
+    const { data } = res;
+    console.log(data);
+    })
+    .catch((err) => {
+    console.log(err.response);
+    });
+  }
+
+  const handleAdminApproval = (request_id:number) => {
+    axios
+    .put(`https://klender.xyz/requet/borrow/${request_id}`,{
+        approved: isApproved
+    },
+    {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
+    .then((res) => {
+    const { data } = res;
+    console.log(data);
+    })
+    .catch((err) => {
+    console.log(err.response);
+    });
+  }
+ 
   let status = "";
 
   if (role === 1) {
@@ -40,6 +126,7 @@ export const ModalActivity = ({
   }
   return (
     <>
+      {console.log("data : ", dataAct)}
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -290,7 +377,7 @@ export const ModalActivity = ({
               ) : status === "Approved by Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
-                  <ButtonPrimary title='Ajukan Pengembalian' />
+                  <ButtonPrimary title='Ajukan Pengembalian' onclick={handleReturnEmployee}/>
                 </Flex>
               ) : status === "Cancelled" ? (
                 <Flex gap='10px' justifyContent='end'>
@@ -300,7 +387,7 @@ export const ModalActivity = ({
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
                   <Box display='none'>
-                    <ButtonPrimary title='Ajukan Pengembalian' />
+                    <ButtonPrimary title='Ajukan Pengembalian' onclick={handleReturnEmployee}/>
                   </Box>
                 </Flex>
               )
@@ -325,7 +412,7 @@ export const ModalActivity = ({
               ) : status === "Approved by Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
-                  <ButtonPrimary title='Ajukan Pengembalian' />
+                  <ButtonPrimary title='Ajukan Pengembalian' onclick={handleAjukanPengembalian}/>
                 </Flex>
               ) : (
                 <Flex gap='10px' justifyContent='end'>

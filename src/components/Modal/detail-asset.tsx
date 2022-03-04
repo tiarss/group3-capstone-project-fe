@@ -1,7 +1,6 @@
-import { Box, Button, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Switch, Tab, TabList, TabPanel, TabPanels, Tabs, useDisclosure } from "@chakra-ui/react";
+import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,  Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { modalProps } from "../../types";
-import { InputSelect, InputText } from "../Input";
 import DetailAdmin from "./admin/detail-asset-admin";
 import DetailEmployee from "./employee/detail-asset-employee";
 import HistoryAset from "./history/history";
@@ -24,7 +23,7 @@ const ModalDetailAsset = ({isOpen, onClose, nama, total_aset, deskripsi, kategor
                     <TabPanels>
                         <TabPanel>
                             <ModalBody mb={5}>
-                                {localStorage.getItem("role") == "employee" ? 
+                                {localStorage.getItem("role") === "Employee" ? 
                                 <DetailEmployee nama={nama} total_aset={total_aset} deskripsi={deskripsi} kategori={kategori} backgroundImage={backgroundimage}/>
                                 : <DetailAdmin nama={nama} total_aset={total_aset} deskripsi={deskripsi} kategori={kategori} backgroundImage={backgroundimage} onChange={onChangeUpdate}/>}
                             </ModalBody>

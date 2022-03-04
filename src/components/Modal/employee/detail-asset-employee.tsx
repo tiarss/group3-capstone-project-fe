@@ -1,5 +1,6 @@
 import { Box, FormLabel, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { useContext } from "react";
+import { MaintenanceContext } from "../../../helper/MaintenanceContext";
 
 type detailEmployeeProps = {
     nama: string | undefined;
@@ -9,6 +10,7 @@ type detailEmployeeProps = {
     backgroundImage?: string | undefined;
 }
 const DetailEmployee = ({nama, total_aset, deskripsi, kategori, backgroundImage}: detailEmployeeProps) => {
+    const {Maintained, setMaintained} = useContext(MaintenanceContext);
     return(
         <>
             <Box width='100%' height="93.4px" style={{
@@ -56,7 +58,9 @@ const DetailEmployee = ({nama, total_aset, deskripsi, kategori, backgroundImage}
                  </Box>
             </Box>
             <Box height="32px" bg="#EFEFEF">
+                {Maintained === true ? 
                 <Text paddingTop={1} paddingLeft={5} color="#2296CB">Sedang dalam perbaikan</Text>
+            : <Text paddingTop={1} paddingLeft={5} color="#2296CB">Tersedia</Text>}
             </Box>
         </>
     )

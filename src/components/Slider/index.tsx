@@ -96,7 +96,7 @@ function SliderImage() {
       )
       .then((res) => {
         const { data } = res.data;
-        console.log(data);
+        console.log("respon: ", data);
         getAllActivities();
       })
       .catch((err) => {
@@ -106,6 +106,32 @@ function SliderImage() {
         setIsOpen(true);
       });
   };
+
+  const handleReturnEmployee = (id: number) => {
+    axios
+      .put(
+        `/activities/${idUser}/${id}`,
+        {
+          status: "return",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        const { data } = res.data;
+        console.log("respon: ", data);
+        getAllActivities();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      })
+      .finally(() => {
+        setIsOpen(true);
+      });
+  }
 
   let settings = {
     className: "slider variable-width",
@@ -227,6 +253,7 @@ function SliderImage() {
         isOpen={isOpen}
         onClose={handleClose}
         handleRejectReqEmployee={() => handleRejectRequest(selectedId)}
+        handleReturnEmployee={() => handleReturnEmployee(selectedId)}
         role={1}
         status='Waiting approval'
       />

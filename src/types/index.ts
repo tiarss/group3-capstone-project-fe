@@ -65,8 +65,8 @@ export type userHistory = {
 };
 
 export type modalProps = {
-  isOpen: boolean;
-  onClose: () => void;
+  isOpen:boolean
+  onClose:()=>void
   nama?: string | undefined;
   total_aset?: number | undefined;
   kategori?: string | undefined;
@@ -78,7 +78,7 @@ export type modalProps = {
   users?: userHistory[] | null | undefined;
   onChangeUpdate?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onClickUpdate?: () => void;
-};
+}
 
 export type addAssets = {
   role?: number;
@@ -88,7 +88,9 @@ export type addAssets = {
   onChangeDeskripsi: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeKategori: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onChangeJumlah: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeMaintained: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickAdd: () => void;
 };
 
 export type history = {
@@ -185,6 +187,8 @@ export type requestModalProps = {
   handleAcceptReqManager?: () => void;
   handleAcceptReqAdmin?: () => void;
   handleRejectReqEmployee?: ()=>void;
+  handleReturnEmployee?: ()=>void;
+  handleAjukanPengembalian?: ()=>void;
   dataActivities?: activitiesDetail;
   data?: tableRequest;
   role: number;

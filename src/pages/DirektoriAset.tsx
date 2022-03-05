@@ -4,7 +4,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import CardDetail from "../components/DetailCard";
 import { Header } from "../components/Header";
-import { InputSelect, Search } from "../components/Input";
+import { InputSelect, InputSelectStatus, Search } from "../components/Input";
 import ModalDetailAsset from "../components/Modal/detail-asset";
 import { MaintenanceContext } from "../helper/MaintenanceContext";
 
@@ -35,9 +35,8 @@ const DirektoriAset = () => {
     ];
 
     const status = [
-        { id: 0, name: "All", value: ""},
-        { id: 1, name: "Tersedia", value: "Available"},
-        { id: 2, name: "Dipakai", value: "In Use"}
+        { id: 0, name: "All", value: "all"},
+        { id: 1, name: "Tersedia", value: "available"},
     ]
 
     useEffect(() => {
@@ -100,7 +99,6 @@ const DirektoriAset = () => {
 
     const handleMaintenance = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.checked;
-        console.log(value)
         setIsMaintained(value)
         setMaintained(value)
     }
@@ -128,7 +126,6 @@ const DirektoriAset = () => {
     const handleSelect = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedCategory(value);
-        console.log(value);
         axios
         .get(`https://klender.xyz/assets?category=${value}`,
         {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
@@ -144,6 +141,16 @@ const DirektoriAset = () => {
     const handleStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const value = e.target.value;
         setSelectedStatus(value);
+        axios
+        .get(`https://klender.xyz/assets?status=${value}`,
+        {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
+        .then((res) => {
+        const { data } = res.data;
+        setAsset(data);
+        })
+        .catch((err) => {
+        console.log(err.response);
+        });
     }
 
     return(
@@ -159,7 +166,7 @@ const DirektoriAset = () => {
                 <Box bg="white" width={1080} maxHeight={605} borderRadius={7} shadow="xl" overflowY='scroll'>
                     <Flex align="center" justify="end" marginTop={3} marginEnd={5}>
                         <Text>Status: </Text>
-                        <InputSelect title="" placeholder="Status" value={selectedStatus} onChange={handleStatus} data={status} isDisabled={false}/>
+                        <InputSelectStatus title="" placeholder="" value={selectedStatus} onChange={handleStatus} data={status} isDisabled={false}/>
                     </Flex>
                     <Flex align="center" justify="center" mt={50}>
                     <Box width={['55%', '70%', '90%']}>

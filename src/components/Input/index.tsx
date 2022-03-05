@@ -23,6 +23,7 @@ import {
   inputSelectDataProps,
   inputSelectDataUserProps,
   inputSelectProps,
+  inputSelectStatusProps,
 } from "../../types";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
@@ -278,5 +279,38 @@ export const Search = ({
         </InputGroup>
       </Flex>
     </Flex>
+  );
+};
+
+export const InputSelectStatus = ({
+  title,
+  placeholder,
+  value,
+  onChange,
+  data,
+  isDisabled
+}: inputSelectStatusProps) => {
+  return (
+    <Box>
+      <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
+      <Select
+        bgColor='white'
+        border='2px solid #373737'
+        _focus={{ border: "2px solid #000" }}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        isDisabled={isDisabled}>
+        {data !== undefined ? (
+          data.map((datas, index) => (
+            <option key={index} value={datas.value}>
+              {datas.name}
+            </option>
+          ))
+        ) : (
+          <option value={0}>Kosong</option>
+        )}
+      </Select>
+    </Box>
   );
 };

@@ -11,11 +11,9 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import axios from "axios";
-import React, { useState } from "react";
-import { ButtonPrimary, ButtonSecondary, ButtonTertier } from "../Button";
+import { ButtonPrimary, ButtonSecondary } from "../Button";
 import moment from "moment";
-import { activitiesDetail, requestModalProps } from "../../types";
+import { requestModalProps } from "../../types";
 
 export const ModalActivity = ({
   dataActivities,

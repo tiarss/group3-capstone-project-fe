@@ -15,6 +15,7 @@ export type inputProps = {
   type?: string;
   size?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  isDisabled?: boolean;
 };
 
 export type inputPasswordProps = {
@@ -31,6 +32,22 @@ export type inputTextAreaProps = {
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 };
 
+type searchData = {
+  id: number;
+  name: string;
+  value: string;
+};
+
+export type inputSelectStatusProps = {
+  title?: string;
+  type?: string;
+  placeholder?: string;
+  value?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  data?: searchData[];
+  isDisabled?: boolean;
+};
+
 export type inputSelectProps = {
   title?: string;
   type?: string;
@@ -38,6 +55,7 @@ export type inputSelectProps = {
   value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   data?: { id: number; name: string }[];
+  isDisabled?: boolean;
 };
 
 export type inputSelectDataProps = {

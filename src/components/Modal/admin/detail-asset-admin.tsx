@@ -49,13 +49,13 @@ const DetailAdmin = ({nama, total_aset, deskripsi, kategori, backgroundImage, on
 
     return(
         <>
-            <InputText title="Nama Aset" placeholder="Masukkan Nama Aset" onChange={handleNama} value={namaAset}/>
-            <InputText title="Deskripsi Aset" placeholder="Masukkan Deskripsi Aset" onChange={handleDeskripsi} value={deskripsiAset}/>
-            <InputSelect title="Kategori Aset" placeholder="Pilih Kategori Aset" value={selectedCategoryId} onChange={handleKategori} data={kategoriAset}/>
-            <InputText title="Jumlah Aset" placeholder="Masukkan Jumlah Aset" onChange={handleJumlahAset} value={jumlahAset}/>
+            <InputText title="Nama Aset" placeholder="Masukkan Nama Aset" onChange={handleNama} value={namaAset} isDisabled={true}/>
+            <InputText title="Deskripsi Aset" placeholder="Masukkan Deskripsi Aset" onChange={handleDeskripsi} value={deskripsiAset} isDisabled={true}/>
+            <InputSelect title="Kategori Aset" placeholder="Pilih Kategori Aset" value={selectedCategoryId} onChange={handleKategori} data={kategoriAset} isDisabled={true}/>
+            <InputText title="Jumlah Aset" placeholder="Masukkan Jumlah Aset" onChange={handleJumlahAset} value={jumlahAset} isDisabled={true}/>
             <Box>
                 <FormLabel style={{ fontWeight: "bold" }}>Foto Aset</FormLabel>
-                <input type='file' onChange={handleAsetImage} />
+                <input type='file' onChange={handleAsetImage} disabled/>
             </Box>
             <Box bgColor="#EFEFEF" marginTop={3} borderRadius={5}>
                 <FormControl display='flex' alignItems='center'>

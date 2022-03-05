@@ -112,31 +112,31 @@ function SliderImage() {
       });
   };
 
-  const handleRejectRequest = (id: number) => {
-    axios
-      .put(
-        `/activities/${idUser}/${id}`,
-        {
-          status: "cancel",
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((res) => {
-        const { data } = res.data;
-        console.log("respon: ", data);
-        getAllActivities();
-      })
-      .catch((err) => {
-        console.log(err.response);
-      })
-      .finally(() => {
-        setIsOpen(true);
-      });
-  };
+  // const handleRejectRequest = (id: number) => {
+  //   axios
+  //     .put(
+  //       `/activities/${idUser}/${id}`,
+  //       {
+  //         status: "cancel",
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
+  //         },
+  //       }
+  //     )
+  //     .then((res) => {
+  //       const { data } = res.data;
+  //       console.log("respon: ", data);
+  //       getAllActivities();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err.response);
+  //     })
+  //     .finally(() => {
+  //       setIsOpen(true);
+  //     });
+  // };
 
   const handleReturnEmployee = (id: number) => {
     axios
@@ -153,7 +153,7 @@ function SliderImage() {
       )
       .then((res) => {
         const { data } = res.data;
-        console.log("respon: ", data);
+        // console.log("respon: ", data);
         getAllActivities();
       })
       .catch((err) => {
@@ -263,7 +263,21 @@ function SliderImage() {
                   padding='5px 7px'
                   fontWeight='semibold'
                   bgColor='#EFEFEF'>
-                  {value.status}
+                  {value.activitiesType === "Borrow"
+                        ? value.status === "Waiting approval"
+                          ? "Menunggu Persetujuan"
+                          : value.status === "Approved by Manager"
+                          ? "Diterima Manager"
+                          : value.status === "Rejected by Manager"
+                          ? "Ditolak Manager"
+                          : value.status === "Approved by Admin"
+                          ? "Diterima"
+                          : value.status === "Rejected by Admin"
+                          ? "Ditolak Admin"
+                          : "Dibatalkan"
+                        : value.status === "Waiting approval"
+                        ? "Menunggu Persetujuan Pengembalian"
+                        : "Dikembalikan"}
                 </Text>
                 <Tooltip label='Details' placement='top'>
                   <InfoIcon

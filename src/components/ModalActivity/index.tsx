@@ -153,8 +153,9 @@ export const ModalActivity = ({
                     padding='3px 6px'
                     color='white'
                     bgColor='#2A2A2A'>
-                    {role === 1
-                      ? data?.activity === "Borrow"
+                    {role === 1 ?
+                      dataActivities !== undefined 
+                      ? dataActivities?.activity === "Borrow"
                         ? status === "Waiting approval"
                           ? "Menunggu Persetujuan"
                           : status === "Approved by Manager"
@@ -167,8 +168,9 @@ export const ModalActivity = ({
                           ? "Ditolak Admin"
                           : "Dibatalkan"
                         : status === "Waiting approval"
-                        ? "Menunggu Persetujuan Pengembalian"
+                        ? "Proses Pengembalian"
                         : "Dikembalikan"
+                        :"test"
                       : role === 2
                       ? data?.activity === "Borrow"
                         ? status === "Waiting approval from Manager" ||
@@ -312,7 +314,7 @@ export const ModalActivity = ({
           </ModalBody>
           <ModalFooter>
             {role === 1 ? (
-              data?.activity === "Borrow" ? (
+              dataActivities?.activity === "Borrow" ? (
                 status === "Waiting approval" ? (
                   <Flex gap='10px' justifyContent='end'>
                     <ButtonSecondary

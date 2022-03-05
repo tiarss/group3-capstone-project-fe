@@ -46,9 +46,12 @@ export const RequestModal = ({
 }) => {
   const [assetData, setAssetData] = useState();
   const [userData, setUserData] = useState();
+  const roles = localStorage.getItem("role");
 
   useEffect(() => {
-    fetchDataUsers();
+    if (roles === "Administrator") {
+      fetchDataUsers();
+    }
   }, []);
 
   const fetchDataAset = (value: string) => {

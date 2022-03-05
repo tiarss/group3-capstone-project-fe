@@ -75,6 +75,8 @@ export const Beranda = () => {
       handleGetAllRequest();
     } else if (roles === "Manager") {
       handleGetManagerReq();
+    }else{
+      getAllHistory();
     }
   }, [activePage]);
 
@@ -100,6 +102,17 @@ export const Beranda = () => {
   };
 
   const handleCloseRequest = () => setIsOpenRequest(false);
+
+  const getAllHistory = () => {
+    axios.get(`/histories/users/${idUser}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res)=>{
+      const {data} = res.data
+      console.log(data)
+    })
+  }
 
   const handleRequest = () => {
     axios
@@ -590,7 +603,94 @@ export const Beranda = () => {
               </Flex>
             </Flex>
             <Box overflowX='auto'>
-              {role === 1 || role === 2 ? (
+              {role === 1 ? <Table minW='800px' size='sm' borderRadius='20px'>
+              <Thead bgColor='blue.500'>
+                    <Tr>
+                      <Th color='white'>No</Th>
+                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>Jenis Aktivitas</Th>
+                      <Th color='white'>Kategori Aset</Th>
+                      <Th color='white'>Barang</Th>
+                      <Th color='white'></Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {isLoadingTable ? (
+                      <>
+                        {dummy.map((value:number) => (
+                        <Tr key={value}>
+                          <Td><Skeleton>1</Skeleton></Td>
+                          <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
+                          <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
+                          <Td><Skeleton>Headphone</Skeleton></Td>
+                          <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
+                          <Td>
+                          <Skeleton><ButtonTertier title='Details' /></Skeleton>
+                          </Td>
+                        </Tr>
+                          ))}
+                      </>
+                    ) : (
+                      <>
+                        {requestData === null ? (
+                        <>
+                          {dummy.map((value:number) => (
+                          <Tr key={value}>
+                            <Td><Skeleton>1</Skeleton></Td>
+                            <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
+                            <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
+                            <Td><Skeleton>Headphone</Skeleton></Td>
+                            <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
+                            <Td>
+                            <Skeleton><ButtonTertier title='Details' /></Skeleton>
+                            </Td>
+                          </Tr>
+                        ))}
+                        </>
+                        ) : requestData !== undefined ? (
+                          requestData.map((value, index) => (
+                            <Tr key={value.id}>
+                              <Td>{(activePage - 1) * 5 + index + 1}</Td>
+                              <Td>
+                                {moment(value.request_time).format(
+                                  "h:mm a, DD MMM YYYY"
+                                )}
+                              </Td>
+                              <Td>
+                                {value.activity === "Borrow"
+                                  ? "Peminjaman Aset"
+                                  : "Peminjaman Aset"}
+                              </Td>
+                              <Td>{value.Asset.category}</Td>
+                              <Td>{`${value.Asset.name.substring(
+                                0,
+                                20
+                              )}+..`}</Td>
+                              <Td>
+                                <ButtonTertier
+                                  title='Details'
+                                  onclick={() => handleOpen(value.id)}
+                                />
+                              </Td>
+                            </Tr>
+                          ))
+                        ) : (
+                          <Tr>
+                            <Td><Skeleton>1</Skeleton></Td>
+                            <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
+                            <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
+                            <Td><Skeleton>Headphone</Skeleton></Td>
+                            <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
+                            <Td>
+                            <Skeleton><ButtonTertier title='Details' /></Skeleton>
+                            </Td>
+                          </Tr>
+                        )}
+                      </>
+                    )}
+                  </Tbody>
+              </Table> : 
+              role === 2 ? (
                 <Table minW='800px' size='sm' borderRadius='20px'>
                   <Thead bgColor='blue.500'>
                     <Tr>

@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, Tag, Text, Tooltip } from "@chakra-ui/react";
 import Slider from "react-slick";
 import { InfoIcon } from "@chakra-ui/icons";
 import { ModalActivity } from "../ModalActivity";
@@ -257,13 +257,8 @@ function SliderImage() {
                 padding='10px'
                 justifyContent='space-between'
                 alignItems='center'>
-                <Text
-                  borderRadius='5px'
-                  fontSize='12px'
-                  padding='5px 7px'
-                  fontWeight='semibold'
-                  bgColor='#EFEFEF'>
-                  {value.activitiesType === "Borrow"
+                  <Tag size="sm" variant="subtle" colorScheme={value.status.includes("Approved") ? "whatsapp" : value.status.includes("Waiting") ? "orange" : "red"}>
+                  {value.activity_type === "Borrow"
                         ? value.status === "Waiting approval"
                           ? "Menunggu Persetujuan"
                           : value.status === "Approved by Manager"
@@ -276,9 +271,33 @@ function SliderImage() {
                           ? "Ditolak Admin"
                           : "Dibatalkan"
                         : value.status === "Waiting approval"
-                        ? "Menunggu Persetujuan Pengembalian"
+                        ? "Proses Pengembalian"
                         : "Dikembalikan"}
-                </Text>
+                  </Tag>
+                {/* <Text
+                  borderRadius='5px'
+                  fontSize='12px'
+                  padding='5px 7px'
+                  fontWeight='semibold'
+                  color="white"
+                  bgColor={value.status.includes("Approved") ? "#009D77" : value.status.includes("Waiting") ? "#E97500" : "#CF3030"}
+                  >
+                  {value.activity_type === "Borrow"
+                        ? value.status === "Waiting approval"
+                          ? "Menunggu Persetujuan"
+                          : value.status === "Approved by Manager"
+                          ? "Diterima Manager"
+                          : value.status === "Rejected by Manager"
+                          ? "Ditolak Manager"
+                          : value.status === "Approved by Admin"
+                          ? "Diterima"
+                          : value.status === "Rejected by Admin"
+                          ? "Ditolak Admin"
+                          : "Dibatalkan"
+                        : value.status === "Waiting approval"
+                        ? "Proses Pengembalian"
+                        : "Dikembalikan"}
+                </Text> */}
                 <Tooltip label='Details' placement='top'>
                   <InfoIcon
                     onClick={() => handleOpen(value.id)}

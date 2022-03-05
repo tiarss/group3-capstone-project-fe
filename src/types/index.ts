@@ -120,7 +120,7 @@ export type CardDetailProps = {
 };
 
 export type typeActivitiesData = {
-  activitiesType: string;
+  activity_type: string;
   asset_name: string;
   asset_image: string;
   id: number;

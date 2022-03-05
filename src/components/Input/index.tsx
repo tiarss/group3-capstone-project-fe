@@ -21,6 +21,7 @@ import {
   inputPasswordProps,
   inputProps,
   inputSelectDataProps,
+  inputSelectDataUserProps,
   inputSelectProps,
 } from "../../types";
 import { FaEye } from "react-icons/fa";
@@ -107,6 +108,7 @@ export const InputNumber = ({
       <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
       <NumberInput defaultValue={1} min={1} max={99}>
         <NumberInputField
+        type="number"
           onChange={onChange}
           placeholder={placeholder}
           value={value}
@@ -186,6 +188,38 @@ export const InputSelectData = ({
     </Box>
   );
 };
+
+export const InputSelectDataUser = ({
+  title,
+  placeholder,
+  value,
+  onChange,
+  data,
+}: inputSelectDataUserProps) => {
+  return (
+    <Box>
+      <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
+      <Select
+        bgColor='white'
+        border='2px solid #373737'
+        _focus={{ border: "2px solid #000" }}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}>
+        {data !== undefined ? data.length > 0 ? (
+          data.map((datas, index) => (
+            <option key={datas.id} value={datas.id}>
+              {datas.user}
+            </option>
+          ))
+        ) : (
+          <option value={0}>Kosong</option>
+        ) : <option value={0}>Kosong</option> }
+      </Select>
+    </Box>
+  );
+};
+
 
 type searchData = {
   id: number;

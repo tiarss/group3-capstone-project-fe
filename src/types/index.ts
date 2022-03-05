@@ -51,6 +51,15 @@ export type inputSelectDataProps = {
   data?: { short_name: string; name: string }[];
 };
 
+export type inputSelectDataUserProps = {
+  title?: string;
+  type?: string;
+  placeholder?: string;
+  value?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  data?: { id: number; user: string }[];
+};
+
 export type userData = {
   avatar: string;
   name: string;
@@ -185,17 +194,18 @@ export type activitiesDetail = {
 };
 
 export type requestModalProps = {
+  handleRejectReqEmployee?: ()=>void;
   handleToManager?: () => void;
   handleAcceptReqManager?: () => void;
+  handleRejectReqManager?:()=>void;
   handleAcceptReqAdmin?: () => void;
-  handleRejectReqEmployee?: ()=>void;
   handleReturnEmployee?: ()=>void;
   handleAjukanPengembalian?: ()=>void;
   handleAcceptReturn?: ()=>void;
+  handleRejectReqAdmin?:()=> void;
   dataActivities?: activitiesDetail;
   data?: tableRequest;
   role: number;
-  status: string;
   isOpen: boolean;
   onClose: () => void;
 };

@@ -31,88 +31,6 @@ export const ModalActivity = ({
   handleAjukanPengembalian,
   handleAcceptReturn
 }: requestModalProps) => {
-  console.log(role)
-  
-  const [shortName, setShortName] = useState<string>("");
-  const [employeeId, setEmployeeId] = useState<number>(0);
-  const [description, setDescription] = useState<string>("");
-  const [returnTime, setReturnTime] = useState<string>("");
-  const [isApproved, setIsApproved] = useState<boolean>(false);
-  const [dataAct, setDataAct] = useState<activitiesDetail|undefined>(dataActivities);
-  
-  const handleShortName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setShortName(value);
-  }
-
-  const handleEmployeeId = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = parseInt(e.target.value);
-    setEmployeeId(value);
-  }
-
-  const handleDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setDescription(value);
-  }
-
-  const handleReturnTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setReturnTime(value);
-  }
-
-  const handleApproved = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.checked;
-    setIsApproved(value);
-  }
-
-  const handleEmployeeReturn = () => {
-    axios
-    .post(`https://klender.xyz/borrow`,{
-        short_name: shortName,
-        description: description
-    },
-    {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
-    .then((res) => {
-    const { data } = res;
-    console.log(data);
-    })
-    .catch((err) => {
-    console.log(err.response);
-    });
-  }
-
-  const handleAdminReturn = () => {
-    axios
-    .post(`https://klender.xyz/borrow`,{
-        short_name: shortName,
-        employee_id: employeeId,
-        description: description,
-        return_time: returnTime
-    },
-    {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
-    .then((res) => {
-    const { data } = res;
-    console.log(data);
-    })
-    .catch((err) => {
-    console.log(err.response);
-    });
-  }
-
-  const handleAdminApproval = (request_id:number) => {
-    axios
-    .put(`https://klender.xyz/requet/borrow/${request_id}`,{
-        approved: isApproved
-    },
-    {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
-    .then((res) => {
-    const { data } = res;
-    console.log(data);
-    })
-    .catch((err) => {
-    console.log(err.response);
-    });
-  }
  
   let status = "";
 
@@ -443,11 +361,6 @@ export const ModalActivity = ({
               ) : 
               status === "Waiting approval from Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
-                  {/* <ButtonSecondary
-                    title='Kemb'
-                    onclick={onClose}
-                    isDisabled={true}
-                  /> */}
                   <ButtonPrimary title='Terima Permohonan' onclick={handleAcceptReturn} />
               </Flex> 
               ) : (

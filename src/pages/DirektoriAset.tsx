@@ -4,7 +4,7 @@ import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import CardDetail from "../components/DetailCard";
 import { Header } from "../components/Header";
-import { Search } from "../components/Input";
+import { InputSelect, Search } from "../components/Input";
 import ModalDetailAsset from "../components/Modal/detail-asset";
 import { MaintenanceContext } from "../helper/MaintenanceContext";
 
@@ -21,6 +21,7 @@ const DirektoriAset = () => {
     const [shortName, setShortName] = useState<string>("");
     const [search, setSearch] = useState<string>("")
     const [selectedCategory, setSelectedCategory] = useState<string>("");
+    const [selectedStatus, setSelectedStatus] = useState<string>("");
     
     const category = [
         { id: 0, name: "All", value: ""},
@@ -31,7 +32,13 @@ const DirektoriAset = () => {
         { id: 5, name: "Printer and Scanner", value: "Printer and Scanner" },
         { id: 6, name: "Electronics", value: "Electronics" },
         { id: 7, name: "Others", value: "Others" },
-      ];
+    ];
+
+    const status = [
+        { id: 0, name: "All", value: ""},
+        { id: 1, name: "Tersedia", value: "Available"},
+        { id: 2, name: "Dipakai", value: "In Use"}
+    ]
 
     useEffect(() => {
         fetchDataAset()
@@ -134,6 +141,11 @@ const DirektoriAset = () => {
         });
     }
 
+    const handleStatus = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        const value = e.target.value;
+        setSelectedStatus(value);
+    }
+
     return(
         <>  
             <Header/>
@@ -145,6 +157,10 @@ const DirektoriAset = () => {
             <Search data={category} value={selectedCategory} onChangeSearch={handleSearch} onChangeSelect={handleSelect}/>
             <Flex align="center" justify="center" mt={50}>
                 <Box bg="white" width={1080} maxHeight={605} borderRadius={7} shadow="xl" overflowY='scroll'>
+                    <Flex align="center" justify="end" marginTop={3} marginEnd={5}>
+                        <Text>Status: </Text>
+                        <InputSelect title="" placeholder="Status" value={selectedStatus} onChange={handleStatus} data={status} isDisabled={false}/>
+                    </Flex>
                     <Flex align="center" justify="center" mt={50}>
                     <Box width={['55%', '70%', '90%']}>
                         <Wrap spacing='50px'>

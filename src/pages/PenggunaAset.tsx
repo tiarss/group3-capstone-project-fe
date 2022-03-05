@@ -22,7 +22,7 @@ import axios from "axios";
 import { tableRequest } from "../types";
 
 export const PenggunaAset = () => {
-  const [valueRadio, setValueRadio] = useState("Semua Pengguna");
+  const [valueRadio, setValueRadio] = useState("all");
   const [countData, setCountData] = useState({
     all: 23,
     new: 10,
@@ -34,8 +34,14 @@ export const PenggunaAset = () => {
   const [activePage, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
   const [role, setRole] = useState(1);
+  const [all, setAll] = useState<any[]>()
   const idUser = localStorage.getItem("id");
   const dummy = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const [countAll, setCountAll] = useState<number>(0);
+  const [countWaiting, setCountWaiting] = useState<number>(0);
+  const [countApproved, setCountApproved] = useState<number>(0);
+  const [countRejected, setCountRejected] = useState<number>(0);
+  const [countReturned, setCountReturned] = useState<number>(0);
 
   let roles = localStorage.getItem("role");
 
@@ -47,7 +53,17 @@ export const PenggunaAset = () => {
     }
   }, [activePage]);
 
-  useEffect(() => {}, [valueRadio]);
+  useEffect(() => {
+    handleGetAllRequest();
+  }, [valueRadio]);
+
+  useEffect(()=>{
+    handleGetAll();
+    handleGetWaiting();
+    handleGetApproved();
+    handleGetRejected();
+    handleGetReturned();
+  },[])
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -79,10 +95,11 @@ export const PenggunaAset = () => {
     const pageView = (activePage - 1) * 5 + 1;
     setIsLoadingTable(true);
     axios
-      .get("/requests/admin", {
+      .get(`/requests/admin`, {
         params: {
           p: pageView,
           rp: 5,
+          s:valueRadio
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -93,8 +110,8 @@ export const PenggunaAset = () => {
         const { total_record } = res.data;
         setRequestData(data);
         setTotalData(total_record);
-        console.log(total_record);
-        console.log(data);
+        console.log("total: ", total_record);
+        console.log("data: ", data);
         setIsLoadingTable(false);
       })
       .catch((err) => {
@@ -102,6 +119,105 @@ export const PenggunaAset = () => {
       });
   };
 
+  const handleGetAll = () => {
+    axios
+      .get(`/requests/admin`, {
+        params: {
+          s:"all"
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountAll(total_record);
+        console.log("All: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetWaiting = () => {
+    axios
+      .get(`/requests/admin`, {
+        params: {
+          s:"waiting-approval"
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountWaiting(total_record);
+        console.log("Waiting: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetApproved = () => {
+    axios
+      .get(`/requests/admin`, {
+        params: {
+          s:"approved"
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountApproved(total_record);
+        console.log("Approved: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetRejected = () => {
+    axios
+      .get(`/requests/admin`, {
+        params: {
+          s:"rejected"
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountRejected(total_record);
+        console.log("Rejected: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetReturned = () => {
+    axios
+      .get(`/requests/admin`, {
+        params: {
+          s:"returned"
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountReturned(total_record);
+        console.log("Returned: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
   //End of Logic Admin
 
   return (
@@ -144,7 +260,7 @@ export const PenggunaAset = () => {
                         <Box
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Semua Pengguna"
+                            valueRadio === "all"
                               ? "white"
                               : "#222222"
                           }>
@@ -165,15 +281,15 @@ export const PenggunaAset = () => {
                           h='20px'
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Semua Pengguna"
+                            valueRadio === "all"
                               ? "#3CA9DB"
                               : "white"
                           }>
-                          {countData.all}
+                          {countAll}
                         </Box>
                       </Center>
                     ),
-                    value: "Semua Pengguna",
+                    value: "all",
                   },
                   {
                     label: (
@@ -181,7 +297,7 @@ export const PenggunaAset = () => {
                         <Box
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Permohonan Baru"
+                            valueRadio === "waiting-approval"
                               ? "white"
                               : "#222222"
                           }>
@@ -193,7 +309,7 @@ export const PenggunaAset = () => {
                           justifyContent='center'
                           ml='10px'
                           bgColor={
-                            valueRadio === "Permohonan Baru"
+                            valueRadio === "waiting-approval"
                               ? "white"
                               : "#222222"
                           }
@@ -202,15 +318,15 @@ export const PenggunaAset = () => {
                           h='20px'
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Permohonan Baru"
+                            valueRadio === "waiting-approval"
                               ? "#3CA9DB"
                               : "white"
                           }>
-                          {countData.new}
+                          {countWaiting}
                         </Box>
                       </Center>
                     ),
-                    value: "Permohonan Baru",
+                    value: "waiting-approval",
                   },
                   {
                     label: (
@@ -218,7 +334,7 @@ export const PenggunaAset = () => {
                         <Box
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Digunakan" ? "white" : "#222222"
+                            valueRadio === "approved" ? "white" : "#222222"
                           }>
                           Digunakan
                         </Box>
@@ -228,20 +344,20 @@ export const PenggunaAset = () => {
                           justifyContent='center'
                           ml='10px'
                           bgColor={
-                            valueRadio === "Digunakan" ? "white" : "#222222"
+                            valueRadio === "approved" ? "white" : "#222222"
                           }
                           borderRadius='20px'
                           w='20px'
                           h='20px'
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Digunakan" ? "#3CA9DB" : "white"
+                            valueRadio === "approved" ? "#3CA9DB" : "white"
                           }>
-                          {countData.used}
+                          {countApproved}
                         </Box>
                       </Center>
                     ),
-                    value: "Digunakan",
+                    value: "approved",
                   },
                   {
                     label: (
@@ -249,7 +365,7 @@ export const PenggunaAset = () => {
                         <Box
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Ditolak" ? "white" : "#222222"
+                            valueRadio === "rejected" ? "white" : "#222222"
                           }>
                           Ditolak
                         </Box>
@@ -259,20 +375,20 @@ export const PenggunaAset = () => {
                           justifyContent='center'
                           ml='10px'
                           bgColor={
-                            valueRadio === "Ditolak" ? "white" : "#222222"
+                            valueRadio === "rejected" ? "white" : "#222222"
                           }
                           borderRadius='20px'
                           w='20px'
                           h='20px'
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Ditolak" ? "#3CA9DB" : "white"
+                            valueRadio === "rejected" ? "#3CA9DB" : "white"
                           }>
-                          {countData.rejected}
+                          {countRejected}
                         </Box>
                       </Center>
                     ),
-                    value: "Ditolak",
+                    value: "rejected",
                   },
                   {
                     label: (
@@ -280,7 +396,7 @@ export const PenggunaAset = () => {
                         <Box
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Dikembalikan" ? "white" : "#222222"
+                            valueRadio === "returned" ? "white" : "#222222"
                           }>
                           Dikembalikan
                         </Box>
@@ -290,20 +406,20 @@ export const PenggunaAset = () => {
                           justifyContent='center'
                           ml='10px'
                           bgColor={
-                            valueRadio === "Dikembalikan" ? "white" : "#222222"
+                            valueRadio === "returned" ? "white" : "#222222"
                           }
                           borderRadius='20px'
                           w='20px'
                           h='20px'
                           transition='all 0.5s ease'
                           color={
-                            valueRadio === "Dikembalikan" ? "#3CA9DB" : "white"
+                            valueRadio === "returned" ? "#3CA9DB" : "white"
                           }>
-                          {countData.returned}
+                          {countReturned}
                         </Box>
                       </Center>
                     ),
-                    value: "Dikembalikan",
+                    value: "returned",
                   },
                 ]}
               />

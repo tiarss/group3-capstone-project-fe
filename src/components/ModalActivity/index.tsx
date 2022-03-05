@@ -30,6 +30,8 @@ export const ModalActivity = ({
   handleReturnEmployee,
   handleAjukanPengembalian,
   handleAcceptReturn
+  handleRejectReqManager,
+  handleRejectReqAdmin,
 }: requestModalProps) => {
   console.log(role)
   
@@ -319,7 +321,17 @@ export const ModalActivity = ({
                     Manager
                   </Text>
                   <Text fontSize='12px' fontWeight='normal'>
-                    Handri Pangestiaji
+                    {data !== undefined
+                      ? data.User.division === "Store"
+                        ? "Bahtiar Subrata"
+                        : data.User.division === "Finance"
+                        ? "Mohammad Pramudiono"
+                        : data.User.division === "Legal"
+                        ? "Bagus Brahmantya"
+                        : data.User.division === "Human Capital"
+                        ? "Salmaa"
+                        : "Yahya Zakaria"
+                      : "-"}
                   </Text>
                 </Box>
                 <Box>
@@ -384,6 +396,10 @@ export const ModalActivity = ({
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
                 </Flex>
+              ) : status === "Cancelled" ? (
+                <Flex gap='10px' justifyContent='end'>
+                  <ButtonSecondary title='Kembali' onclick={onClose} />
+                </Flex>
               ) : (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
@@ -404,7 +420,7 @@ export const ModalActivity = ({
                   </Flex>
                 ) : status === "Approved by Manager" ? (
                   <Flex gap='10px' justifyContent='end'>
-                    <ButtonSecondary title='Tolak Permohonan' onclick={onClose} />
+                    <ButtonSecondary title='Tolak Permohonan' onclick={handleRejectReqManager} />
                     <ButtonPrimary
                       title='Terima Permohonan'
                       onclick={handleAcceptReqAdmin}
@@ -412,7 +428,7 @@ export const ModalActivity = ({
                   </Flex>
                 ) : status === "Approved by Admin" ? (
                   <Flex gap='10px' justifyContent='end'>
-                    <ButtonSecondary title='Kembali' onclick={onClose} />
+                    <ButtonSecondary title='Kembali' onclick={handleRejectReqAdmin} />
                     <ButtonPrimary title='Ajukan Pengembalian' onclick={handleAjukanPengembalian}/>
                   </Flex>
                 ) : (
@@ -448,7 +464,10 @@ export const ModalActivity = ({
             // Punya manajer
             ) : status === "Waiting approval from Manager" ? (
               <Flex gap='10px' justifyContent='end'>
-                <ButtonSecondary title='Tolak' onclick={onClose} />
+                <ButtonSecondary
+                  title='Tolak'
+                  onclick={handleRejectReqManager}
+                />
                 <ButtonPrimary
                   title='Terima Permohonan'
                   onclick={handleAcceptReqManager}

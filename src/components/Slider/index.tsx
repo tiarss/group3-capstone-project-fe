@@ -2,10 +2,11 @@ import { Box, Flex, Text, Tooltip } from "@chakra-ui/react";
 import Slider from "react-slick";
 import { InfoIcon } from "@chakra-ui/icons";
 import { ModalActivity } from "../ModalActivity";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { activitiesDetail, typeActivitiesData } from "../../types";
 import moment from "moment";
+import { Trigger } from "../../helper/Trigger";
 
 function SampleNextArrow(props: any) {
   const { className, onClick } = props;
@@ -34,12 +35,14 @@ function SamplePrevArrow(props: any) {
 }
 
 function SliderImage() {
+  const {trigger, setTrigger} = useContext(Trigger)
   const [isOpen, setIsOpen] = useState(false);
   const [activitiesData, setActivitiesData] = useState<typeActivitiesData[]>();
   const [selectedActivities, setSelectedActivities] =
     useState<activitiesDetail>();
   const [selectedId, setSelectedId] = useState<number>(0);
   const idUser = localStorage.getItem("id");
+  const roles = localStorage.getItem('role')
 
   const handleOpen = (id: number) => {
     setSelectedId(id);
@@ -65,10 +68,11 @@ function SliderImage() {
 
   useEffect(() => {
     getAllActivities();
-  }, []);
+  }, [trigger]);
 
   const getAllActivities = () => {
-    axios
+    if(roles === "Employee"){
+      axios
       .get(`/activities/${idUser}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -78,6 +82,33 @@ function SliderImage() {
         const { data } = res.data;
         setActivitiesData(data);
         console.log(data);
+      });
+    }
+  };
+
+  const handleRejectRequest = (id: number) => {
+    axios
+    .put(
+        `/activities/${idUser}/${id}`,
+        {
+          status: "cancel",
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        const { data } = res.data;
+        console.log(data);
+        getAllActivities();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      })
+      .finally(() => {
+        setIsOpen(true);
       });
   };
 
@@ -255,7 +286,6 @@ function SliderImage() {
         handleRejectReqEmployee={() => handleRejectRequest(selectedId)}
         handleReturnEmployee={() => handleReturnEmployee(selectedId)}
         role={1}
-        status='Waiting approval'
       />
     </Box>
   );

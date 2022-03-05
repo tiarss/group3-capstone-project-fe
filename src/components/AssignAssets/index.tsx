@@ -1,8 +1,6 @@
 import {
   Box,
-  Button,
   Flex,
-  HTMLChakraComponents,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -12,44 +10,51 @@ import {
   ModalOverlay,
   Switch,
   Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getAllAssets } from "../../types";
 import { ButtonPrimary, ButtonSecondary } from "../Button";
-import {
-  InputSelect,
-  InputSelectData,
-  InputSelectDataUser,
-  InputText,
-} from "../Input";
+import { InputSelect, InputSelectData, InputSelectDataUser, InputText } from "../Input";
 
-export const RequestModal = ({
+const category = [
+  { id: 1, name: "Computer" },
+  { id: 2, name: "Computer Accessories" },
+  { id: 3, name: "Networking" },
+  { id: 4, name: "UPS" },
+  { id: 5, name: "Printer and Scanner" },
+  { id: 6, name: "Electronics" },
+  { id: 7, name: "Others" },
+];
+
+export const AssignAssets = ({
   isOpen,
-  role,
   onClose,
   onChangeDeskripsi,
   onChangeAset,
-  onClickRequest,
-  onClickProcurement,
   onChangeEmployee,
+  onClickAssign,
+  onChangeDate,
 }: {
   isOpen: boolean;
-  role?: number;
   onClose: () => void;
   onChangeDeskripsi: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeAset: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-  onClickRequest: () => void;
-  onClickProcurement: () => void;
   onChangeEmployee: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onClickAssign: () => void;
+  onChangeDate: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
   const [assetData, setAssetData] = useState();
   const [userData, setUserData] = useState();
+  const [isChecked, setIsChecked] = useState(false)
 
   useEffect(() => {
     fetchDataUsers();
   }, []);
+  const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
+     const value = e.target.checked
+     setIsChecked(value)
+  }
 
   const fetchDataAset = (value: string) => {
     axios
@@ -90,50 +95,16 @@ export const RequestModal = ({
     console.log(value);
     fetchDataAset(value);
   };
-
-  const category = [
-    { id: 1, name: "Computer" },
-    { id: 2, name: "Computer Accessories" },
-    { id: 3, name: "Networking" },
-    { id: 4, name: "UPS" },
-    { id: 5, name: "Printer and Scanner" },
-    { id: 6, name: "Electronics" },
-    { id: 7, name: "Others" },
-  ];
-
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>
-            {role === 1 ? "Peminjaman Aset" : "Pengajuan Aset Baru"}
-          </ModalHeader>
+          <ModalHeader>Assign Aset ke Karyawan</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            {role === 1 ? (
               <Flex flexDir='column' gap='10px'>
-                <InputSelect
-                  data={category}
-                  title='Kategori Aset'
-                  placeholder='Pilih Kategori'
-                  onChange={handleChangeCategory}
-                />
-                <InputSelectData
-                  title='List Aset'
-                  placeholder='Pilih Aset'
-                  data={assetData}
-                  onChange={onChangeAset}
-                />
-                <InputText
-                  title='Deskripsi Keperluan'
-                  placeholder='Lenovo Thinkpad Yoga'
-                  onChange={onChangeDeskripsi}
-                />
-              </Flex>
-            ) : (
-              <Flex flexDir='column' gap='10px'>
-                <InputSelect
+              <InputSelect
                   data={category}
                   title='Kategori Aset'
                   placeholder='Pilih Kategori'
@@ -154,26 +125,25 @@ export const RequestModal = ({
                 <InputText
                   title='Deskripsi Keperluan'
                   placeholder='Tuliskan Keperluan'
+                  onChange={onChangeDeskripsi}
                 />
-                <InputText type='file' title='Upload Foto' />
+                <Text>Gunakan Tanggal Pengembalian</Text>
+                <Switch id='isChecked' onChange={handleChecked} width="fit-content" isChecked={isChecked} />
+                <Box display={isChecked ? "block" : "none"}>
+                  <InputText
+                    title='Tanggal Pengembalian'
+                    placeholder='Tuliskan Keperluan'
+                    type="date"
+                    onChange={onChangeDate}
+                  />
+                </Box>
               </Flex>
-            )}
           </ModalBody>
           <ModalFooter>
-            {role === 1 ? (
-              <Flex gap='10px'>
-                <ButtonSecondary title='Batal' onclick={onClose} />
-                <ButtonPrimary
-                  title='Ajukan Peminjaman'
-                  onclick={onClickRequest}
-                />
-              </Flex>
-            ) : (
-              <Flex gap='10px'>
-                <ButtonSecondary title='Batal' onclick={onClose} />
-                <ButtonPrimary title='Ajukan Pengadaan' />
-              </Flex>
-            )}
+            <Flex justifyContent='end' gap='10px'>
+              <ButtonSecondary title='Batal' onclick={onClose} />
+              <ButtonPrimary title='Assign Aset' onclick={onClickAssign} />
+            </Flex>
           </ModalFooter>
         </ModalContent>
       </Modal>

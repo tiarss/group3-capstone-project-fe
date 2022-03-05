@@ -12,7 +12,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { Pagination } from "@mantine/core";
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, { ChangeEvent, useContext, useEffect, useState } from "react";
 import {
   ButtonPrimary,
   ButtonSecondary,
@@ -27,16 +27,20 @@ import axios from "axios";
 import { tableRequest } from "../types";
 import moment from "moment";
 import ModalAddAssets from "../components/Modal/tambah-asset";
+import { Trigger, triggerType } from "../helper/Trigger";
+import { AssignAssets } from "../components/AssignAssets";
 
 export const Beranda = () => {
+  const { trigger, setTrigger } = useContext(Trigger);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenRequest, setIsOpenRequest] = useState(false);
+  const [isOpenAssign, setIsOpenAssign] = useState(false);
   const [isOpenAddAssets, setIsOpenAddAssets] = useState(false);
   const [role, setRole] = useState(1);
   const [activePage, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
   const idUser = localStorage.getItem("id");
-  const dummy = [1,2,3,4,5]
+  const dummy = [1, 2, 3, 4, 5];
 
   //Employee State
   //Create Request
@@ -53,6 +57,9 @@ export const Beranda = () => {
   const [addAssetsSum, setAddAssetsSum] = useState<number>(0);
   const [addAssetsImage, setAddAssetsImage] = useState<File>();
   const [addAssetsCategory, setAddAssetsCategory] = useState<string>("");
+
+  const [employeeId, setEmployeeId] = useState<number>(0)
+  const [returnDate, setReturnDate] = useState<string>()
 
   const [requestData, setRequestData] = useState<tableRequest[]>();
   const [selectedData, setSelectedData] = useState<tableRequest>();
@@ -110,6 +117,8 @@ export const Beranda = () => {
       )
       .then((res) => {
         console.log(res);
+        const temp: number = trigger.trig;
+        setTrigger({ ...trigger, trig: temp + 1 });
       })
       .catch((err) => {
         console.log(err.response);
@@ -141,6 +150,13 @@ export const Beranda = () => {
     setIsOpen(true);
   };
   const handleClose = () => setIsOpen(false);
+
+  const handleOpenAssign = () => {
+    setIsOpenAssign(true);
+  };
+  const handleCloseAssign = () => {
+    setIsOpenAssign(false);
+  };
 
   const handleGetAllRequest = () => {
     const pageView = (activePage - 1) * 5 + 1
@@ -210,6 +226,18 @@ export const Beranda = () => {
     console.log(value)
     setIsMaintained(value)
   }
+
+  const handleEmployee = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setEmployeeId(parseInt(value))
+  };
+
+  const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    const convert = moment(value).format()
+    setReturnDate(convert)
+  };
+
 
   const handleAddAssets = () => {
     axios
@@ -316,6 +344,32 @@ export const Beranda = () => {
         console.log(err.response);
       });
   }
+    
+  const handleRejectReqAdmin = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Rejected by Admin" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  }
 
   const handleAjukanPengembalian = (id:number) => {
     axios
@@ -338,24 +392,52 @@ export const Beranda = () => {
       .catch((err) => {
         console.log(err.response);
       })
+  };
+
+  const handleRequestProcurement = () => {};
+  const handleAssignAssets = () => {
+    axios.post('/requests/borrow', {
+      short_name: assetShortName,
+      employee_id: employeeId,
+      description: descriptionRequest,
+      return_date: returnDate,
+    },{
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    }).then((res)=>{
+      console.log(res)
+    }).catch((err)=>{
+      console.log(err.response)
+    })
   }
   // End of Admin Logic
 
   // Manager Logic
 
   const handleGetManagerReq = () => {
+    const pageView = (activePage - 1) * 5 + 1;
     setIsLoadingTable(true);
     axios
       .get(`/requests/manager/borrow`, {
+        params: {
+          p: pageView,
+          rp: 5,
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       })
       .then((res) => {
         const { data } = res.data;
+        const { total_record } = res.data;
         setRequestData(data);
+        setTotalData(total_record);
         console.log(data);
         setIsLoadingTable(false);
+      })
+      .catch((err) => {
+        console.log(err.response);
       });
   };
 
@@ -385,9 +467,31 @@ export const Beranda = () => {
       });
   };
 
-  
-
-  const handleRejectReqManager = (id: number) => {};
+  const handleRejectReqManager = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Rejected by Manager" });
+        }
+        handleGetManagerReq();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
 
   // End of Manager Logic
 
@@ -467,8 +571,14 @@ export const Beranda = () => {
                   </>
                 ) : role === 2 ? (
                   <>
-                    <ButtonTertier title='Assign Aset Ke Karyawan' />
-                    <ButtonSecondary title='Pengajuan Aset Baru' />
+                    <ButtonTertier
+                      title='Assign Aset Ke Karyawan'
+                      onclick={handleOpenAssign}
+                    />
+                    <ButtonSecondary
+                      title='Pengajuan Aset Baru'
+                      onclick={handleOpenRequest}
+                    />
                     <ButtonPrimary
                       title='Tambah Aset'
                       onclick={handleOpenAddAssets}
@@ -526,9 +636,9 @@ export const Beranda = () => {
                         ))}
                         </>
                         ) : requestData !== undefined ? (
-                          requestData.map((value) => (
+                          requestData.map((value, index) => (
                             <Tr key={value.id}>
-                              <Td>1</Td>
+                              <Td>{(activePage - 1) * 5 + index + 1}</Td>
                               <Td>
                                 {moment(value.request_time).format(
                                   "h:mm a, DD MMM YYYY"
@@ -664,11 +774,14 @@ export const Beranda = () => {
         </Box>
       </Box>
       <RequestModal
+        role={role}
         isOpen={isOpenRequest}
         onClose={handleCloseRequest}
         onChangeAset={handleAssetName}
         onChangeDeskripsi={handleDescriptionRequest}
         onClickRequest={handleRequest}
+        onClickProcurement={handleRequestProcurement}
+        onChangeEmployee={handleEmployee}
       />
       
       <ModalActivity
@@ -678,10 +791,20 @@ export const Beranda = () => {
         handleAcceptReqAdmin={() => handleAcceptReqAdmin(selectedIdReq)}
         handleAjukanPengembalian={()=>handleAjukanPengembalian(selectedIdReq)}
         handleAcceptReturn={()=>handleAcceptReturn(selectedIdReq)}
+        handleRejectReqAdmin={() => handleRejectReqAdmin(selectedIdReq)}
+        handleRejectReqManager={() => handleRejectReqManager(selectedIdReq)}
         isOpen={isOpen}
         onClose={handleClose}
         role={role}
-        status='Approved by Admin'
+      />
+      <AssignAssets
+        isOpen={isOpenAssign}
+        onClose={handleCloseAssign}
+        onClickAssign={handleAssignAssets}
+        onChangeDeskripsi={handleDescriptionRequest}
+        onChangeEmployee={handleEmployee}
+        onChangeAset={handleAssetName}
+        onChangeDate={handleDate}
       />
       <ModalAddAssets
         isOpen={isOpenAddAssets}

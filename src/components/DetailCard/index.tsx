@@ -40,8 +40,9 @@ const CardDetail = ({backgroundImage, kategori, name, deskripsi, pengguna, stok,
                     </Text>
                     </Box>
                 </Box>
-                <Box mt={2} height={150} mx={3}>
-                    <Text fontSize='xs' lineHeight={1}>{deskripsi}</Text>
+                <Box mt={3} height={50} mx={3}>
+                    <Text fontSize='xs' lineHeight={1}>{deskripsi.length> 100 
+                    ? `${deskripsi.substring(0, 100)} ...` : `${deskripsi}`}</Text>
                 </Box>
                 <Flex mt={5}>
                     <Box ms={3}>

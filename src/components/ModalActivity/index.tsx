@@ -11,11 +11,9 @@ import {
   ModalHeader,
   ModalOverlay,
 } from "@chakra-ui/react";
-import axios from "axios";
-import React, { useState } from "react";
-import { ButtonPrimary, ButtonSecondary, ButtonTertier } from "../Button";
+import { ButtonPrimary, ButtonSecondary } from "../Button";
 import moment from "moment";
-import { activitiesDetail, requestModalProps } from "../../types";
+import { requestModalProps } from "../../types";
 
 export const ModalActivity = ({
   dataActivities,
@@ -227,7 +225,23 @@ export const ModalActivity = ({
                     display={
                       role === 1 ? "none" : role === 2 ? "block" : "block"
                     }>
-                    -
+                    {role === 1 ? (
+                      moment(dataActivities?.request_date).format(
+                        "h:mm A, DD MMM YYYY"
+                      )
+                    ) : (
+                      <>
+                        {data !== undefined ? 
+                          moment(data.return_time).format(
+                            "h:mm A, DD MMM YYYY"
+                          ) === `6:59 AM, 01 Jan 10000` ?
+                            "Belum Dikembalikan"
+                          : moment(data.return_time).format(
+                            "h:mm A, DD MMM YYYY"
+                          )
+                        : `13:24 PM, 14 Feb 2022`}
+                      </>
+                    )}
                   </Text>
                   <Text
                     fontSize='12px'

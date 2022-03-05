@@ -24,7 +24,7 @@ const ModalDetailAsset = ({isOpen, onClose, nama, total_aset, deskripsi, kategor
                     <TabPanels>
                         <TabPanel>
                             <ModalBody mb={5}>
-                                {localStorage.getItem("role") == "employee" ? 
+                                {localStorage.getItem("role") === "Employee" ? 
                                 <DetailEmployee nama={nama} total_aset={total_aset} deskripsi={deskripsi} kategori={kategori} backgroundImage={backgroundimage}/>
                                 : <DetailAdmin nama={nama} total_aset={total_aset} deskripsi={deskripsi} kategori={kategori} backgroundImage={backgroundimage} onChange={onChangeUpdate}/>}
                             </ModalBody>

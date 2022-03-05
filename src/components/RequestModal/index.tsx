@@ -18,7 +18,12 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { getAllAssets } from "../../types";
 import { ButtonPrimary, ButtonSecondary } from "../Button";
-import { InputSelect, InputSelectData, InputText } from "../Input";
+import {
+  InputSelect,
+  InputSelectData,
+  InputSelectDataUser,
+  InputText,
+} from "../Input";
 
 export const RequestModal = ({
   isOpen,
@@ -27,6 +32,8 @@ export const RequestModal = ({
   onChangeDeskripsi,
   onChangeAset,
   onClickRequest,
+  onClickProcurement,
+  onChangeEmployee,
 }: {
   isOpen: boolean;
   role?: number;
@@ -34,15 +41,15 @@ export const RequestModal = ({
   onChangeDeskripsi: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeAset: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   onClickRequest: () => void;
+  onClickProcurement: () => void;
+  onChangeEmployee: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) => {
-  const [checked, setChecked] = useState(false);
-  const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.checked;
-    setChecked(value);
-  };
   const [assetData, setAssetData] = useState();
+  const [userData, setUserData] = useState();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    fetchDataUsers();
+  }, []);
 
   const fetchDataAset = (value: string) => {
     axios
@@ -57,6 +64,21 @@ export const RequestModal = ({
         );
         console.log(filterAvailable);
         setAssetData(filterAvailable);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const fetchDataUsers = () => {
+    axios
+      .get(`/users`, {
+        headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        const splice = data.splice(5, 40);
+        setUserData(splice);
       })
       .catch((err) => {
         console.log(err.response);
@@ -84,7 +106,9 @@ export const RequestModal = ({
       <Modal isOpen={isOpen} onClose={onClose} scrollBehavior='inside'>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>{role === 1 ? "Peminjaman Aset" : "Pengajuan Aset Baru"}</ModalHeader>
+          <ModalHeader>
+            {role === 1 ? "Peminjaman Aset" : "Pengajuan Aset Baru"}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             {role === 1 ? (
@@ -109,24 +133,29 @@ export const RequestModal = ({
               </Flex>
             ) : (
               <Flex flexDir='column' gap='10px'>
-                <InputText title='Kategori Aset' placeholder='Laptop' />
-                <InputText
-                  title='Pilih Aset'
-                  placeholder='Lenovo Thinkpad Yoga'
+                <InputSelect
+                  data={category}
+                  title='Kategori Aset'
+                  placeholder='Pilih Kategori'
+                  onChange={handleChangeCategory}
                 />
-                <InputText title='Karyawan' placeholder='Bahtiar Subrata' />
+                <InputSelectData
+                  title='List Aset'
+                  placeholder='Pilih Aset'
+                  data={assetData}
+                  onChange={onChangeAset}
+                />
+                <InputSelectDataUser
+                  title='Pilih Karyawan'
+                  placeholder='Karyawan - Divisi'
+                  data={userData}
+                  onChange={onChangeEmployee}
+                />
                 <InputText
                   title='Deskripsi Keperluan'
                   placeholder='Tuliskan Keperluan'
                 />
-                <Text>Gunakan Tanggal Pengembalian</Text>
-                <Switch id='isChecked' onChange={handleChecked} />
-                <Box display={checked ? "block" : "none"}>
-                  <InputText
-                    title='Tanggal Pengembalian'
-                    placeholder='Tuliskan Keperluan'
-                  />
-                </Box>
+                <InputText type='file' title='Upload Foto' />
               </Flex>
             )}
           </ModalBody>

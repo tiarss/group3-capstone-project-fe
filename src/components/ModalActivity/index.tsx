@@ -233,7 +233,17 @@ export const ModalActivity = ({
                     Manager
                   </Text>
                   <Text fontSize='12px' fontWeight='normal'>
-                    Handri Pangestiaji
+                    {data !== undefined
+                      ? data.User.division === "Store"
+                        ? "Bahtiar Subrata"
+                        : data.User.division === "Finance"
+                        ? "Mohammad Pramudiono"
+                        : data.User.division === "Legal"
+                        ? "Bagus Brahmantya"
+                        : data.User.division === "Human Capital"
+                        ? "Salmaa"
+                        : "Yahya Zakaria"
+                      : "-"}
                   </Text>
                 </Box>
                 <Box>
@@ -318,7 +328,10 @@ export const ModalActivity = ({
                 </Flex>
               ) : status === "Approved by Manager" ? (
                 <Flex gap='10px' justifyContent='end'>
-                  <ButtonSecondary title='Tolak Permohonan' onclick={handleRejectReqAdmin} />
+                  <ButtonSecondary
+                    title='Tolak Permohonan'
+                    onclick={handleRejectReqAdmin}
+                  />
                   <ButtonPrimary
                     title='Terima Permohonan'
                     onclick={handleAcceptReqAdmin}
@@ -341,7 +354,10 @@ export const ModalActivity = ({
               )
             ) : status === "Waiting approval from Manager" ? (
               <Flex gap='10px' justifyContent='end'>
-                <ButtonSecondary title='Tolak' onclick={handleRejectReqManager} />
+                <ButtonSecondary
+                  title='Tolak'
+                  onclick={handleRejectReqManager}
+                />
                 <ButtonPrimary
                   title='Terima Permohonan'
                   onclick={handleAcceptReqManager}

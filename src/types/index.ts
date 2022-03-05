@@ -49,6 +49,15 @@ export type inputSelectDataProps = {
   data?: { short_name: string; name: string }[];
 };
 
+export type inputSelectDataUserProps = {
+  title?: string;
+  type?: string;
+  placeholder?: string;
+  value?: string | number;
+  onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  data?: { id: number; user: string }[];
+};
+
 export type userData = {
   avatar: string;
   name: string;

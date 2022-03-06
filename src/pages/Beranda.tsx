@@ -1,6 +1,11 @@
 import {
   Box,
+  Button,
   Flex,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Skeleton,
   Table,
   Tag,
@@ -10,6 +15,7 @@ import {
   Th,
   Thead,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import { Pagination } from "@mantine/core";
 import React, { ChangeEvent, useContext, useEffect, useState } from "react";
@@ -24,15 +30,24 @@ import { RequestModal } from "../components/RequestModal";
 import { ResumeCard } from "../components/ResumeCard";
 import SliderImage from "../components/Slider";
 import axios from "axios";
-import { historyDataType, tableProcure, tableRequest } from "../types";
+import {
+  historyDataType,
+  selectHistoryDataType,
+  tableProcure,
+  tableRequest,
+} from "../types";
 import moment from "moment";
 import ModalAddAssets from "../components/Modal/tambah-asset";
 import { Trigger, triggerType } from "../helper/Trigger";
 import { AssignAssets } from "../components/AssignAssets";
 import { HistoryModal } from "../components/HistoryModal";
 import { ModalProcure } from "../components/ModalActivity/Procure";
+import { useNavigate } from "react-router-dom";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export const Beranda = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
   const { trigger, setTrigger } = useContext(Trigger);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenHistory, setIsOpenHistory] = useState(false);
@@ -47,6 +62,12 @@ export const Beranda = () => {
   const [totalDataProcure, setTotalDataProcure] = useState(0);
   const idUser = localStorage.getItem("id");
   const dummy = [1, 2, 3, 4, 5];
+  const logOut = () => {
+    localStorage.setItem("token", "");
+    localStorage.setItem("role", "");
+    localStorage.setItem("id", "");
+    localStorage.setItem("isAuth", JSON.stringify(false));
+  };
 
   //Employee State
   //Create Request
@@ -64,6 +85,7 @@ export const Beranda = () => {
   const [addAssetsSum, setAddAssetsSum] = useState<number>(0);
   const [addAssetsImage, setAddAssetsImage] = useState<File>();
   const [addAssetsCategory, setAddAssetsCategory] = useState<string>("");
+  const [activitySelect, setActivitySelect] = useState("")
 
   const [employeeId, setEmployeeId] = useState<number>(0);
   const [returnDate, setReturnDate] = useState<string>();
@@ -76,7 +98,7 @@ export const Beranda = () => {
   const [selectedDataProcure, setSelectedDataProcure] =
     useState<tableProcure>();
   const [selectedDataHistory, setSelectedDataHistory] =
-    useState<historyDataType>();
+    useState<selectHistoryDataType>();
   const [isLoadingTable, setIsLoadingTable] = useState(true);
   const [isLoadingTableProcure, setIsLoadingTableProcure] = useState(true);
   const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
@@ -95,7 +117,7 @@ export const Beranda = () => {
     } else {
       getAllHistory();
     }
-  }, [activePage]);
+  }, [activePage, activitySelect]);
 
   useEffect(() => {
     roleCondition();
@@ -129,12 +151,35 @@ export const Beranda = () => {
 
   //Logic as Employee
   const handleOpenHistory = (id: number) => {
-    const filtering = historyAssets?.find((value) => value.id === id);
-    setSelectedDataHistory(filtering);
-    if (filtering !== undefined) {
-      setSelectedIdHistory(filtering?.id);
-    }
-    setIsOpenHistory(true);
+    axios
+      .get(`/histories/users/${idUser}/${id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setSelectedDataHistory(data);
+        setSelectedIdHistory(id);
+        console.log(data);
+      })
+      .catch((err) => {
+        const { data } = err.response;
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+      })
+      .finally(() => {
+        setIsOpenHistory(true);
+      });
   };
 
   const handleCloseHistory = () => setIsOpenHistory(false);
@@ -200,6 +245,13 @@ export const Beranda = () => {
   // End of Employee Logic
 
   // Admin Logic
+  const selectActivityReturn = () => {
+    setActivitySelect("return")
+  }
+
+  const selectActivityBorrow = () => {
+    setActivitySelect("")
+  }
 
   const handleOpen = (id: number) => {
     const filtering = requestData?.find((value) => value.id === id);
@@ -227,7 +279,7 @@ export const Beranda = () => {
     setIsOpenProcure(true);
   };
 
-  const handleCloseProcure = () => setIsOpenProcure(false)
+  const handleCloseProcure = () => setIsOpenProcure(false);
 
   const handleGetAllRequest = () => {
     setIsLoadingTable(true);
@@ -236,6 +288,7 @@ export const Beranda = () => {
         params: {
           p: activePage,
           rp: 5,
+          a: activitySelect,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -659,6 +712,56 @@ export const Beranda = () => {
       });
   };
 
+  const handleAcceptProcure = (id: number) => {
+    axios
+      .put(
+        `/requests/procure/${id}`,
+        {
+          approved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedDataProcure;
+        if (temp !== undefined) {
+          setSelectedDataProcure({ ...temp, status: "Approved by Manager" });
+        }
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleRejectProcure = (id: number) => {
+    axios
+      .put(
+        `/requests/procure/${id}`,
+        {
+          approved: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedDataProcure;
+        if (temp !== undefined) {
+          setSelectedDataProcure({ ...temp, status: "Rejected by Manager" });
+        }
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
   // End of Manager Logic
 
   return (
@@ -878,7 +981,19 @@ export const Beranda = () => {
                     <Tr>
                       <Th color='white'>No</Th>
                       <Th color='white'>Tanggal</Th>
-                      <Th color='white'>Jenis Aktivitas</Th>
+                      <Th color='white'><Menu>
+                          <MenuButton
+                            as={Button}
+                            size="sm"
+                            colorScheme="blue"
+                            rightIcon={<ChevronDownIcon />}>
+                            Jenis Aktivitas
+                          </MenuButton>
+                          <MenuList color="blue.500">
+                            <MenuItem onClick={selectActivityBorrow}>Peminjaman</MenuItem>
+                            <MenuItem onClick={selectActivityReturn}>Pengembalian</MenuItem>
+                          </MenuList>
+                        </Menu></Th>
                       <Th color='white'>Kategori Aset</Th>
                       <Th color='white'>Barang</Th>
                       <Th color='white'></Th>
@@ -953,7 +1068,7 @@ export const Beranda = () => {
                               <Td>
                                 {value.activity === "Borrow"
                                   ? "Peminjaman Aset"
-                                  : "Peminjaman Aset"}
+                                  : "Pengembalian Aset"}
                               </Td>
                               <Td>{value.Asset.category}</Td>
                               <Td>{`${value.Asset.name.substring(
@@ -1090,7 +1205,7 @@ export const Beranda = () => {
             </Flex>
           </Box>
         </Box>
-        <Box display='flex' gap='20px'>
+        <Box display={role === 1 ? "none" : "block"} gap='20px'>
           <Box
             bgColor='white'
             width='100%'
@@ -1422,8 +1537,8 @@ export const Beranda = () => {
         onClose={handleCloseHistory}
       />
       <ModalProcure
-        // handleAcceptReqProcure={}
-        // handleRejectReqProcure={}
+        handleAcceptReqProcure={() => handleAcceptProcure(selectedIdProcure)}
+        handleRejectReqProcure={() => handleRejectProcure(selectedIdProcure)}
         data={selectedDataProcure}
         role={role}
         isOpen={isOpenProcure}

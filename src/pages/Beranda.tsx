@@ -1168,7 +1168,25 @@ export const Beranda = () => {
                                 20
                               )}+..`}</Td>
                               <Td>
-                                <Tag>{value.status}</Tag>
+                                <Tag
+                                size='md'
+                                variant='subtle'
+                                colorScheme={
+                                  value.status.includes("Approved")
+                                    ? "whatsapp"
+                                    : value.status.includes("Waiting")
+                                    ? "orange"
+                                    : "red"
+                                }
+                                >
+                                  {value.status === "Waiting approval from Manager" 
+                                      ? "Menunggu Persetujuan" : 
+                                      value.status === "Approved by Manager" 
+                                      ? "Disetujui" :
+                                      value.status === "Rejected by Manager"
+                                      ? "Ditolak" : 
+                                      "Tidak Diketahui"}
+                                </Tag>
                               </Td>
                               <Td>
                                 <ButtonTertier

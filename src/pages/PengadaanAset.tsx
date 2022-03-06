@@ -19,23 +19,15 @@ import { ModalActivity } from "../components/ModalActivity";
 import { SegmentedControl } from "@mantine/core";
 import moment from "moment";
 import axios from "axios";
-import { tableProcure, tableRequest } from "../types";
+import { tableProcure } from "../types";
 import { ModalProcure } from "../components/ModalActivity/Procure";
 
 const PengadaanAset = () => {
     const [valueRadio, setValueRadio] = useState("all");
-    const [countData, setCountData] = useState({
-        all: 23,
-        new: 10,
-        used: 10,
-        rejected: 1,
-        returned: 2,
-    });
     const [isOpen, setIsOpen] = useState(false);
     const [activePage, setPage] = useState(1);
     const [totalData, setTotalData] = useState(0);
     const [role, setRole] = useState(1);
-    const [all, setAll] = useState<any[]>();
     const idUser = localStorage.getItem("id");
     const dummy = [1, 2, 3, 4, 5, 6, 7, 8, 9];
     const [countAll, setCountAll] = useState<number>(0);
@@ -632,7 +624,27 @@ const PengadaanAset = () => {
                                         {`${value.description.substring(0, 20)}+..`}
                                     </Td>
                                     <Td>
-                                        <Tag>{value.status}</Tag>
+                                        <Tag
+                                          size='md'
+                                          variant='subtle'
+                                          colorScheme={
+                                            value.status.includes("Approved")
+                                              ? "whatsapp"
+                                              : value.status.includes("Waiting")
+                                              ? "orange"
+                                              : "red"
+                                          }
+                                        >
+                                          {
+                                            value.status === "Waiting approval from Manager" 
+                                              ? "Menunggu Persetujuan" : 
+                                            value.status === "Approved by Manager" 
+                                            ? "Disetujui" :
+                                            value.status === "Rejected by Manager"
+                                            ? "Ditolak" : 
+                                            "Tidak Diketahui"
+                                          }
+                                        </Tag>
                                     </Td>
                                     <Td>
                                         <ButtonTertier

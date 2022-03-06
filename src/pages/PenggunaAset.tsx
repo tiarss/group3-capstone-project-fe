@@ -1034,7 +1034,43 @@ export const PenggunaAset = () => {
                               </Td>
                               <Td>Sisa Waktu</Td>
                               <Td>
-                                <Tag>{value.status}</Tag>
+                                <Tag
+                                  size='md'
+                                  variant='subtle'
+                                  colorScheme={
+                                    value.status.includes("Approved")
+                                      ? "whatsapp"
+                                      : value.status.includes("Waiting")
+                                      ? "orange"
+                                      : "red"
+                                  }
+                                >
+                                  {role === 3 ?
+                                    value.activity==="Borrow" ? 
+                                      value.status === "Waiting approval from Manager" 
+                                      ? "Menunggu Persetujuan" : 
+                                      value.status === "Approved by Manager" 
+                                      ? "Disetujui" :
+                                      value.status === "Rejected by Manager"
+                                      ? "Ditolak" : "Tidak Diketahui"
+                                    : "Dikembalikan"
+                                  : 
+                                    value.activity==="Borrow" ? 
+                                      value.status === "Waiting approval from Manager" 
+                                      ? "Menunggu Persetujuan Manager" :
+                                      value.status === "Waiting approval from Admin" 
+                                      ? "Menunggu Persetujuan Admin" :  
+                                      value.status === "Approved by Admin" 
+                                      ? "Disetujui" :
+                                      value.status === "Rejected by Manager"
+                                      ? "Ditolak Manager" : 
+                                      value.status === "Rejected by Admin"
+                                      ? "Ditolak Admin" :
+                                      "Dibatalkan"
+                                    : 
+                                      "Dikembalikan"
+                                  }
+                                </Tag>
                               </Td>
                               <Td>
                                 <ButtonTertier

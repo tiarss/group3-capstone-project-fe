@@ -370,6 +370,136 @@ export const PenggunaAset = () => {
 
   //End of Logic Admin
 
+  //Manager Logic
+  const handleGetAllManagerRequest = () => {
+    setIsLoadingTable(true);
+    axios
+      .get(`/requests/manager/borrow`, {
+        params: {
+          p: activePage,
+          rp: 5,
+          s: valueRadio,
+          a: activity
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        const { total_record } = res.data;
+        setRequestData(data);
+        setTotalData(total_record);
+        console.log("total: ", total_record);
+        console.log("data: ", data);
+        setIsLoadingTable(false);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerAll = () => {
+    axios
+      .get(`/requests/manager/borrow`, {
+        params: {
+          s: "all",
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountAll(total_record);
+        console.log("All: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerWaiting = () => {
+    axios
+      .get(`/requests/manager/borrow`, {
+        params: {
+          s: "waiting-approval",
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountWaiting(total_record);
+        console.log("Waiting: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerApproved = () => {
+    axios
+      .get(`/requests/manager/borrow`, {
+        params: {
+          s: "approved",
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountApproved(total_record);
+        console.log("Approved: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerRejected = () => {
+    axios
+      .get(`/requests/manager/borrow`, {
+        params: {
+          s: "rejected",
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountRejected(total_record);
+        console.log("Rejected: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerReturned = () => {
+    axios
+      .get(`/requests/manager/borrow`, {
+        params: {
+          s: "returned",
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountReturned(total_record);
+        console.log("Returned: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+  //End of Logic Manager
+
   return (
     <div>
       {console.log("aktifitas: ", activity)}

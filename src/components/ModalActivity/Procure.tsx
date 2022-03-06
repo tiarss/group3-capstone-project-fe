@@ -112,7 +112,7 @@ export const ModalProcure = ({
             </Box>
           </ModalBody>
           <ModalFooter>
-            {role === 1 ? (
+            {role === 2 ? (
               status === "Waiting approval from Manager" ? (
                 <>
                   <ButtonPrimary title='Kembali' onclick={onClose} />

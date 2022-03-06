@@ -1,4 +1,5 @@
 import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
+import moment from "moment";
 import React from "react";
 import { history, modalProps } from "../../../types";
 
@@ -52,18 +53,21 @@ const HistoryAset = ({category, asset_name, asset_image, users}: history) => {
             <Table variant='simple' size='sm'>
                 <Thead>
                     <Tr>
-                        <Th>No</Th>
-                        <Th>Pengguna Aset</Th>
-                        <Th>Tanggal Peminjaman</Th>
-                        <Th>Status</Th>
+                        <Th fontSize={9}>No</Th>
+                        <Th fontSize={9}>Pengguna Aset</Th>
+                        <Th fontSize={9}>Tanggal Peminjaman</Th>
+                        <Th fontSize={9}>Status</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
-                     {users.map((item:any) => 
-                    <Tr>
-                        <Td>{item.id}</Td>
+                     {users.map((item:any, index) => 
+                    <Tr key={index}>
+                        <Td>{index+1}</Td>
                         <Td>{item.user_name}</Td>
-                        <Td>{item.request_date}</Td>
+                        <Td>{moment(item.request_date).format(
+                            "DD MMM YYYY"
+                            )
+                        }</Td>
                         <Td>{item.status}</Td>
                     </Tr>
                     )}

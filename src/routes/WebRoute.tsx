@@ -10,6 +10,7 @@ import { TestComponent } from "../pages/TestComponent";
 import { NotFound } from "../pages/NotFound";
 import { MaintenanceContext } from "../helper/MaintenanceContext";
 import { TriggerProvider } from "../helper/Trigger";
+import PengadaanAset from "../pages/PengadaanAset";
 
 export const WebRoute = () => {
   console.log("aku duluan");

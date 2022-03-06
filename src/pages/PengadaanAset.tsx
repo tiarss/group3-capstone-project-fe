@@ -50,18 +50,31 @@ const PengadaanAset = () => {
         if (roles === "Administrator") {
             handleGetAllRequest();
         } else if (roles === "Manager") {
+          handleGetManagerAllRequest();
         }
     }, [activePage]);
 
     useEffect(() => {
-        handleGetAllRequest();
+      if (roles === "Administrator") {
+          handleGetAllRequest();
+      } else if (roles === "Manager") {
+        handleGetManagerAllRequest();
+      }
     }, [valueRadio]);
 
     useEffect(() => {
+      if (roles === "Administrator") {
         handleGetAll();
         handleGetWaiting();
         handleGetApproved();
         handleGetRejected();
+      } else if (roles === "Manager") {
+        handleGetManagerAll();
+        handleGetManagerWaiting();
+        handleGetManagerApproved();
+        handleGetManagerRejected();
+      }
+        
     }, []);
 
     const roleCondition = () => {
@@ -106,6 +119,7 @@ const PengadaanAset = () => {
             params: {
               p: activePage,
               rp: 5,
+              s: valueRadio
             },
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -204,8 +218,117 @@ const PengadaanAset = () => {
             console.log(err.response);
           });
       };
+      //End of Logic Admin
 
-      const handleToManager = (id: number) => {
+      //Manager Logic
+      const handleGetManagerAllRequest = () => {
+        setIsLoadingTable(true);
+        axios
+          .get(`/requests/manager/procure`, {
+            params: {
+              p: activePage,
+              rp: 5,
+              s: valueRadio
+            },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((res) => {
+            const { data } = res.data;
+            const { total_record } = res.data;
+            setRequestData(data);
+            setTotalData(total_record);
+            console.log("total: ", total_record);
+            console.log("data: ", data);
+            setIsLoadingTable(false);
+          })
+          .catch((err) => {
+            console.log(err.response);
+        });
+    };
+
+    const handleGetManagerAll = () => {
+        axios
+          .get(`/requests/manager/procure`, {
+            params: {
+              s: "all",
+            },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((res) => {
+            const { total_record } = res.data;
+            setCountAll(total_record);
+            console.log("All: ", total_record);
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      };
+    
+      const handleGetManagerWaiting = () => {
+        axios
+          .get(`/requests/manager/procure`, {
+            params: {
+              s: "waiting-approval",
+            },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((res) => {
+            const { total_record } = res.data;
+            setCountWaiting(total_record);
+            console.log("Waiting: ", total_record);
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      };
+    
+      const handleGetManagerApproved = () => {
+        axios
+          .get(`/requests/manager/procure`, {
+            params: {
+              s: "approved",
+            },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((res) => {
+            const { total_record } = res.data;
+            setCountApproved(total_record);
+            console.log("Approved: ", total_record);
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      };
+    
+      const handleGetManagerRejected = () => {
+        axios
+          .get(`/requests/manager/procure`, {
+            params: {
+              s: "rejected",
+            },
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          })
+          .then((res) => {
+            const { total_record } = res.data;
+            setCountRejected(total_record);
+            console.log("Rejected: ", total_record);
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      };
+
+      const handleAcceptReqManager = (id: number) => {
         axios
           .put(
             `/requests/procure/${id}`,
@@ -222,7 +345,7 @@ const PengadaanAset = () => {
             console.log(res);
             const temp = selectedData;
             if (temp !== undefined) {
-              setSelectedData({ ...temp, status: "Waiting approval from Manager" });
+              setSelectedData({ ...temp, status: "Approved by Admin" });
             }
             handleGetAllRequest();
           })
@@ -230,7 +353,33 @@ const PengadaanAset = () => {
             console.log(err.response);
           });
       };
-      //End of Logic Admin
+    
+      const handleRejectReqManager = (id: number) => {
+        axios
+          .put(
+            `/requests/procure/${id}`,
+            {
+              approved: false,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            }
+          )
+          .then((res) => {
+            console.log(res);
+            const temp = selectedData;
+            if (temp !== undefined) {
+              setSelectedData({ ...temp, status: "Rejected by Admin" });
+            }
+            handleGetAllRequest();
+          })
+          .catch((err) => {
+            console.log(err.response);
+          });
+      };
+      //End of Logic Manager
 
     return(
         <div>
@@ -272,7 +421,9 @@ const PengadaanAset = () => {
                                     <Box
                                     transition='all 0.5s ease'
                                     color={valueRadio === "all" ? "white" : "#222222"}>
-                                    Semua Pengadaan
+                                    {role===2 ?
+                                    "Semua Pengadaan"
+                                    : "Semua Permohonan"}
                                     </Box>
                                     <Box
                                     display='flex'
@@ -301,7 +452,10 @@ const PengadaanAset = () => {
                                         ? "white"
                                         : "#222222"
                                     }>
-                                    Permohonan Baru
+                                      {role===2 ?
+                                    "Permohonan Baru"
+                                    : "Butuh Persetujuan"}
+                                    
                                     </Box>
                                     <Box
                                     display='flex'
@@ -336,7 +490,10 @@ const PengadaanAset = () => {
                                     color={
                                         valueRadio === "approved" ? "white" : "#222222"
                                     }>
-                                    Diterima
+                                    {role === 2 
+                                    ? "Diterima" : 
+                                    "Disetujui"}
+                                    
                                     </Box>
                                     <Box
                                     display='flex'
@@ -531,6 +688,8 @@ const PengadaanAset = () => {
             onClose={handleClose} 
             role={role} 
             data={selectedData}
+            handleAcceptReqProcure={()=>handleAcceptReqManager(selectedIdReq)}
+            handleRejectReqProcure={()=>handleRejectReqManager(selectedIdReq)}
             />
         </div>
     )

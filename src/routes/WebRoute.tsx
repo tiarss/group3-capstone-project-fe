@@ -45,6 +45,7 @@ export const WebRoute = () => {
                   <>
                     <Route path='/beranda' element={<Beranda />} />
                     <Route path='/pengguna-aset' element={<PenggunaAset />} />
+                    <Route path="/pengadaan-aset" element={<PengadaanAset />} />
                     <Route path='*' element={<NotFound />} />
                   </>
                 )

@@ -55,6 +55,7 @@ export const PenggunaAset = () => {
 
   useEffect(() => {
     handleGetAllRequest();
+    handleActivity();
   }, [valueRadio]);
 
   useEffect(() => {
@@ -109,6 +110,7 @@ export const PenggunaAset = () => {
           p: activePage,
           rp: 5,
           s: valueRadio,
+          a: activity
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -357,10 +359,20 @@ export const PenggunaAset = () => {
         console.log(err.response);
       });
   };
+
+  const handleActivity = () => {
+    if (valueRadio === "returned") {
+      setActivity("return")
+    } else {
+      setActivity("borrow")
+    }
+  }
+
   //End of Logic Admin
 
   return (
     <div>
+      {console.log("aktifitas: ", activity)}
       <Header />
       <Box
         transition='all 0.5s ease'

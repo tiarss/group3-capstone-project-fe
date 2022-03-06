@@ -50,6 +50,7 @@ export const PenggunaAset = () => {
     if (roles === "Administrator") {
       handleGetAllRequest();
     } else if (roles === "Manager") {
+      // handleGetAllRequest("manager");
     }
   }, [activePage]);
 
@@ -86,7 +87,7 @@ export const PenggunaAset = () => {
   const [selectedData, setSelectedData] = useState<tableRequest>();
   const [isLoadingTable, setIsLoadingTable] = useState(true);
   const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
-  const [activity, setActivity] = useState<string>("borrow");
+  const [activity, setActivity] = useState<string>("");
   //End Admin State
 
   //Logic Administrator
@@ -100,15 +101,25 @@ export const PenggunaAset = () => {
     console.log(filtering)
   };
   const handleClose = () => setIsOpen(false);
+  const handleSelectReturn = () => {
+    console.log("test return")
+    setActivity("return")
+  }
+
+  const handleSelectBorrow = () => {
+    setActivity("")
+  }
 
   const handleGetAllRequest = () => {
     setIsLoadingTable(true);
+    const status = valueRadio === "waiting-approvals" ? "" : valueRadio;
     axios
       .get(`/requests/admin/borrow`, {
         params: {
           p: activePage,
           rp: 5,
-          s: valueRadio,
+          s: status,
+          a: activity,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -395,7 +406,7 @@ export const PenggunaAset = () => {
                 data={[
                   {
                     label: (
-                      <Center>
+                      <Center onClick={handleSelectBorrow}>
                         <Box
                           transition='all 0.5s ease'
                           color={valueRadio === "all" ? "white" : "#222222"}>
@@ -420,7 +431,7 @@ export const PenggunaAset = () => {
                   },
                   {
                     label: (
-                      <Center>
+                      <Center onClick={handleSelectBorrow}>
                         <Box
                           transition='all 0.5s ease'
                           color={
@@ -457,7 +468,44 @@ export const PenggunaAset = () => {
                   },
                   {
                     label: (
-                      <Center>
+                      <Center onClick={handleSelectReturn}>
+                        <Box
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "waiting-approvals"
+                              ? "white"
+                              : "#222222"
+                          }>
+                          Permohonan Pengembalian
+                        </Box>
+                        <Box
+                          display='flex'
+                          alignItems='center'
+                          justifyContent='center'
+                          ml='10px'
+                          bgColor={
+                            valueRadio === "waiting-approvals"
+                              ? "white"
+                              : "#222222"
+                          }
+                          borderRadius='20px'
+                          w='20px'
+                          h='20px'
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "waiting-approvals"
+                              ? "#3CA9DB"
+                              : "white"
+                          }>
+                          {countWaiting}
+                        </Box>
+                      </Center>
+                    ),
+                    value: "waiting-approvals",
+                  },
+                  {
+                    label: (
+                      <Center onClick={handleSelectBorrow}>
                         <Box
                           transition='all 0.5s ease'
                           color={
@@ -488,7 +536,7 @@ export const PenggunaAset = () => {
                   },
                   {
                     label: (
-                      <Center>
+                      <Center onClick={handleSelectBorrow}>
                         <Box
                           transition='all 0.5s ease'
                           color={
@@ -519,7 +567,7 @@ export const PenggunaAset = () => {
                   },
                   {
                     label: (
-                      <Center>
+                      <Center onClick={handleSelectBorrow}>
                         <Box
                           transition='all 0.5s ease'
                           color={

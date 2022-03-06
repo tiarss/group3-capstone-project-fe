@@ -116,10 +116,10 @@ export const Header = () => {
           _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
           _active={{ bgColor: "#1788BB" }}>
-          Pengguna Aset
+          {role === 2 ? "Pengguna Aset" : "Permintaan Permohonan"}
         </Button>
         <Button
-          display={role === 2 || role === 3 ? "block" : "none"}
+          display={role === 2 ? "block" : "none"}
           fontWeight='medium'
           color='white'
           bgColor='#2296CB'

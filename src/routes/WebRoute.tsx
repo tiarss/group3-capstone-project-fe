@@ -38,7 +38,7 @@ export const WebRoute = () => {
                     <Route path='/pengguna-aset' element={<PenggunaAset />} />
                     <Route path='/beranda' element={<Beranda />} />
                     <Route path='/direktori-aset' element={<DirektoriAset />} />
-                    <Route path='/pengadaan-aset' element={<PengadaanAset />} />
+                    <Route path="/pengadaan-aset" element={<PengadaanAset />} />
                     <Route path='*' element={<NotFound />} />
                   </>
                 ) : (

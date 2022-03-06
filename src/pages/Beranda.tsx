@@ -24,21 +24,27 @@ import { RequestModal } from "../components/RequestModal";
 import { ResumeCard } from "../components/ResumeCard";
 import SliderImage from "../components/Slider";
 import axios from "axios";
-import { tableRequest } from "../types";
+import { historyDataType, tableProcure, tableRequest } from "../types";
 import moment from "moment";
 import ModalAddAssets from "../components/Modal/tambah-asset";
 import { Trigger, triggerType } from "../helper/Trigger";
 import { AssignAssets } from "../components/AssignAssets";
+import { HistoryModal } from "../components/HistoryModal";
+import { ModalProcure } from "../components/ModalActivity/Procure";
 
 export const Beranda = () => {
   const { trigger, setTrigger } = useContext(Trigger);
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenHistory, setIsOpenHistory] = useState(false);
   const [isOpenRequest, setIsOpenRequest] = useState(false);
   const [isOpenAssign, setIsOpenAssign] = useState(false);
+  const [isOpenProcure, setIsOpenProcure] = useState(false);
   const [isOpenAddAssets, setIsOpenAddAssets] = useState(false);
   const [role, setRole] = useState(1);
   const [activePage, setPage] = useState(1);
+  const [activePageProcure, setPageProcure] = useState(1);
   const [totalData, setTotalData] = useState(0);
+  const [totalDataProcure, setTotalDataProcure] = useState(0);
   const idUser = localStorage.getItem("id");
   const dummy = [1, 2, 3, 4, 5];
 
@@ -47,6 +53,7 @@ export const Beranda = () => {
 
   const [assetShortName, setAssetShortName] = useState<string>("");
   const [descriptionRequest, setDesciptionRequest] = useState<string>("");
+  const [historyAssets, setHistoryAssets] = useState<historyDataType[]>();
 
   //End Employee State
 
@@ -58,14 +65,24 @@ export const Beranda = () => {
   const [addAssetsImage, setAddAssetsImage] = useState<File>();
   const [addAssetsCategory, setAddAssetsCategory] = useState<string>("");
 
-  const [employeeId, setEmployeeId] = useState<number>(0)
-  const [returnDate, setReturnDate] = useState<string>()
+  const [employeeId, setEmployeeId] = useState<number>(0);
+  const [returnDate, setReturnDate] = useState<string>();
+  const [ImageData, setImageData] = useState<File>();
+  const [reqAssetsCategory, setReqAssetsCategory] = useState<string>("");
 
   const [requestData, setRequestData] = useState<tableRequest[]>();
+  const [procureData, setProcureData] = useState<tableProcure[]>();
   const [selectedData, setSelectedData] = useState<tableRequest>();
+  const [selectedDataProcure, setSelectedDataProcure] =
+    useState<tableProcure>();
+  const [selectedDataHistory, setSelectedDataHistory] =
+    useState<historyDataType>();
   const [isLoadingTable, setIsLoadingTable] = useState(true);
+  const [isLoadingTableProcure, setIsLoadingTableProcure] = useState(true);
   const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
-  const [isMaintained, setIsMaintained ] = useState<boolean>(false); 
+  const [selectedIdProcure, setSelectedIdProcure] = useState<number>(0);
+  const [selectedIdHistory, setSelectedIdHistory] = useState<number>(0);
+  const [isMaintained, setIsMaintained] = useState<boolean>(false);
   //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -75,10 +92,21 @@ export const Beranda = () => {
       handleGetAllRequest();
     } else if (roles === "Manager") {
       handleGetManagerReq();
-    }else{
+    } else {
       getAllHistory();
     }
   }, [activePage]);
+
+  useEffect(() => {
+    roleCondition();
+    if (roles === "Administrator") {
+      handleGetAllProcurement();
+    } else if (roles === "Manager") {
+      handleGetAllProcurementManager();
+    } else {
+      getAllHistory();
+    }
+  }, [activePageProcure]);
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -92,11 +120,25 @@ export const Beranda = () => {
   };
 
   const handlePage = (value: number) => {
-    console.log(value);
     setPage(value);
   };
 
+  const handlePageProcure = (value: number) => {
+    setPageProcure(value);
+  };
+
   //Logic as Employee
+  const handleOpenHistory = (id: number) => {
+    const filtering = historyAssets?.find((value) => value.id === id);
+    setSelectedDataHistory(filtering);
+    if (filtering !== undefined) {
+      setSelectedIdHistory(filtering?.id);
+    }
+    setIsOpenHistory(true);
+  };
+
+  const handleCloseHistory = () => setIsOpenHistory(false);
+
   const handleOpenRequest = () => {
     setIsOpenRequest(true);
   };
@@ -104,15 +146,20 @@ export const Beranda = () => {
   const handleCloseRequest = () => setIsOpenRequest(false);
 
   const getAllHistory = () => {
-    axios.get(`/histories/users/${idUser}`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res)=>{
-      const {data} = res.data
-      console.log(data)
-    })
-  }
+    setIsLoadingTable(true);
+    axios
+      .get(`/histories/users/${idUser}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        setHistoryAssets(data.histories);
+        setIsLoadingTable(false);
+        console.log(data);
+      });
+  };
 
   const handleRequest = () => {
     axios
@@ -171,13 +218,23 @@ export const Beranda = () => {
     setIsOpenAssign(false);
   };
 
+  const handleOpenProcure = (id: number) => {
+    const filtering = procureData?.find((value) => value.id === id);
+    setSelectedDataProcure(filtering);
+    if (filtering !== undefined) {
+      setSelectedIdProcure(filtering?.id);
+    }
+    setIsOpenProcure(true);
+  };
+
+  const handleCloseProcure = () => setIsOpenProcure(false)
+
   const handleGetAllRequest = () => {
-    const pageView = (activePage - 1) * 5 + 1
     setIsLoadingTable(true);
     axios
-      .get("/requests/admin", {
+      .get("/requests/admin/borrow", {
         params: {
-          p: pageView,
+          p: activePage,
           rp: 5,
         },
         headers: {
@@ -188,10 +245,36 @@ export const Beranda = () => {
         const { data } = res.data;
         const { total_record } = res.data;
         setRequestData(data);
-        setTotalData(total_record)
-        console.log(total_record)
+        setTotalData(total_record);
+        console.log(total_record);
         console.log(data);
         setIsLoadingTable(false);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetAllProcurement = () => {
+    setIsLoadingTableProcure(true);
+    axios
+      .get("/requests/admin/procure", {
+        params: {
+          p: activePageProcure,
+          rp: 5,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        const { total_record } = res.data;
+        setProcureData(data);
+        setTotalDataProcure(total_record);
+        console.log(total_record);
+        console.log(data);
+        setIsLoadingTableProcure(false);
       })
       .catch((err) => {
         console.log(err.response);
@@ -236,21 +319,31 @@ export const Beranda = () => {
 
   const handleMaintenance = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
-    console.log(value)
-    setIsMaintained(value)
-  }
+    console.log(value);
+    setIsMaintained(value);
+  };
 
   const handleEmployee = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    setEmployeeId(parseInt(value))
+    setEmployeeId(parseInt(value));
   };
 
   const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    const convert = moment(value).format()
-    setReturnDate(convert)
+    const convert = moment(value).format();
+    setReturnDate(convert);
   };
 
+  const handleImageProcurement = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.files;
+    if (!value) return;
+    setImageData(value[0]);
+  };
+  const handleCategoryReq = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.target.value;
+    setReqAssetsCategory(value);
+    console.log(value);
+  };
 
   const handleAddAssets = () => {
     const formData = new FormData();
@@ -263,8 +356,7 @@ export const Beranda = () => {
       formData.append("image", addAssetsImage);
     }
     axios
-      .post(
-        "/assets", formData, {
+      .post("/assets", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Accept: "multipart/form-data",
@@ -281,7 +373,7 @@ export const Beranda = () => {
         handleCloseAddAssets();
       });
   };
-  
+
   const handleToManager = (id: number) => {
     axios
       .put(
@@ -358,8 +450,8 @@ export const Beranda = () => {
       .catch((err) => {
         console.log(err.response);
       });
-  }
-    
+  };
+
   const handleRejectReqAdmin = (id: number) => {
     axios
       .put(
@@ -384,12 +476,12 @@ export const Beranda = () => {
       .catch((err) => {
         console.log(err.response);
       });
-  }
+  };
 
-  const handleAjukanPengembalian = (id:number) => {
+  const handleAjukanPengembalian = (id: number) => {
     axios
       .put(
-        `/request/return/${id}`,
+        `/requests/return/${id}`,
         {
           askingreturn: true,
         },
@@ -401,31 +493,66 @@ export const Beranda = () => {
       )
       .then((res) => {
         const { data } = res;
-        console.log("respon: ", data);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, activity: "Request to Return" });
+        }
         handleClose();
       })
       .catch((err) => {
         console.log(err.response);
-      })
+      });
   };
 
-  const handleRequestProcurement = () => {};
+  const handleRequestProcurement = () => {
+    console.log(ImageData);
+    console.log(reqAssetsCategory);
+    console.log(descriptionRequest);
+    const formData = new FormData();
+    formData.append("category", reqAssetsCategory);
+    formData.append("description", descriptionRequest);
+    if (ImageData) {
+      formData.append("image", ImageData);
+    }
+    axios
+      .post(`/requests/procure`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Accept: "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
   const handleAssignAssets = () => {
-    axios.post('/requests/borrow', {
-      short_name: assetShortName,
-      employee_id: employeeId,
-      description: descriptionRequest,
-      return_date: returnDate,
-    },{
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    }).then((res)=>{
-      console.log(res)
-    }).catch((err)=>{
-      console.log(err.response)
-    })
-  }
+    axios
+      .post(
+        "/requests/borrow",
+        {
+          short_name: assetShortName,
+          employee_id: employeeId,
+          description: descriptionRequest,
+          return_date: returnDate,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
   // End of Admin Logic
 
   // Manager Logic
@@ -455,7 +582,31 @@ export const Beranda = () => {
         console.log(err.response);
       });
   };
-
+  const handleGetAllProcurementManager = () => {
+    setIsLoadingTableProcure(true);
+    axios
+      .get("/requests/manager/procure", {
+        params: {
+          p: activePageProcure,
+          rp: 5,
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        const { total_record } = res.data;
+        setProcureData(data);
+        setTotalDataProcure(total_record);
+        console.log(total_record);
+        console.log(data);
+        setIsLoadingTableProcure(false);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
   const handleAcceptReqManager = (id: number) => {
     axios
       .put(
@@ -590,14 +741,6 @@ export const Beranda = () => {
                       title='Assign Aset Ke Karyawan'
                       onclick={handleOpenAssign}
                     />
-                    <ButtonSecondary
-                      title='Pengajuan Aset Baru'
-                      onclick={handleOpenRequest}
-                    />
-                    <ButtonPrimary
-                      title='Tambah Aset'
-                      onclick={handleOpenAddAssets}
-                    />
                   </>
                 ) : (
                   <></>
@@ -605,11 +748,12 @@ export const Beranda = () => {
               </Flex>
             </Flex>
             <Box overflowX='auto'>
-              {role === 1 ? <Table minW='800px' size='sm' borderRadius='20px'>
-              <Thead bgColor='blue.500'>
+              {role === 1 ? (
+                <Table minW='800px' size='sm' borderRadius='20px'>
+                  <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
-                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>Tanggal Peminjaman</Th>
                       <Th color='white'>Jenis Aktivitas</Th>
                       <Th color='white'>Kategori Aset</Th>
                       <Th color='white'>Barang</Th>
@@ -619,80 +763,116 @@ export const Beranda = () => {
                   <Tbody>
                     {isLoadingTable ? (
                       <>
-                        {dummy.map((value:number) => (
-                        <Tr key={value}>
-                          <Td><Skeleton>1</Skeleton></Td>
-                          <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
-                          <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
-                          <Td><Skeleton>Headphone</Skeleton></Td>
-                          <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
-                          <Td>
-                          <Skeleton><ButtonTertier title='Details' /></Skeleton>
-                          </Td>
-                        </Tr>
-                          ))}
-                      </>
-                    ) : (
-                      <>
-                        {requestData === null ? (
-                        <>
-                          {dummy.map((value:number) => (
+                        {dummy.map((value: number) => (
                           <Tr key={value}>
-                            <Td><Skeleton>1</Skeleton></Td>
-                            <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
-                            <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
-                            <Td><Skeleton>Headphone</Skeleton></Td>
-                            <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
                             <Td>
-                            <Skeleton><ButtonTertier title='Details' /></Skeleton>
+                              <Skeleton>1</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Peminjaman Aset</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Headphone</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>
+                                <ButtonTertier title='Details' />
+                              </Skeleton>
                             </Td>
                           </Tr>
                         ))}
-                        </>
-                        ) : requestData !== undefined ? (
-                          requestData.map((value, index) => (
+                      </>
+                    ) : (
+                      <>
+                        {historyAssets === null ? (
+                          <>
+                            {dummy.map((value: number) => (
+                              <Tr key={value}>
+                                <Td>
+                                  <Skeleton>1</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>Peminjaman Aset</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>Headphone</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>
+                                    <ButtonTertier title='Details' />
+                                  </Skeleton>
+                                </Td>
+                              </Tr>
+                            ))}
+                          </>
+                        ) : historyAssets !== undefined ? (
+                          historyAssets.map((value, index) => (
                             <Tr key={value.id}>
                               <Td>{(activePage - 1) * 5 + index + 1}</Td>
                               <Td>
-                                {moment(value.request_time).format(
+                                {moment(value.request_date).format(
                                   "h:mm a, DD MMM YYYY"
                                 )}
                               </Td>
                               <Td>
-                                {value.activity === "Borrow"
+                                {value.activity_type === "Borrowing Asset"
                                   ? "Peminjaman Aset"
                                   : "Peminjaman Aset"}
                               </Td>
-                              <Td>{value.Asset.category}</Td>
-                              <Td>{`${value.Asset.name.substring(
+                              <Td>{value.category}</Td>
+                              <Td>{`${value.asset_name.substring(
                                 0,
                                 20
                               )}+..`}</Td>
                               <Td>
                                 <ButtonTertier
                                   title='Details'
-                                  onclick={() => handleOpen(value.id)}
+                                  onclick={() => handleOpenHistory(value.id)}
                                 />
                               </Td>
                             </Tr>
                           ))
                         ) : (
                           <Tr>
-                            <Td><Skeleton>1</Skeleton></Td>
-                            <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
-                            <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
-                            <Td><Skeleton>Headphone</Skeleton></Td>
-                            <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
                             <Td>
-                            <Skeleton><ButtonTertier title='Details' /></Skeleton>
+                              <Skeleton>1</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Peminjaman Aset</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Headphone</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>
+                                <ButtonTertier title='Details' />
+                              </Skeleton>
                             </Td>
                           </Tr>
                         )}
                       </>
                     )}
                   </Tbody>
-              </Table> : 
-              role === 2 ? (
+                </Table>
+              ) : role === 2 ? (
                 <Table minW='800px' size='sm' borderRadius='20px'>
                   <Thead bgColor='blue.500'>
                     <Tr>
@@ -707,36 +887,60 @@ export const Beranda = () => {
                   <Tbody>
                     {isLoadingTable ? (
                       <>
-                        {dummy.map((value:number) => (
-                        <Tr key={value}>
-                          <Td><Skeleton>1</Skeleton></Td>
-                          <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
-                          <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
-                          <Td><Skeleton>Headphone</Skeleton></Td>
-                          <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
-                          <Td>
-                          <Skeleton><ButtonTertier title='Details' /></Skeleton>
-                          </Td>
-                        </Tr>
-                          ))}
+                        {dummy.map((value: number) => (
+                          <Tr key={value}>
+                            <Td>
+                              <Skeleton>1</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Peminjaman Aset</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Headphone</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>
+                                <ButtonTertier title='Details' />
+                              </Skeleton>
+                            </Td>
+                          </Tr>
+                        ))}
                       </>
                     ) : (
                       <>
                         {requestData === null ? (
-                        <>
-                          {dummy.map((value:number) => (
-                          <Tr key={value}>
-                            <Td><Skeleton>1</Skeleton></Td>
-                            <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
-                            <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
-                            <Td><Skeleton>Headphone</Skeleton></Td>
-                            <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
-                            <Td>
-                            <Skeleton><ButtonTertier title='Details' /></Skeleton>
-                            </Td>
-                          </Tr>
-                        ))}
-                        </>
+                          <>
+                            {dummy.map((value: number) => (
+                              <Tr key={value}>
+                                <Td>
+                                  <Skeleton>1</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>Peminjaman Aset</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>Headphone</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>
+                                    <ButtonTertier title='Details' />
+                                  </Skeleton>
+                                </Td>
+                              </Tr>
+                            ))}
+                          </>
                         ) : requestData !== undefined ? (
                           requestData.map((value, index) => (
                             <Tr key={value.id}>
@@ -766,13 +970,25 @@ export const Beranda = () => {
                           ))
                         ) : (
                           <Tr>
-                            <Td><Skeleton>1</Skeleton></Td>
-                            <Td><Skeleton>12:22 WIB, 11 Jan 2022</Skeleton></Td>
-                            <Td><Skeleton>Peminjaman Aset</Skeleton></Td>
-                            <Td><Skeleton>Headphone</Skeleton></Td>
-                            <Td><Skeleton>dBe DJ80 Foldable DJ...</Skeleton></Td>
                             <Td>
-                            <Skeleton><ButtonTertier title='Details' /></Skeleton>
+                              <Skeleton>1</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Peminjaman Aset</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Headphone</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>
+                                <ButtonTertier title='Details' />
+                              </Skeleton>
                             </Td>
                           </Tr>
                         )}
@@ -874,6 +1090,286 @@ export const Beranda = () => {
             </Flex>
           </Box>
         </Box>
+        <Box display='flex' gap='20px'>
+          <Box
+            bgColor='white'
+            width='100%'
+            minH='200px'
+            padding='20px'
+            borderRadius='10px'>
+            <Flex
+              transition='all 0.5s ease'
+              alignItems={{ base: "start", md: "center" }}
+              justifyContent='space-between'
+              mb='20px'
+              flexDir={{ base: "column", md: "row" }}>
+              <Text
+                fontSize='16px'
+                fontWeight='semibold'
+                textAlign='left'
+                transition='all 0.5s ease'
+                mb={{ base: "10px", md: "0px" }}>
+                Permohonan Pengadaan
+              </Text>
+              <Flex gap='10px' display={role === 3 ? "none" : "flex"}>
+                <ButtonSecondary
+                  title='Pengajuan Aset Baru'
+                  onclick={handleOpenRequest}
+                />
+                <ButtonPrimary
+                  title='Tambah Aset'
+                  onclick={handleOpenAddAssets}
+                />
+              </Flex>
+            </Flex>
+            <Box overflowX='auto'>
+              {role === 2 ? (
+                <Table minW='800px' size='sm' borderRadius='20px'>
+                  <Thead bgColor='blue.500'>
+                    <Tr>
+                      <Th color='white'>No</Th>
+                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>Jenis Aktivitas</Th>
+                      <Th color='white'>Kategori Aset</Th>
+                      <Th color='white'>Deskripsi</Th>
+                      <Th color='white'></Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {isLoadingTableProcure ? (
+                      <>
+                        {dummy.map((value: number) => (
+                          <Tr key={value}>
+                            <Td>
+                              <Skeleton>1</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Peminjaman Aset</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Headphone</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>
+                                <ButtonTertier title='Details' />
+                              </Skeleton>
+                            </Td>
+                          </Tr>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {procureData === null ? (
+                          <>
+                            {dummy.map((value: number) => (
+                              <Tr key={value}>
+                                <Td>
+                                  <Skeleton>1</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>Peminjaman Aset</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>Headphone</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>
+                                    <ButtonTertier title='Details' />
+                                  </Skeleton>
+                                </Td>
+                              </Tr>
+                            ))}
+                          </>
+                        ) : procureData !== undefined ? (
+                          procureData.map((value, index) => (
+                            <Tr key={value.id}>
+                              <Td>{(activePageProcure - 1) * 5 + index + 1}</Td>
+                              <Td>
+                                {moment(value.request_time).format(
+                                  "h:mm a, DD MMM YYYY"
+                                )}
+                              </Td>
+                              <Td>
+                                {value.activity === "Procure"
+                                  ? "Pengadaan Aset"
+                                  : "Pengadaan Aset"}
+                              </Td>
+                              <Td>{value.category}</Td>
+                              <Td>{`${value.description.substring(
+                                0,
+                                20
+                              )}+..`}</Td>
+                              <Td>
+                                <ButtonTertier
+                                  title='Details'
+                                  onclick={() => handleOpenProcure(value.id)}
+                                />
+                              </Td>
+                            </Tr>
+                          ))
+                        ) : (
+                          <Tr>
+                            <Td>
+                              <Skeleton>1</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Peminjaman Aset</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Headphone</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>
+                                <ButtonTertier title='Details' />
+                              </Skeleton>
+                            </Td>
+                          </Tr>
+                        )}
+                      </>
+                    )}
+                  </Tbody>
+                </Table>
+              ) : (
+                <Table size='sm' borderRadius='20px'>
+                  <Thead bgColor='blue.500'>
+                    <Tr>
+                      <Th color='white'>No</Th>
+                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>Jenis Aktivitas</Th>
+                      <Th color='white'>Kategori Aset</Th>
+                      <Th color='white'>Deskripsi</Th>
+                      <Th color='white'></Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {isLoadingTableProcure ? (
+                      <>
+                        {dummy.map((value: number) => (
+                          <Tr key={value}>
+                            <Td>
+                              <Skeleton>1</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Peminjaman Aset</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Headphone</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>
+                                <ButtonTertier title='Details' />
+                              </Skeleton>
+                            </Td>
+                          </Tr>
+                        ))}
+                      </>
+                    ) : (
+                      <>
+                        {procureData === null ? (
+                          <>
+                            {dummy.map((value: number) => (
+                              <Tr key={value}>
+                                <Td>
+                                  <Skeleton>1</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>Peminjaman Aset</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>Headphone</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                                </Td>
+                                <Td>
+                                  <Skeleton>
+                                    <ButtonTertier title='Details' />
+                                  </Skeleton>
+                                </Td>
+                              </Tr>
+                            ))}
+                          </>
+                        ) : procureData !== undefined ? (
+                          procureData!.map((value, index) => (
+                            <Tr key={value.id}>
+                              <Td>{(activePageProcure - 1) * 5 + index + 1}</Td>
+                              <Td>
+                                {moment(value.request_time).format(
+                                  "h:mm a, DD MMM YYYY"
+                                )}
+                              </Td>
+                              <Td>
+                                {value.activity === "Procure"
+                                  ? "Pengadaan Aset"
+                                  : "Pengadaan Aset"}
+                              </Td>
+                              <Td>{value.category}</Td>
+                              <Td>{`${value.description.substring(
+                                0,
+                                20
+                              )}+..`}</Td>
+                              <Td>
+                                <ButtonTertier
+                                  title='Details'
+                                  onclick={() => handleOpenProcure(value.id)}
+                                />
+                              </Td>
+                            </Tr>
+                          ))
+                        ) : (
+                          <Tr>
+                            <Td>1</Td>
+                            <Td>12:22 WIB, 11 Jan 2022</Td>
+                            <Td>Peminjaman Aset</Td>
+                            <Td>Headphone</Td>
+                            <Td>dBe DJ80 Foldable DJ...</Td>
+                            <Td>
+                              <ButtonTertier title='Details' />
+                            </Td>
+                          </Tr>
+                        )}
+                      </>
+                    )}
+                  </Tbody>
+                </Table>
+              )}
+            </Box>
+            <Flex mt='10px' justifyContent='center'>
+              <Pagination
+                total={Math.ceil(totalDataProcure / 5)}
+                page={activePageProcure}
+                onChange={handlePageProcure}
+              />
+            </Flex>
+          </Box>
+        </Box>
       </Box>
       <RequestModal
         role={role}
@@ -884,15 +1380,16 @@ export const Beranda = () => {
         onClickRequest={handleRequest}
         onClickProcurement={handleRequestProcurement}
         onChangeEmployee={handleEmployee}
+        onChangeImage={handleImageProcurement}
+        onChangeReqCategory={handleCategoryReq}
       />
-      
       <ModalActivity
         data={selectedData}
         handleToManager={() => handleToManager(selectedIdReq)}
         handleAcceptReqManager={() => handleAcceptReqManager(selectedIdReq)}
         handleAcceptReqAdmin={() => handleAcceptReqAdmin(selectedIdReq)}
-        handleAjukanPengembalian={()=>handleAjukanPengembalian(selectedIdReq)}
-        handleAcceptReturn={()=>handleAcceptReturn(selectedIdReq)}
+        handleAjukanPengembalian={() => handleAjukanPengembalian(selectedIdReq)}
+        handleAcceptReturn={() => handleAcceptReturn(selectedIdReq)}
         handleRejectReqAdmin={() => handleRejectReqAdmin(selectedIdReq)}
         handleRejectReqManager={() => handleRejectReqManager(selectedIdReq)}
         isOpen={isOpen}
@@ -918,6 +1415,19 @@ export const Beranda = () => {
         onChangeMaintained={handleMaintenance}
         onChangeImage={handleAddImage}
         onClickAdd={handleAddAssets}
+      />
+      <HistoryModal
+        isOpen={isOpenHistory}
+        dataHistory={selectedDataHistory}
+        onClose={handleCloseHistory}
+      />
+      <ModalProcure
+        // handleAcceptReqProcure={}
+        // handleRejectReqProcure={}
+        data={selectedDataProcure}
+        role={role}
+        isOpen={isOpenProcure}
+        onClose={handleCloseProcure}
       />
     </div>
   );

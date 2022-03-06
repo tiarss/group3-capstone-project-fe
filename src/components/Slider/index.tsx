@@ -35,14 +35,14 @@ function SamplePrevArrow(props: any) {
 }
 
 function SliderImage() {
-  const {trigger, setTrigger} = useContext(Trigger)
+  const { trigger, setTrigger } = useContext(Trigger);
   const [isOpen, setIsOpen] = useState(false);
   const [activitiesData, setActivitiesData] = useState<typeActivitiesData[]>();
   const [selectedActivities, setSelectedActivities] =
     useState<activitiesDetail>();
   const [selectedId, setSelectedId] = useState<number>(0);
   const idUser = localStorage.getItem("id");
-  const roles = localStorage.getItem('role')
+  const roles = localStorage.getItem("role");
 
   const handleOpen = (id: number) => {
     setSelectedId(id);
@@ -71,24 +71,24 @@ function SliderImage() {
   }, [trigger]);
 
   const getAllActivities = () => {
-    if(roles === "Employee"){
+    if (roles === "Employee") {
       axios
-      .get(`/activities/${idUser}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
-      .then((res) => {
-        const { data } = res.data;
-        setActivitiesData(data);
-        console.log(data);
-      });
+        .get(`/activities/${idUser}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })
+        .then((res) => {
+          const { data } = res.data;
+          setActivitiesData(data);
+          console.log(data);
+        });
     }
   };
 
   const handleRejectRequest = (id: number) => {
     axios
-    .put(
+      .put(
         `/activities/${idUser}/${id}`,
         {
           status: "cancel",
@@ -162,7 +162,7 @@ function SliderImage() {
       .finally(() => {
         setIsOpen(true);
       });
-  }
+  };
 
   let settings = {
     className: "slider variable-width",
@@ -257,23 +257,36 @@ function SliderImage() {
                 padding='10px'
                 justifyContent='space-between'
                 alignItems='center'>
-                  <Tag size="sm" variant="subtle" colorScheme={value.status.includes("Approved") ? "whatsapp" : value.status.includes("Waiting") ? "orange" : "red"}>
+                <Tag
+                  size='sm'
+                  variant='subtle'
+                  colorScheme={
+                    value.status.includes("Approved")
+                      ? "whatsapp"
+                      : value.status.includes("Waiting")
+                      ? "orange"
+                      : "red"
+                  }>
                   {value.activity_type === "Borrow"
-                        ? value.status === "Waiting approval"
-                          ? "Menunggu Persetujuan"
-                          : value.status === "Approved by Manager"
-                          ? "Diterima Manager"
-                          : value.status === "Rejected by Manager"
-                          ? "Ditolak Manager"
-                          : value.status === "Approved by Admin"
-                          ? "Diterima"
-                          : value.status === "Rejected by Admin"
-                          ? "Ditolak Admin"
-                          : "Dibatalkan"
-                        : value.status === "Waiting approval"
-                        ? "Proses Pengembalian"
-                        : "Dikembalikan"}
-                  </Tag>
+                    ? value.status === "Waiting approval"
+                      ? "Menunggu Persetujuan"
+                      : value.status === "Approved by Manager"
+                      ? "Diterima Manager"
+                      : value.status === "Rejected by Manager"
+                      ? "Ditolak Manager"
+                      : value.status === "Approved by Admin"
+                      ? "Diterima"
+                      : value.status === "Rejected by Admin"
+                      ? "Ditolak Admin"
+                      : "Dibatalkan"
+                    : value.activity_type === "Return"
+                    ? value.status === "Waiting approval"
+                      ? "Proses Pengembalian"
+                      : "Dikembalikan"
+                    : value.status === "Approved by Admin"
+                    ? "Permintaan Pengembalian"
+                    : "Dikembalikan"}
+                </Tag>
                 {/* <Text
                   borderRadius='5px'
                   fontSize='12px'

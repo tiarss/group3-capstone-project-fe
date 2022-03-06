@@ -44,6 +44,7 @@ export const ModalActivity = ({
       status = data?.status;
     }
   }
+  console.log(data, "test")
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -151,24 +152,28 @@ export const ModalActivity = ({
                     padding='3px 6px'
                     color='white'
                     bgColor='#2A2A2A'>
-                    {role === 1 ?
-                      dataActivities !== undefined 
-                      ? dataActivities?.activity === "Borrow"
-                        ? status === "Waiting approval"
-                          ? "Menunggu Persetujuan"
-                          : status === "Approved by Manager"
-                          ? "Diterima Manager"
-                          : status === "Rejected by Manager"
-                          ? "Ditolak Manager"
+                    {role === 1
+                      ? dataActivities !== undefined
+                        ? dataActivities?.activity === "Borrow"
+                          ? status === "Waiting approval"
+                            ? "Menunggu Persetujuan"
+                            : status === "Approved by Manager"
+                            ? "Diterima Manager"
+                            : status === "Rejected by Manager"
+                            ? "Ditolak Manager"
+                            : status === "Approved by Admin"
+                            ? "Diterima"
+                            : status === "Rejected by Admin"
+                            ? "Ditolak Admin"
+                            : "Dibatalkan"
+                          : dataActivities?.activity === "Return"
+                          ? status === "Waiting approval"
+                            ? "Proses Pengembalian"
+                            : "Dikembalikan"
                           : status === "Approved by Admin"
-                          ? "Diterima"
-                          : status === "Rejected by Admin"
-                          ? "Ditolak Admin"
-                          : "Dibatalkan"
-                        : status === "Waiting approval"
-                        ? "Proses Pengembalian"
-                        : "Dikembalikan"
-                        :"test"
+                          ? "Permintaan Pengembalian"
+                          : "Dikembalikan"
+                        : "test"
                       : role === 2
                       ? data?.activity === "Borrow"
                         ? status === "Waiting approval from Manager" ||
@@ -182,7 +187,7 @@ export const ModalActivity = ({
                           ? "Ditolak Manager"
                           : status === "Rejected by Admin"
                           ? "Ditolak Admin"
-                          : "Dikembalikan"
+                          : "Dibatalkan"
                         : status === "Waiting approval from Admin"
                         ? "Menunggu Persetujuan Pengembalian"
                         : "Dikembalikan"
@@ -231,15 +236,15 @@ export const ModalActivity = ({
                       )
                     ) : (
                       <>
-                        {data !== undefined ? 
-                          moment(data.return_time).format(
-                            "h:mm A, DD MMM YYYY"
-                          ) === `6:59 AM, 01 Jan 10000` ?
-                            "Belum Dikembalikan"
-                          : moment(data.return_time).format(
-                            "h:mm A, DD MMM YYYY"
-                          )
-                        : `13:24 PM, 14 Feb 2022`}
+                        {data !== undefined
+                          ? moment(data.return_time).format(
+                              "h:mm A, DD MMM YYYY"
+                            ) === `6:59 AM, 01 Jan 10000`
+                            ? "Belum Dikembalikan"
+                            : moment(data.return_time).format(
+                                "h:mm A, DD MMM YYYY"
+                              )
+                          : `13:24 PM, 14 Feb 2022`}
                       </>
                     )}
                   </Text>
@@ -312,7 +317,7 @@ export const ModalActivity = ({
                     <Text fontSize='12px' fontWeight='bold' color='#2296CB'>
                       Ditolak Admin
                     </Text>
-                  ) : (
+                  ) : status === "Waiting approval from Admin" ? (
                     <Text
                       cursor='pointer'
                       onClick={handleToManager}
@@ -320,6 +325,10 @@ export const ModalActivity = ({
                       fontWeight='bold'
                       color='#2296CB'>
                       Minta Persetujuan
+                    </Text>
+                  ) : (
+                    <Text fontSize='12px' fontWeight='bold' color='#2296CB'>
+                      Disetujui
                     </Text>
                   )}
                 </Box>
@@ -369,12 +378,28 @@ export const ModalActivity = ({
                     </Box>
                   </Flex>
                 )
-              ) : status === "Waiting approval from Admin" ? (
+              ) : dataActivities?.activity === "Return" ? (
+                status === "Waiting approval" ? (
+                  <Flex gap='10px' justifyContent='end'>
+                    <ButtonPrimary title='Kembali' onclick={onClose} />
+                  </Flex>
+                ) : (
+                  <ButtonPrimary title='Kembali' onclick={onClose} />
+                )
+              ) : status === "Approved by Admin" ? (
+                <Flex gap='10px' justifyContent='end'>
+                    <ButtonSecondary title='Kembali' onclick={onClose} />
+                    <Box>
+                      <ButtonPrimary
+                        title='Ajukan Pengembalian'
+                        onclick={handleReturnEmployee}
+                      />
+                    </Box>
+                  </Flex>
+              ) : (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonPrimary title='Kembali' onclick={onClose} />
                 </Flex>
-              ) : (
-                <ButtonPrimary title='Kembali' onclick={onClose} />
               )
             ) : role === 2 ? (
               data?.activity === "Borrow" ? (

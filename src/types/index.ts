@@ -194,6 +194,18 @@ export type tableRequest = {
   status: string;
   updated_at: string;
 };
+export type tableProcure = {
+  User: userDataRequest;
+  category: string;
+  image: string;
+  activity: string;
+  deleted_at: string;
+  description: string;
+  id: number;
+  request_time: string;
+  status: string;
+  updated_at: string;
+};
 
 export type activitiesDetail = {
   activity: string;
@@ -225,3 +237,27 @@ export type requestModalProps = {
   isOpen: boolean;
   onClose: () => void;
 };
+
+export type procureModalProps = {
+  handleAcceptReqProcure?: () => void;
+  handleRejectReqProcure?:()=>void;
+  data?: tableProcure;
+  role: number;
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export type historyModalProps = {
+  dataHistory?: historyDataType;
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export type historyDataType = {
+  activity_type: string
+  asset_name: string
+  asset_image: string
+  category: string
+  id: number
+  request_date: string
+}

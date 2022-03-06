@@ -9,7 +9,7 @@ import {
   Th,
   Thead,
   Tr,
-  Tag
+  Tag,
 } from "@chakra-ui/react";
 import { Center, Pagination } from "@mantine/core";
 import { ButtonTertier } from "../components/Button";
@@ -34,7 +34,7 @@ export const PenggunaAset = () => {
   const [activePage, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
   const [role, setRole] = useState(1);
-  const [all, setAll] = useState<any[]>()
+  const [all, setAll] = useState<any[]>();
   const idUser = localStorage.getItem("id");
   const dummy = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const [countAll, setCountAll] = useState<number>(0);
@@ -57,13 +57,13 @@ export const PenggunaAset = () => {
     handleGetAllRequest();
   }, [valueRadio]);
 
-  useEffect(()=>{
+  useEffect(() => {
     handleGetAll();
     handleGetWaiting();
     handleGetApproved();
     handleGetRejected();
     handleGetReturned();
-  },[])
+  }, []);
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -80,8 +80,7 @@ export const PenggunaAset = () => {
     console.log(value);
     setPage(value);
   };
-  const handleOpen = () => setIsOpen(true);
-  const handleClose = () => setIsOpen(false);
+  
   //Admin State
   const [requestData, setRequestData] = useState<tableRequest[]>();
   const [selectedData, setSelectedData] = useState<tableRequest>();
@@ -90,16 +89,25 @@ export const PenggunaAset = () => {
   //End Admin State
 
   //Logic Administrator
+  const handleOpen = (id: number) => {
+    const filtering = requestData?.find((value) => value.id === id);
+    setSelectedData(filtering);
+    if (filtering !== undefined) {
+      setSelectedIdReq(filtering?.id);
+    }
+    setIsOpen(true);
+    console.log(filtering)
+  };
+  const handleClose = () => setIsOpen(false);
 
   const handleGetAllRequest = () => {
-    const pageView = (activePage - 1) * 5 + 1;
     setIsLoadingTable(true);
     axios
-      .get(`/requests/admin`, {
+      .get(`/requests/admin/borrow`, {
         params: {
-          p: pageView,
+          p: activePage,
           rp: 5,
-          s:valueRadio
+          s: valueRadio,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -121,9 +129,9 @@ export const PenggunaAset = () => {
 
   const handleGetAll = () => {
     axios
-      .get(`/requests/admin`, {
+      .get(`/requests/admin/borrow`, {
         params: {
-          s:"all"
+          s: "all",
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -141,9 +149,9 @@ export const PenggunaAset = () => {
 
   const handleGetWaiting = () => {
     axios
-      .get(`/requests/admin`, {
+      .get(`/requests/admin/borrow`, {
         params: {
-          s:"waiting-approval"
+          s: "waiting-approval",
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -161,9 +169,9 @@ export const PenggunaAset = () => {
 
   const handleGetApproved = () => {
     axios
-      .get(`/requests/admin`, {
+      .get(`/requests/admin/borrow`, {
         params: {
-          s:"approved"
+          s: "approved",
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -181,9 +189,9 @@ export const PenggunaAset = () => {
 
   const handleGetRejected = () => {
     axios
-      .get(`/requests/admin`, {
+      .get(`/requests/admin/borrow`, {
         params: {
-          s:"rejected"
+          s: "rejected",
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -201,9 +209,9 @@ export const PenggunaAset = () => {
 
   const handleGetReturned = () => {
     axios
-      .get(`/requests/admin`, {
+      .get(`/requests/admin/borrow`, {
         params: {
-          s:"returned"
+          s: "returned",
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -259,11 +267,7 @@ export const PenggunaAset = () => {
                       <Center>
                         <Box
                           transition='all 0.5s ease'
-                          color={
-                            valueRadio === "all"
-                              ? "white"
-                              : "#222222"
-                          }>
+                          color={valueRadio === "all" ? "white" : "#222222"}>
                           Semua Pengguna
                         </Box>
                         <Box
@@ -271,20 +275,12 @@ export const PenggunaAset = () => {
                           alignItems='center'
                           justifyContent='center'
                           ml='10px'
-                          bgColor={
-                            valueRadio === "Semua Pengguna"
-                              ? "white"
-                              : "#222222"
-                          }
+                          bgColor={valueRadio === "all" ? "white" : "#222222"}
                           borderRadius='20px'
                           w='20px'
                           h='20px'
                           transition='all 0.5s ease'
-                          color={
-                            valueRadio === "all"
-                              ? "#3CA9DB"
-                              : "white"
-                          }>
+                          color={valueRadio === "all" ? "#3CA9DB" : "white"}>
                           {countAll}
                         </Box>
                       </Center>
@@ -520,10 +516,12 @@ export const PenggunaAset = () => {
                               <Td>
                                 <Tag>{value.status}</Tag>
                               </Td>
-                              <Td><ButtonTertier
+                              <Td>
+                                <ButtonTertier
                                   title='Details'
-                                  onclick={handleOpen}
-                                /></Td>
+                                  onclick={()=>handleOpen(value.id)}
+                                />
+                              </Td>
                             </Tr>
                           ))
                         ) : (
@@ -570,11 +568,7 @@ export const PenggunaAset = () => {
           </Box>
         </Box>
       </Box>
-      <ModalActivity
-        isOpen={isOpen}
-        onClose={handleClose}
-        role={1}
-      />
+      <ModalActivity isOpen={isOpen} onClose={handleClose} role={role} data={selectedData} />
     </div>
   );
 };

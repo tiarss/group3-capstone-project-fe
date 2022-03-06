@@ -21,7 +21,6 @@ import { ButtonPrimary, ButtonSecondary } from "../Button";
 import {
   InputSelect,
   InputSelectData,
-  InputSelectDataUser,
   InputText,
 } from "../Input";
 
@@ -33,7 +32,8 @@ export const RequestModal = ({
   onChangeAset,
   onClickRequest,
   onClickProcurement,
-  onChangeEmployee,
+  onChangeImage,
+  onChangeReqCategory,
 }: {
   isOpen: boolean;
   role?: number;
@@ -43,6 +43,8 @@ export const RequestModal = ({
   onClickRequest: () => void;
   onClickProcurement: () => void;
   onChangeEmployee: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  onChangeImage: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeReqCategory: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }) => {
   const [assetData, setAssetData] = useState();
   const [userData, setUserData] = useState();
@@ -130,7 +132,7 @@ export const RequestModal = ({
                 />
                 <InputText
                   title='Deskripsi Keperluan'
-                  placeholder='Lenovo Thinkpad Yoga'
+                  placeholder='Tuliskan Keperluan'
                   onChange={onChangeDeskripsi}
                 />
               </Flex>
@@ -140,25 +142,14 @@ export const RequestModal = ({
                   data={category}
                   title='Kategori Aset'
                   placeholder='Pilih Kategori'
-                  onChange={handleChangeCategory}
-                />
-                <InputSelectData
-                  title='List Aset'
-                  placeholder='Pilih Aset'
-                  data={assetData}
-                  onChange={onChangeAset}
-                />
-                <InputSelectDataUser
-                  title='Pilih Karyawan'
-                  placeholder='Karyawan - Divisi'
-                  data={userData}
-                  onChange={onChangeEmployee}
+                  onChange={onChangeReqCategory}
                 />
                 <InputText
                   title='Deskripsi Keperluan'
                   placeholder='Tuliskan Keperluan'
+                  onChange={onChangeDeskripsi}
                 />
-                <InputText type='file' title='Upload Foto' />
+                <InputText type='file' title='Upload Foto' onChange={onChangeImage} />
               </Flex>
             )}
           </ModalBody>
@@ -174,7 +165,7 @@ export const RequestModal = ({
             ) : (
               <Flex gap='10px'>
                 <ButtonSecondary title='Batal' onclick={onClose} />
-                <ButtonPrimary title='Ajukan Pengadaan' />
+                <ButtonPrimary title='Ajukan Pengadaan' onclick={onClickProcurement} />
               </Flex>
             )}
           </ModalFooter>

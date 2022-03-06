@@ -14,40 +14,45 @@ import { TriggerProvider } from "../helper/Trigger";
 export const WebRoute = () => {
   console.log("aku duluan");
   const role = localStorage.getItem("role");
+  const isAuth = localStorage.getItem("isAuth");
   const [Maintained, setMaintained] = useState<boolean>(false);
   return (
     <BrowserRouter>
       <TriggerProvider>
-      <MaintenanceContext.Provider value={{Maintained, setMaintained}}>
-        <UserProvider>
-          <Routes>
-            <Route path='/test' element={<TestComponent />} />
-            <Route path='/sign-in' element={<SignIn />} />
-            {/* Employee */}
-            {role === "Employee" ? (
-              <>
-                <Route path='/beranda' element={<Beranda />} />
-                <Route path='*' element={<NotFound />} />
-                <Route path='/direktori-aset' element={<DirektoriAset />} />
-              </>
-            ) : role === "Administrator" ? (
-              <>
-                <Route path='/pengguna-aset' element={<PenggunaAset />} />
-                <Route path='/beranda' element={<Beranda />} />
-                <Route path='/direktori-aset' element={<DirektoriAset />} />
-                <Route path='*' element={<NotFound />} />
-              </>
-            ) : (
-              <>
-                <Route path='/beranda' element={<Beranda />} />
-                <Route path='/pengguna-aset' element={<PenggunaAset />} />
-                <Route path='*' element={<NotFound />} />
-              </>
-            )}
-            {/* <Route path='/sign-up' element={<SignUp />} /> */}
-            {/* <Route path='/profile' element={<Profile />} /> */}
-          </Routes>
-        </UserProvider>
+        <MaintenanceContext.Provider value={{ Maintained, setMaintained }}>
+          <UserProvider>
+            <Routes>
+              <Route path='/test' element={<TestComponent />} />
+              <Route path='/sign-in' element={<SignIn />} />
+              {/* Employee */}
+              {isAuth ? (
+                role === "Employee" ? (
+                  <>
+                    <Route path='/beranda' element={<Beranda />} />
+                    <Route path='*' element={<NotFound />} />
+                    <Route path='/direktori-aset' element={<DirektoriAset />} />
+                  </>
+                ) : role === "Administrator" ? (
+                  <>
+                    <Route path='/pengguna-aset' element={<PenggunaAset />} />
+                    <Route path='/beranda' element={<Beranda />} />
+                    <Route path='/direktori-aset' element={<DirektoriAset />} />
+                    <Route path='*' element={<NotFound />} />
+                  </>
+                ) : (
+                  <>
+                    <Route path='/beranda' element={<Beranda />} />
+                    <Route path='/pengguna-aset' element={<PenggunaAset />} />
+                    <Route path='*' element={<NotFound />} />
+                  </>
+                )
+              ) : (
+                <>
+                  <Route path='*' element={<NotFound />} />
+                </>
+              )}
+            </Routes>
+          </UserProvider>
         </MaintenanceContext.Provider>
       </TriggerProvider>
     </BrowserRouter>

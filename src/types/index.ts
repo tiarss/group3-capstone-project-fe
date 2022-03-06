@@ -248,7 +248,7 @@ export type procureModalProps = {
 };
 
 export type historyModalProps = {
-  dataHistory?: historyDataType;
+  dataHistory?: selectHistoryDataType;
   isOpen: boolean;
   onClose: () => void;
 };
@@ -258,6 +258,20 @@ export type historyDataType = {
   asset_name: string
   asset_image: string
   category: string
+  id: number
+  request_date: string
+}
+
+export type selectHistoryDataType = {
+  asset_name: string
+  asset_image: string
+  asset_short_name: string
+  category: string
+  description: string
+  return_date:string
+  status: string
+  user_name: string
+  stock_left: number
   id: number
   request_date: string
 }

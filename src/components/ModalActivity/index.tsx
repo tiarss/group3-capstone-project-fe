@@ -129,10 +129,10 @@ export const ModalActivity = ({
                         : data.User.name
                       : "Guest"}
                   </Text>
-                  <Text fontSize='12px' fontWeight='bold'>
+                  <Text fontSize='12px' fontWeight='bold' display={role === 1 ? "none" : "block"}>
                     Divisi
                   </Text>
-                  <Text fontSize='12px'>
+                  <Text fontSize='12px' display={role === 1 ? "none" : "block"}>
                     {data !== undefined
                       ? data.User.division === ""
                         ? "-"
@@ -266,7 +266,7 @@ export const ModalActivity = ({
                   <Text fontSize='12px' fontWeight='bold'>
                     Deskripsi Keperluan
                   </Text>
-                  <Text fontSize='12px'>{data?.description}</Text>
+                  <Text fontSize='12px'>{dataActivities === undefined ? data?.description : dataActivities.description}</Text>
                 </Box>
               </Flex>
               <Flex
@@ -465,9 +465,8 @@ export const ModalActivity = ({
               ) : (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary
-                    title='Tolak'
+                    title='Kembali'
                     onclick={onClose}
-                    isDisabled={true}
                   />
                   <ButtonPrimary title='Terima Permohonan' isDisabled={true} />
                 </Flex>

@@ -112,7 +112,7 @@ export const ModalProcure = ({
             </Box>
           </ModalBody>
           <ModalFooter>
-            {role === 1 ? (
+            {role === 2 ? (
               status === "Waiting approval from Manager" ? (
                 <>
                   <ButtonPrimary title='Kembali' onclick={onClose} />
@@ -122,14 +122,13 @@ export const ModalProcure = ({
                   <ButtonPrimary
                     title='Kembali'
                     onclick={onClose}
-                    isDisabled={true}
                   />
                 </>
               )
             ) : status === "Waiting approval from Manager" ? (
               <Flex gap="10px">
-                <ButtonSecondary title='Tolak Permintaan' onclick={onClose} />
-                <ButtonPrimary title='Terima Permintaan' onclick={onClose} />
+                <ButtonSecondary title='Tolak Permintaan' onclick={handleRejectReqProcure} />
+                <ButtonPrimary title='Terima Permintaan' onclick={handleAcceptReqProcure} />
               </Flex>
             ) : status === "Aprroved by Manager" ? (
               <ButtonPrimary title='Kembali' onclick={onClose} />

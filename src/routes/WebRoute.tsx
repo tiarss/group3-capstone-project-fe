@@ -10,6 +10,7 @@ import { TestComponent } from "../pages/TestComponent";
 import { NotFound } from "../pages/NotFound";
 import { MaintenanceContext } from "../helper/MaintenanceContext";
 import { TriggerProvider } from "../helper/Trigger";
+import PengadaanAset from "../pages/PengadaanAset";
 
 export const WebRoute = () => {
   console.log("aku duluan");
@@ -33,6 +34,7 @@ export const WebRoute = () => {
             ) : role === "Administrator" ? (
               <>
                 <Route path='/pengguna-aset' element={<PenggunaAset />} />
+                <Route path='/pengadaan-aset' element={<PengadaanAset />} />
                 <Route path='/beranda' element={<Beranda />} />
                 <Route path='/direktori-aset' element={<DirektoriAset />} />
                 <Route path='*' element={<NotFound />} />

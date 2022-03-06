@@ -118,6 +118,17 @@ export const Header = () => {
           _active={{ bgColor: "#1788BB" }}>
           Pengguna Aset
         </Button>
+        <Button
+          display={role === 2 || role === 3 ? "block" : "none"}
+          fontWeight='medium'
+          color='white'
+          bgColor='#2296CB'
+          onClick={() => navigate("/pengadaan-aset")}
+          _hover={{ bgColor: "#3CA9DB" }}
+          _focus={{ border: "none" }}
+          _active={{ bgColor: "#1788BB" }}>
+          Pengadaan Aset
+        </Button>
       </Flex>
       <Box>
         <Menu>

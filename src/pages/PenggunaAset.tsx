@@ -86,6 +86,7 @@ export const PenggunaAset = () => {
   const [selectedData, setSelectedData] = useState<tableRequest>();
   const [isLoadingTable, setIsLoadingTable] = useState(true);
   const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
+  const [activity, setActivity] = useState<string>("borrow");
   //End Admin State
 
   //Logic Administrator

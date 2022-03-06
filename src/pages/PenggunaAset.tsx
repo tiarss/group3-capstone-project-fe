@@ -226,6 +226,136 @@ export const PenggunaAset = () => {
         console.log(err.response);
       });
   };
+
+  const handleToManager = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Waiting approval from Manager" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleAcceptReqAdmin = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Approved by Admin" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleAcceptReturn = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Approved by Admin" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleRejectReqAdmin = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Rejected by Admin" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleAjukanPengembalian = (id: number) => {
+    axios
+      .put(
+        `/requests/return/${id}`,
+        {
+          askingreturn: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        const { data } = res;
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, activity: "Request to Return" });
+        }
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
   //End of Logic Admin
 
   return (
@@ -568,7 +698,23 @@ export const PenggunaAset = () => {
           </Box>
         </Box>
       </Box>
-      <ModalActivity isOpen={isOpen} onClose={handleClose} role={role} data={selectedData} />
+      <ModalActivity 
+      isOpen={isOpen} 
+      onClose={handleClose} 
+      role={role} 
+      data={selectedData}
+      handleToManager={() => handleToManager(selectedIdReq)}
+      // handleAcceptReqManager={() => handleAcceptReqManager(selectedIdReq)}
+      handleAcceptReqAdmin={() => handleAcceptReqAdmin(selectedIdReq)}
+      handleAjukanPengembalian={() => handleAjukanPengembalian(selectedIdReq)}
+      handleAcceptReturn={() => handleAcceptReturn(selectedIdReq)}
+      handleRejectReqAdmin={() => handleRejectReqAdmin(selectedIdReq)}
+      // handleRejectReqManager={() => handleRejectReqManager(selectedIdReq)} 
+      />
     </div>
   );
 };
+
+/*
+
+*/

@@ -65,6 +65,21 @@ const PengadaanAset = () => {
     roleCondition();
     if (roles === "Administrator") {
       handleGetAllRequest();
+    } else if (roles === "Manager") {
+      handleGetManagerAllRequest();
+    }
+  }, [activePage, order, valueRadio, category, dates]);
+
+  // useEffect(() => {
+  //   if (roles === "Administrator") {
+  //       handleGetAllRequest();
+  //   } else if (roles === "Manager") {
+  //     handleGetManagerAllRequest();
+  //   }
+  // }, [valueRadio]);
+
+  useEffect(() => {
+    if (roles === "Administrator") {
       handleGetAll();
       handleGetWaiting();
       handleGetApproved();

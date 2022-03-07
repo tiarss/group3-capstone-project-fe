@@ -1,7 +1,8 @@
 import { SearchIcon } from "@chakra-ui/icons";
-import { Box, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Spacer, Text, useDisclosure, Wrap } from "@chakra-ui/react";
+import { Box, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Spacer, Text, useDisclosure, useToast, Wrap } from "@chakra-ui/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import CardDetail from "../components/DetailCard";
 import { Header } from "../components/Header";
 import { InputSelect, InputSelectStatus, Search } from "../components/Input";
@@ -9,6 +10,8 @@ import ModalDetailAsset from "../components/Modal/detail-asset";
 import { MaintenanceContext } from "../helper/MaintenanceContext";
 
 const DirektoriAset = () => {
+    const toast = useToast();
+    const navigate = useNavigate();
     const [isOpen, setIsOpen] = useState(false);
     const [asset, setAsset] = useState<any[]>([])
     const [details, setDetails] = useState<{category: string, description: string, image: string, name: string, total_asset: number}>()
@@ -23,6 +26,13 @@ const DirektoriAset = () => {
     const [selectedCategory, setSelectedCategory] = useState<string>("");
     const [selectedStatus, setSelectedStatus] = useState<string>("");
     
+    const logOut = () => {
+        localStorage.setItem("token", "");
+        localStorage.setItem("role", "");
+        localStorage.setItem("id", "");
+        localStorage.setItem("isAuth", JSON.stringify(false));
+    };
+
     const category = [
         { id: 0, name: "All", value: ""},
         { id: 1, name: "Computer", value: "Computer" },
@@ -52,7 +62,18 @@ const DirektoriAset = () => {
         setAsset(data);
         })
         .catch((err) => {
-        console.log(err.response);
+            const { data } = err.response;
+            if (data.message === "invalid or expired jwt") {
+              logOut();
+              toast({
+                title: `Sign In Expired`,
+                description: "Please re-Sign In",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              navigate("/sign-in");
+            }
         });
     };
 
@@ -67,7 +88,18 @@ const DirektoriAset = () => {
         handleHistory(short_name);
         })
         .catch((err) => {
-        console.log(err.response);
+            const { data } = err.response;
+            if (data.message === "invalid or expired jwt") {
+              logOut();
+              toast({
+                title: `Sign In Expired`,
+                description: "Please re-Sign In",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              navigate("/sign-in");
+            }
         })
         .finally(()=> {
             setIsOpen(true);
@@ -80,14 +112,24 @@ const DirektoriAset = () => {
         {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
         .then((res) => {
         const { data } = res.data;
-        console.log(data);
         setCategoryHistory(data.category);
         setNameHistory(data.asset_name);
         setImageHistory(data.asset_image);
         setUsersHistory(data.users);
         })
         .catch((err) => {
-        console.log(err.response);
+            const { data } = err.response;
+            if (data.message === "invalid or expired jwt") {
+              logOut();
+              toast({
+                title: `Sign In Expired`,
+                description: "Please re-Sign In",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              navigate("/sign-in");
+            }
         });
     }
 
@@ -111,10 +153,36 @@ const DirektoriAset = () => {
         {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
         .then((res) => {
         const { data } = res;
-        console.log(data);
+        if (data.message === "success update asset status") {
+            toast({
+              title: "Anda Berhasil Mengubah Status Aset",
+              status: "success",
+              duration: 3000,
+              isClosable: true,
+            });
+          }
         })
         .catch((err) => {
-        console.log(err.response);
+            const { data } = err.response;
+            if (data.message === "invalid or expired jwt") {
+              logOut();
+              toast({
+                title: `Sign In Expired`,
+                description: "Please re-Sign In",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              navigate("/sign-in");
+            }
+            if (data.message === "asset not found") {
+                toast({
+                  title: "Aset tidak ditemukan",
+                  status: "error",
+                  duration: 9000,
+                  isClosable: true,
+                });
+            }
         });
     }
 
@@ -134,7 +202,18 @@ const DirektoriAset = () => {
         setAsset(data);
         })
         .catch((err) => {
-        console.log(err.response);
+            const { data } = err.response;
+            if (data.message === "invalid or expired jwt") {
+              logOut();
+              toast({
+                title: `Sign In Expired`,
+                description: "Please re-Sign In",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              navigate("/sign-in");
+            }
         });
     }
 
@@ -145,18 +224,28 @@ const DirektoriAset = () => {
         .get(`https://klender.xyz/assets?status=${value}`,
         {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
         .then((res) => {
-        const { data } = res.data;
-        setAsset(data);
+            const { data } = res.data;
+            setAsset(data);
         })
         .catch((err) => {
-        console.log(err.response);
+            const { data } = err.response;
+            if (data.message === "invalid or expired jwt") {
+              logOut();
+              toast({
+                title: `Sign In Expired`,
+                description: "Please re-Sign In",
+                status: "error",
+                duration: 9000,
+                isClosable: true,
+              });
+              navigate("/sign-in");
+            }
         });
     }
 
     return(
         <>  
             <Header/>
-            {console.log(usersHistory)}
             <Box bg="#EFEFEF" paddingBottom={9}>
             <Flex align="center" justify="center">
                 <Text fontSize='xl' fontWeight='bold' mt={7}>Direktori Aset</Text>

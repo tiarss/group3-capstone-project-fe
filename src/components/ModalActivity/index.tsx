@@ -193,7 +193,7 @@ export const ModalActivity = ({
                           : status === "Rejected by Admin"
                           ? "Ditolak Admin"
                           : "Dibatalkan"
-                        : status === "Waiting approval from Admin"
+                        : status === "Waiting approval"
                         ? "Menunggu Persetujuan Pengembalian"
                         : "Dikembalikan"
                       : status === "Waiting approval from Manager"
@@ -428,7 +428,7 @@ export const ModalActivity = ({
                   <Flex gap='10px' justifyContent='end'>
                     <ButtonSecondary
                       title='Tolak Permohonan'
-                      onclick={handleRejectReqManager}
+                      onclick={handleRejectReqAdmin}
                     />
                     <ButtonPrimary
                       title='Terima Permohonan'
@@ -464,7 +464,7 @@ export const ModalActivity = ({
                     isDisabled={true}
                   /> */}
                   <ButtonPrimary
-                    title='Terima Permohonans'
+                    title='Terima Permohonan'
                     onclick={handleAcceptReturn}
                   />
                 </Flex>
@@ -479,11 +479,11 @@ export const ModalActivity = ({
             ) : status === "Waiting approval from Manager" ? (
               <Flex gap='10px' justifyContent='end'>
                 <ButtonSecondary
-                  title='Tolaks'
+                  title='Tolak'
                   onclick={handleRejectReqManager}
                 />
                 <ButtonPrimary
-                  title='Terima Permohonans'
+                  title='Terima Permohonan'
                   onclick={handleAcceptReqManager}
                 />
               </Flex>

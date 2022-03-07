@@ -57,7 +57,8 @@ export const PenggunaAset = () => {
    const [activity, setActivity] = useState<string>("borrow");
    const [order, setOrder] = useState("recent");
    const [category, setCategory] = useState("all");
-   const [dates, setDates] = useState<string>("")
+   const [dates, setDates] = useState<string>("");
+   const [reloadNumber, setReloadNumber] = useState(0);
    //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -93,7 +94,7 @@ export const PenggunaAset = () => {
       handleGetManagerRejected();
       handleGetManagerReturned();
     }
-  }, []);
+  }, [activePage, order, valueRadio, category, dates, reloadNumber]);
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -355,6 +356,7 @@ export const PenggunaAset = () => {
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Admin" });
         }
+        setReloadNumber(reloadNumber+1);
         handleGetAllRequest();
       })
       .catch((err) => {
@@ -411,6 +413,7 @@ export const PenggunaAset = () => {
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Admin" });
         }
+        setReloadNumber(reloadNumber+1);
         handleGetAllRequest();
       })
       .catch((err) => {
@@ -467,6 +470,7 @@ export const PenggunaAset = () => {
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Rejected by Admin" });
         }
+        setReloadNumber(reloadNumber+1);
         handleGetAllRequest();
       })
       .catch((err) => {
@@ -692,6 +696,7 @@ export const PenggunaAset = () => {
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Manager" });
         }
+        setReloadNumber(reloadNumber+1);
         handleGetAllRequest();
       })
       .catch((err) => {
@@ -748,6 +753,7 @@ export const PenggunaAset = () => {
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Rejected by Manager" });
         }
+        setReloadNumber(reloadNumber+1);
         handleGetAllRequest();
       })
       .catch((err) => {

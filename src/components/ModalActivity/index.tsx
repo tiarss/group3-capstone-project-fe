@@ -477,7 +477,7 @@ export const ModalActivity = ({
                   <Flex gap='10px' justifyContent='end'>
                     <ButtonSecondary
                       title='Tolak Permohonan'
-                      onclick={handleRejectReqManager}
+                      onclick={handleRejectReqAdmin}
                     />
                     <ButtonPrimary
                       title='Terima Permohonan'

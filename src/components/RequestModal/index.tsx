@@ -96,10 +96,10 @@ export const RequestModal = ({
 
   const category = [
     { id: 1, name: "Computer" },
-    { id: 2, name: "Computer Accessories" },
+    { id: 2, name: "Computer-Accessories" },
     { id: 3, name: "Networking" },
     { id: 4, name: "UPS" },
-    { id: 5, name: "Printer and Scanner" },
+    { id: 5, name: "Printer-Scanner" },
     { id: 6, name: "Electronics" },
     { id: 7, name: "Others" },
   ];

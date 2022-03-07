@@ -1,4 +1,4 @@
-import { Box, Flex, Tag, Text, Tooltip } from "@chakra-ui/react";
+import { Box, Flex, Tag, Text, Tooltip, useToast } from "@chakra-ui/react";
 import Slider from "react-slick";
 import { InfoIcon } from "@chakra-ui/icons";
 import { ModalActivity } from "../ModalActivity";
@@ -35,6 +35,7 @@ function SamplePrevArrow(props: any) {
 }
 
 function SliderImage() {
+  const toast = useToast()
   const { trigger, setTrigger } = useContext(Trigger);
   const [isOpen, setIsOpen] = useState(false);
   const [activitiesData, setActivitiesData] = useState<typeActivitiesData[]>();
@@ -100,8 +101,19 @@ function SliderImage() {
         }
       )
       .then((res) => {
-        const { data } = res.data;
-        console.log(data);
+        const { data } = res;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Membatalakan Permintaan",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        const temp = selectedActivities
+        if (temp !== undefined) {
+          setSelectedActivities({ ...temp, status: "Cancelled"});
+        }
         getAllActivities();
       })
       .catch((err) => {
@@ -126,6 +138,15 @@ function SliderImage() {
         }
       )
       .then((res) => {
+        const { data } = res;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Mengajukan Permintaan Pengembalian",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedActivities
         if (temp !== undefined) {
           setSelectedActivities({ ...temp, status: "Waiting approval", activity: "Return" });

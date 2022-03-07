@@ -42,7 +42,7 @@ export const WebRoute = () => {
                       </ProtectedRoute>
                     }
                   />
-                  <Route path='*' element={<NotFound />} />
+                  {/* <Route path='*' element={<NotFound />} /> */}
                 </>
               ) : role === "Administrator" ? (
                 <>
@@ -78,7 +78,7 @@ export const WebRoute = () => {
                       </ProtectedRoute>
                     }
                   />
-                  <Route path='*' element={<NotFound />} />
+                  {/* <Route path='*' element={<NotFound />} /> */}
                 </>
               ) : (
                 <>
@@ -106,7 +106,7 @@ export const WebRoute = () => {
                       </ProtectedRoute>
                     }
                   />
-                  <Route path='*' element={<NotFound />} />
+                  {/* <Route path='*' element={<NotFound />} /> */}
                 </>
               )}
             </Routes>

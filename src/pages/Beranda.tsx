@@ -192,7 +192,9 @@ export const Beranda = () => {
     setIsOpenRequest(true);
   };
 
-  const handleCloseRequest = () => setIsOpenRequest(false);
+  const handleCloseRequest = () => {
+    setIsOpenRequest(false)
+  };
 
   const getAllHistory = () => {
     setIsLoadingTable(true);
@@ -251,6 +253,8 @@ export const Beranda = () => {
             isClosable: true,
           });
         }
+        setAssetShortName("")
+        setDesciptionRequest("")
         const temp: number = trigger.trig;
         setTrigger({ ...trigger, trig: temp + 1 });
       })
@@ -519,6 +523,11 @@ export const Beranda = () => {
             isClosable: true,
           });
         }
+        setAddAssetsName("")
+        setAddAssetsCategory("")
+        setAddAssetsDescription("")
+        setAddAssetsSum(0)
+        setIsMaintained(false)
       })
       .catch((err) => {
         const { data } = err.response;
@@ -949,6 +958,10 @@ export const Beranda = () => {
             isClosable: true,
           });
         }
+        setAssetShortName("")
+        setEmployeeId(0)
+        setDesciptionRequest("")
+        setReturnDate("")
       })
       .catch((err) => {
         const { data } = err.response;
@@ -1459,7 +1472,7 @@ export const Beranda = () => {
                 textAlign='left'
                 transition='all 0.5s ease'
                 mb={{ base: "10px", md: "0px" }}>
-                Permohonan Terbaru
+                {role === 1 ? "Histori Peminjaman" : "Permohonan Terbaru"}
               </Text>
               <Flex gap='10px'>
                 {role === 1 ? (
@@ -1484,6 +1497,7 @@ export const Beranda = () => {
             <Box overflowX='auto'>
               {role === 1 ? (
                 <Table minW='800px' size='sm' borderRadius='20px'>
+                  <TableCaption>{historyAssets === null ? "Tidak Ada Data" : ""}</TableCaption>
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
@@ -1525,32 +1539,7 @@ export const Beranda = () => {
                     ) : (
                       <>
                         {historyAssets === null ? (
-                          <>
-                            {dummy.map((value: number) => (
-                              <Tr key={value}>
-                                <Td>
-                                  <Skeleton>1</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>Peminjaman Aset</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>Headphone</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>
-                                    <ButtonTertier title='Details' />
-                                  </Skeleton>
-                                </Td>
-                              </Tr>
-                            ))}
-                          </>
+                          <></>
                         ) : historyAssets !== undefined ? (
                           historyAssets.map((value, index) => (
                             <Tr key={value.id}>

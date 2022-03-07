@@ -430,7 +430,7 @@ export const ModalActivity = ({
                   <Flex gap='10px' justifyContent='end'>
                     <ButtonSecondary
                       title='Kembali'
-                      onclick={handleRejectReqAdmin}
+                      onclick={onClose}
                     />
                     <ButtonPrimary
                       title='Ajukan Pengembalian'

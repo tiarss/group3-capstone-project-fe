@@ -28,6 +28,7 @@ import axios from "axios";
 import { tableProcure } from "../types";
 import { ModalProcure } from "../components/ModalActivity/Procure";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { InputText } from "../components/Input";
 
 const PengadaanAset = () => {
   const [valueRadio, setValueRadio] = useState("all");
@@ -56,6 +57,7 @@ const PengadaanAset = () => {
   const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
   const [order, setOrder] = useState("recent");
   const [category, setCategory] = useState("all");
+  const [dates, setDates] = useState<string>("")
   //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -67,7 +69,7 @@ const PengadaanAset = () => {
     } else if (roles === "Manager") {
       handleGetManagerAllRequest();
     }
-  }, [activePage, order, valueRadio, category]);
+  }, [activePage, order, valueRadio, category,dates]);
 
   // useEffect(() => {
   //   if (roles === "Administrator") {
@@ -129,6 +131,7 @@ const PengadaanAset = () => {
           o: order,
           s: valueRadio,
           c: category,
+          d: dates
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -468,6 +471,13 @@ const PengadaanAset = () => {
   };
   //End of Logic Manager
 
+  const handleDate= (e: React.ChangeEvent<HTMLInputElement>)=>{
+    const value = e.target.value
+    console.log(value)
+    setDates(value)
+  }
+
+
   return (
     <div>
       <Header />
@@ -631,6 +641,7 @@ const PengadaanAset = () => {
             </Box>
           </Flex>
           <Box bgColor='white' p='50px 20px 20px' borderRadius='10px'>
+              <InputText type="date" title="Filter Tanggal" onChange={handleDate}/>
             <Table minW='800px' size='sm' borderRadius='20px'>
               <TableCaption>
                 {requestData === null ? "Tidak ada Data" : ""}

@@ -69,7 +69,7 @@ const PengadaanAset = () => {
     } else if (roles === "Manager") {
       handleGetManagerAllRequest();
     }
-  }, [activePage, order, valueRadio, category,dates]);
+  }, [activePage, order, valueRadio, category, dates]);
 
   // useEffect(() => {
   //   if (roles === "Administrator") {

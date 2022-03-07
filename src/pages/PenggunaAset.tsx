@@ -11,6 +11,11 @@ import {
   Tr,
   Tag,
   TableCaption,
+  Menu,
+  MenuButton,
+  Button,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
 import { Center, Pagination } from "@mantine/core";
 import { ButtonTertier } from "../components/Button";
@@ -21,6 +26,8 @@ import { SegmentedControl } from "@mantine/core";
 import moment from "moment";
 import axios from "axios";
 import { tableRequest } from "../types";
+import { InputText } from "../components/Input";
+import { ChevronDownIcon } from "@chakra-ui/icons";
 
 export const PenggunaAset = () => {
   const [valueRadio, setValueRadio] = useState("all");
@@ -44,6 +51,9 @@ export const PenggunaAset = () => {
    const [isLoadingTable, setIsLoadingTable] = useState(true);
    const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
    const [activity, setActivity] = useState<string>("borrow");
+   const [order, setOrder] = useState("recent");
+   const [category, setCategory] = useState("all");
+   const [dates, setDates] = useState<string>("")
    //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -55,7 +65,7 @@ export const PenggunaAset = () => {
     } else if (roles === "Manager") {
       handleGetAllManagerRequest();
     }
-  }, [activePage,valueRadio]);
+  }, [activePage, valueRadio, order, category, dates]);
 
   // useEffect(() => {
   //   // handleActivity();
@@ -129,8 +139,11 @@ export const PenggunaAset = () => {
         params: {
           p: activePage,
           rp: 5,
+          o: order,
           s: status,
           a: activity,
+          c: category,
+          d: dates
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -575,6 +588,59 @@ export const PenggunaAset = () => {
   };
   //End of Logic Manager
 
+  const handleDate= (e: React.ChangeEvent<HTMLInputElement>)=>{
+    const value = e.target.value
+    console.log(value)
+    setDates(value)
+  }
+
+  const selectAscend = () => {
+    setOrder("old");
+  };
+
+  const selectDescend = () => {
+    setOrder("recent");
+  };
+
+  const selectCategoryAll = () => {
+    setCategory("all");
+    setPage(1);
+  };
+
+  const selectCategoryCom = () => {
+    setCategory("computer");
+    setPage(1);
+  };
+  const selectCategoryComAcc = () => {
+    setCategory("computer-accessories");
+    setPage(1);
+  };
+
+  const selectCategoryNet = () => {
+    setCategory("networking");
+    setPage(1);
+  };
+
+  const selectCategoryUPS = () => {
+    setCategory("ups");
+    setPage(1);
+  };
+
+  const selectCategoryPrintScan = () => {
+    setCategory("printer-scanner");
+    setPage(1);
+  };
+
+  const selectCategoryElec = () => {
+    setCategory("electronics");
+    setPage(1);
+  };
+
+  const selectCategoryOther = () => {
+    setCategory("others");
+    setPage(1);
+  };
+
   return (
     <div>
       <Header />
@@ -961,7 +1027,12 @@ export const PenggunaAset = () => {
               />
             </Box>
           </Flex>
-          <Box bgColor='white' p='50px 20px 20px' borderRadius='10px'>
+          <Box bgColor='white' minHeight="500px" p='50px 20px 20px' borderRadius='10px' overflow="auto">
+            <Flex align="center" justify="start" marginTop={3} marginEnd={5}>
+              <Box width="300px" my="10px">
+                <InputText type="date" title="Filter Tanggal" onChange={handleDate}/>
+              </Box>
+            </Flex>
             <Table minW='800px' size='sm' borderRadius='20px'>
             <TableCaption>
                 {requestData === null ? "Tidak ada Data" : ""}
@@ -969,9 +1040,59 @@ export const PenggunaAset = () => {
               <Thead bgColor='blue.500'>
                 <Tr>
                   <Th color='white'>No</Th>
-                  <Th color='white'>Tanggal Permohonan</Th>
-                  <Th color='white'>Tanggal Pengembalian</Th>
-                  <Th color='white'>Kategori Aset</Th>
+                  <Th color='white'>
+                    <Menu>
+                      <MenuButton
+                        as={Button}
+                        size='sm'
+                        colorScheme='blue'
+                        fontSize='12px'
+                        rightIcon={<ChevronDownIcon />}>
+                        TANGGAL PERMOHONAN
+                      </MenuButton>
+                      <MenuList color='blue.500'>
+                        <MenuItem onClick={selectAscend}>Oldest</MenuItem>
+                        <MenuItem onClick={selectDescend}>Recent</MenuItem>
+                      </MenuList>
+                    </Menu>
+                    </Th>
+                  <Th color='white'>
+                    Tanggal Pengembalian
+                  </Th>
+                  <Th color='white'>
+                    <Menu>
+                      <MenuButton
+                        as={Button}
+                        size='sm'
+                        colorScheme='blue'
+                        fontSize='12px'
+                        rightIcon={<ChevronDownIcon />}>
+                        KATEGORI ASET
+                      </MenuButton>
+                      <MenuList color='blue.500'>
+                        <MenuItem onClick={selectCategoryAll}>Semua</MenuItem>
+                        <MenuItem onClick={selectCategoryCom}>
+                          Computer
+                        </MenuItem>
+                        <MenuItem onClick={selectCategoryComAcc}>
+                          Computer Accessories
+                        </MenuItem>
+                        <MenuItem onClick={selectCategoryNet}>
+                          Networking
+                        </MenuItem>
+                        <MenuItem onClick={selectCategoryUPS}>UPS</MenuItem>
+                        <MenuItem onClick={selectCategoryPrintScan}>
+                          Printer and Scanner
+                        </MenuItem>
+                        <MenuItem onClick={selectCategoryElec}>
+                          Electronics
+                        </MenuItem>
+                        <MenuItem onClick={selectCategoryOther}>
+                          Others
+                        </MenuItem>
+                      </MenuList>
+                    </Menu>
+                  </Th>
                   <Th color='white'>Barang</Th>
                   <Th color='white'>Sisa Waktu</Th>
                   <Th color='white'>Status</Th>
@@ -1023,7 +1144,14 @@ export const PenggunaAset = () => {
                                 )}
                               </Td>
                               <Td>
-                                {moment(value.return_time).format(
+                                { 
+                                value.activity === "Borrow" ? 
+                                  value.status === "Approved by Admin" 
+                                  ? "Belum Dikembalikan"
+                                  : "-"
+                                : value.status === "Waiting approval" 
+                                ? "Menunggu Konfirmasi Admin" 
+                                : moment(value.return_time).format(
                                   "h:mm a, DD MMM YYYY"
                                 )}
                               </Td>

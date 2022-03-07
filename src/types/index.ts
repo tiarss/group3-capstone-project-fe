@@ -14,6 +14,7 @@ export type inputProps = {
   placeholder?: string;
   type?: string;
   size?: string;
+  width?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   isDisabled?: boolean;
 };

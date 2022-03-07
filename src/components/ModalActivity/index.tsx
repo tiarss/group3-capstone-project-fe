@@ -10,6 +10,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tag,
 } from "@chakra-ui/react";
 import { ButtonPrimary, ButtonSecondary } from "../Button";
 import moment from "moment";
@@ -142,7 +143,7 @@ export const ModalActivity = ({
                   <Text fontSize='12px' fontWeight='bold'>
                     Status Pengajuan
                   </Text>
-                  <Text
+                  {/* <Text
                     mt='5px'
                     fontWeight='semibold'
                     borderRadius='5px'
@@ -188,7 +189,7 @@ export const ModalActivity = ({
                           : status === "Rejected by Admin"
                           ? "Ditolak Admin"
                           : "Dibatalkan"
-                        : status === "Waiting approval from Admin"
+                        : status === "Waiting approval"
                         ? "Menunggu Persetujuan Pengembalian"
                         : "Dikembalikan"
                       : status === "Waiting approval from Manager"
@@ -196,7 +197,64 @@ export const ModalActivity = ({
                       : status === "Approved by Manager"
                       ? "Diterima Manager"
                       : "Ditolak Manager"}
-                  </Text>
+                  </Text> */}
+                  <Tag
+                    size='sm'
+                    variant='subtle'
+                    colorScheme={
+                      status.includes("Approved")
+                        ? "whatsapp"
+                        : status.includes("Waiting")
+                        ? "orange"
+                        : "red"
+                    }
+                  >
+                    {role === 1
+                      ? dataActivities !== undefined
+                        ? dataActivities?.activity === "Borrow"
+                          ? status === "Waiting approval"
+                            ? "Menunggu Persetujuan"
+                            : status === "Approved by Manager"
+                            ? "Diterima Manager"
+                            : status === "Rejected by Manager"
+                            ? "Ditolak Manager"
+                            : status === "Approved by Admin"
+                            ? "Diterima"
+                            : status === "Rejected by Admin"
+                            ? "Ditolak Admin"
+                            : "Dibatalkan"
+                          : dataActivities?.activity === "Return"
+                          ? status === "Waiting approval"
+                            ? "Proses Pengembalian"
+                            : "Dikembalikan"
+                          : status === "Approved by Admin"
+                          ? "Permintaan Pengembalian"
+                          : "Dikembalikan"
+                        : "test"
+                      : role === 2
+                      ? data?.activity === "Borrow"
+                        ? status === "Waiting approval from Manager" ||
+                          status === "Waiting approval from Admin"
+                          ? "Menunggu Persetujuan"
+                          : status === "Approved by Admin"
+                          ? "Diterima"
+                          : status === "Approved by Manager"
+                          ? "Disetujui Manager"
+                          : status === "Rejected by Manager"
+                          ? "Ditolak Manager"
+                          : status === "Rejected by Admin"
+                          ? "Ditolak Admin"
+                          : "Dibatalkan"
+                        : status === "Waiting approval"
+                        ? "Menunggu Persetujuan Pengembalian"
+                        : "Dikembalikan"
+                      : status === "Waiting approval from Manager"
+                      ? "Menunggu Persetujuan Manager"
+                      : status === "Approved by Manager"
+                      ? "Diterima Manager"
+                      : "Ditolak Manager"
+                    }
+                  </Tag>
                 </Box>
                 <Box w='50%'>
                   <Text fontSize='12px' fontWeight='bold'>

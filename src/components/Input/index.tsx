@@ -34,6 +34,7 @@ export const InputText = ({
   placeholder,
   type,
   size,
+  width,
   value,
   onChange,
   isDisabled
@@ -47,6 +48,7 @@ export const InputText = ({
         _focus={{ border: "2px solid #000" }}
         onChange={onChange}
         size={size}
+        width={width}
         type={type}
         placeholder={placeholder}
         value={value}

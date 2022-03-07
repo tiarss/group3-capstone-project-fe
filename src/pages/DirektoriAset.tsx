@@ -156,7 +156,6 @@ const DirektoriAset = () => {
     return(
         <>  
             <Header/>
-            {console.log(usersHistory)}
             <Box bg="#EFEFEF" paddingBottom={9}>
             <Flex align="center" justify="center">
                 <Text fontSize='xl' fontWeight='bold' mt={7}>Direktori Aset</Text>

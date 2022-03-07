@@ -45,7 +45,7 @@ export const ModalActivity = ({
       status = data?.status;
     }
   }
-  console.log(data, "test")
+  console.log(data, "test");
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -130,7 +130,10 @@ export const ModalActivity = ({
                         : data.User.name
                       : "Guest"}
                   </Text>
-                  <Text fontSize='12px' fontWeight='bold' display={role === 1 ? "none" : "block"}>
+                  <Text
+                    fontSize='12px'
+                    fontWeight='bold'
+                    display={role === 1 ? "none" : "block"}>
                     Divisi
                   </Text>
                   <Text fontSize='12px' display={role === 1 ? "none" : "block"}>
@@ -143,16 +146,17 @@ export const ModalActivity = ({
                   <Text fontSize='12px' fontWeight='bold'>
                     Status Pengajuan
                   </Text>
-                  {/* <Text
-                    mt='5px'
-                    fontWeight='semibold'
-                    borderRadius='5px'
-                    width='fit-content'
-                    fontSize='10px'
-                    textAlign='left'
-                    padding='3px 6px'
-                    color='white'
-                    bgColor='#2A2A2A'>
+                  <Tag
+                    mt="5px"
+                    size='sm'
+                    variant='subtle'
+                    colorScheme={
+                      status.includes("Waiting")
+                        ? "orange"
+                        : status.includes("Approved")
+                        ? "green"
+                        : "red"
+                    }>
                     {role === 1
                       ? dataActivities !== undefined
                         ? dataActivities?.activity === "Borrow"
@@ -197,63 +201,6 @@ export const ModalActivity = ({
                       : status === "Approved by Manager"
                       ? "Diterima Manager"
                       : "Ditolak Manager"}
-                  </Text> */}
-                  <Tag
-                    size='sm'
-                    variant='subtle'
-                    colorScheme={
-                      status.includes("Approved")
-                        ? "whatsapp"
-                        : status.includes("Waiting")
-                        ? "orange"
-                        : "red"
-                    }
-                  >
-                    {role === 1
-                      ? dataActivities !== undefined
-                        ? dataActivities?.activity === "Borrow"
-                          ? status === "Waiting approval"
-                            ? "Menunggu Persetujuan"
-                            : status === "Approved by Manager"
-                            ? "Diterima Manager"
-                            : status === "Rejected by Manager"
-                            ? "Ditolak Manager"
-                            : status === "Approved by Admin"
-                            ? "Diterima"
-                            : status === "Rejected by Admin"
-                            ? "Ditolak Admin"
-                            : "Dibatalkan"
-                          : dataActivities?.activity === "Return"
-                          ? status === "Waiting approval"
-                            ? "Proses Pengembalian"
-                            : "Dikembalikan"
-                          : status === "Approved by Admin"
-                          ? "Permintaan Pengembalian"
-                          : "Dikembalikan"
-                        : "test"
-                      : role === 2
-                      ? data?.activity === "Borrow"
-                        ? status === "Waiting approval from Manager" ||
-                          status === "Waiting approval from Admin"
-                          ? "Menunggu Persetujuan"
-                          : status === "Approved by Admin"
-                          ? "Diterima"
-                          : status === "Approved by Manager"
-                          ? "Disetujui Manager"
-                          : status === "Rejected by Manager"
-                          ? "Ditolak Manager"
-                          : status === "Rejected by Admin"
-                          ? "Ditolak Admin"
-                          : "Dibatalkan"
-                        : status === "Waiting approval"
-                        ? "Menunggu Persetujuan Pengembalian"
-                        : "Dikembalikan"
-                      : status === "Waiting approval from Manager"
-                      ? "Menunggu Persetujuan Manager"
-                      : status === "Approved by Manager"
-                      ? "Diterima Manager"
-                      : "Ditolak Manager"
-                    }
                   </Tag>
                 </Box>
                 <Box w='50%'>
@@ -324,7 +271,11 @@ export const ModalActivity = ({
                   <Text fontSize='12px' fontWeight='bold'>
                     Deskripsi Keperluan
                   </Text>
-                  <Text fontSize='12px'>{dataActivities === undefined ? data?.description : dataActivities.description}</Text>
+                  <Text fontSize='12px'>
+                    {dataActivities === undefined
+                      ? data?.description
+                      : dataActivities.description}
+                  </Text>
                 </Box>
               </Flex>
               <Flex
@@ -446,14 +397,14 @@ export const ModalActivity = ({
                 )
               ) : status === "Approved by Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
-                    <ButtonSecondary title='Kembali' onclick={onClose} />
-                    <Box>
-                      <ButtonPrimary
-                        title='Ajukan Pengembalian'
-                        onclick={handleReturnEmployee}
-                      />
-                    </Box>
-                  </Flex>
+                  <ButtonSecondary title='Kembali' onclick={onClose} />
+                  <Box>
+                    <ButtonPrimary
+                      title='Ajukan Pengembalian'
+                      onclick={handleReturnEmployee}
+                    />
+                  </Box>
+                </Flex>
               ) : (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonPrimary title='Kembali' onclick={onClose} />
@@ -486,10 +437,7 @@ export const ModalActivity = ({
                   </Flex>
                 ) : status === "Approved by Admin" ? (
                   <Flex gap='10px' justifyContent='end'>
-                    <ButtonSecondary
-                      title='Kembali'
-                      onclick={onClose}
-                    />
+                    <ButtonSecondary title='Kembali' onclick={onClose} />
                     <ButtonPrimary
                       title='Ajukan Pengembalian'
                       onclick={handleAjukanPengembalian}
@@ -508,7 +456,7 @@ export const ModalActivity = ({
                     />
                   </Flex>
                 )
-              ) : status === "Waiting approval" ? (
+              ) : status === "Waiting approval from Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
                   {/* <ButtonSecondary
                     title='Kemb'
@@ -522,10 +470,7 @@ export const ModalActivity = ({
                 </Flex>
               ) : (
                 <Flex gap='10px' justifyContent='end'>
-                  <ButtonSecondary
-                    title='Kembali'
-                    onclick={onClose}
-                  />
+                  <ButtonSecondary title='Kembali' onclick={onClose} />
                   <ButtonPrimary title='Terima Permohonan' isDisabled={true} />
                 </Flex>
 

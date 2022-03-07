@@ -29,9 +29,11 @@ import axios from "axios";
 import { tableRequest } from "../types";
 import { InputText } from "../components/Input";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import { useNavigate } from "react-router-dom";
 
 export const PenggunaAset = () => {
-  const toast = useToast()
+  const toast = useToast();
+  const navigate = useNavigate();
   const [valueRadio, setValueRadio] = useState("all");
   const [isOpen, setIsOpen] = useState(false);
   const [activePage, setPage] = useState(1);
@@ -60,6 +62,13 @@ export const PenggunaAset = () => {
 
   let roles = localStorage.getItem("role");
 
+  const logOut = () => {
+    localStorage.setItem("token", "");
+    localStorage.setItem("role", "");
+    localStorage.setItem("id", "");
+    localStorage.setItem("isAuth", JSON.stringify(false));
+  };
+
   useEffect(() => {
     roleCondition();
     if (roles === "Administrator") {
@@ -68,15 +77,6 @@ export const PenggunaAset = () => {
       handleGetAllManagerRequest();
     }
   }, [activePage, valueRadio, order, category, dates]);
-
-  // useEffect(() => {
-  //   // handleActivity();
-  //   if (roles === "Administrator") {
-  //     handleGetAllRequest();
-  //   } else if (roles === "Manager") {
-  //     handleGetAllManagerRequest();
-  //   }
-  // }, [valueRadio]);
 
   useEffect(() => {
     if (roles === "Administrator") {
@@ -156,23 +156,30 @@ export const PenggunaAset = () => {
         const { total_record } = res.data;
         setRequestData(data);
         setTotalData(total_record);
-        console.log("total: ", total_record);
-        console.log("data: ", data);
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        console.log(err.response);
         const { data } = err.response;
         const message = data.message
           .toLowerCase()
           .replace(/(^\w{1})|(\s{1}\w{1})/g, (m: string) => m.toUpperCase());
-        console.log(err.response);
-        toast({
-          title: `${message}`,
-          status: "error",
-          duration: 9000,
-          isClosable: true,
-        });
+          toast({
+            title: `${message}`,
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          if (data.message === "invalid or expired jwt") {
+            logOut();
+            toast({
+              title: `Sign In Expired`,
+              description: "Please re-Sign In",
+              status: "error",
+              duration: 3000,
+              isClosable: true,
+            });
+            navigate("/sign-in");
+          }
       });
   };
 
@@ -189,7 +196,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountAll(total_record);
-        console.log("All: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -459,7 +465,18 @@ export const PenggunaAset = () => {
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 

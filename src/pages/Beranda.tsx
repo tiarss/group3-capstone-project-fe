@@ -276,6 +276,17 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -361,6 +372,17 @@ export const Beranda = () => {
           logOut();
           toast({
             title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
             description: "Please re-Sign In",
             status: "error",
             duration: 9000,
@@ -545,6 +567,17 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -583,6 +616,17 @@ export const Beranda = () => {
           logOut();
           toast({
             title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
             description: "Please re-Sign In",
             status: "error",
             duration: 9000,
@@ -635,6 +679,17 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -673,6 +728,17 @@ export const Beranda = () => {
           logOut();
           toast({
             title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
             description: "Please re-Sign In",
             status: "error",
             duration: 9000,
@@ -725,6 +791,17 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -763,6 +840,17 @@ export const Beranda = () => {
           logOut();
           toast({
             title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
             description: "Please re-Sign In",
             status: "error",
             duration: 9000,
@@ -1034,6 +1122,17 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -1062,6 +1161,17 @@ export const Beranda = () => {
           logOut();
           toast({
             title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
             description: "Please re-Sign In",
             status: "error",
             duration: 9000,
@@ -1114,6 +1224,17 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -1152,6 +1273,17 @@ export const Beranda = () => {
           logOut();
           toast({
             title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
             description: "Please re-Sign In",
             status: "error",
             duration: 9000,
@@ -1203,6 +1335,17 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -1240,6 +1383,17 @@ export const Beranda = () => {
           logOut();
           toast({
             title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
             description: "Please re-Sign In",
             status: "error",
             duration: 9000,

@@ -10,9 +10,11 @@ import {
   ModalOverlay,
   Switch,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getAllAssets } from "../../types";
 import { ButtonPrimary, ButtonSecondary } from "../Button";
 import { InputSelect, InputSelectData, InputSelectDataUser, InputText } from "../Input";
@@ -44,6 +46,8 @@ export const AssignAssets = ({
   onClickAssign: () => void;
   onChangeDate: (e: React.ChangeEvent<HTMLInputElement>) => void
 }) => {
+  const toast = useToast()
+  const navigate = useNavigate()
   const [assetData, setAssetData] = useState();
   const [userData, setUserData] = useState();
   const [isChecked, setIsChecked] = useState(false)
@@ -55,6 +59,13 @@ export const AssignAssets = ({
      const value = e.target.checked
      setIsChecked(value)
   }
+
+  const logOut = () => {
+    localStorage.setItem("token", "");
+    localStorage.setItem("role", "");
+    localStorage.setItem("id", "");
+    localStorage.setItem("isAuth", JSON.stringify(false));
+  };
 
   const fetchDataAset = (value: string) => {
     axios
@@ -74,7 +85,29 @@ export const AssignAssets = ({
         setAssetData(filterAvailable);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -89,7 +122,29 @@ export const AssignAssets = ({
         setUserData(splice);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 

@@ -8,6 +8,7 @@ import {
   MenuList,
   Skeleton,
   Table,
+  TableCaption,
   Tag,
   Tbody,
   Td,
@@ -85,7 +86,7 @@ export const Beranda = () => {
   const [addAssetsSum, setAddAssetsSum] = useState<number>(0);
   const [addAssetsImage, setAddAssetsImage] = useState<File>();
   const [addAssetsCategory, setAddAssetsCategory] = useState<string>("");
-  const [activitySelect, setActivitySelect] = useState("")
+  const [activitySelect, setActivitySelect] = useState("");
 
   const [employeeId, setEmployeeId] = useState<number>(0);
   const [returnDate, setReturnDate] = useState<string>();
@@ -105,6 +106,10 @@ export const Beranda = () => {
   const [selectedIdProcure, setSelectedIdProcure] = useState<number>(0);
   const [selectedIdHistory, setSelectedIdHistory] = useState<number>(0);
   const [isMaintained, setIsMaintained] = useState<boolean>(false);
+  const [order, setOrder] = useState("recent");
+  const [category, setCategory] = useState("all");
+  const [orderProc, setOrderProc] = useState("recent");
+  const [categoryProc, setCategoryProc] = useState("all");
   //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -117,7 +122,7 @@ export const Beranda = () => {
     } else {
       getAllHistory();
     }
-  }, [activePage, activitySelect]);
+  }, [activePage, activitySelect, order,category]);
 
   useEffect(() => {
     roleCondition();
@@ -128,7 +133,7 @@ export const Beranda = () => {
     } else {
       getAllHistory();
     }
-  }, [activePageProcure]);
+  }, [activePageProcure, orderProc, categoryProc]);
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -194,6 +199,9 @@ export const Beranda = () => {
     setIsLoadingTable(true);
     axios
       .get(`/histories/users/${idUser}`, {
+        params: {
+          page: activePage,
+        },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -201,8 +209,12 @@ export const Beranda = () => {
       .then((res) => {
         const { data } = res.data;
         setHistoryAssets(data.histories);
+        setTotalData(data.count);
         setIsLoadingTable(false);
         console.log(data);
+      })
+      .catch((err) => {
+        console.log(err.response);
       });
   };
 
@@ -246,12 +258,14 @@ export const Beranda = () => {
 
   // Admin Logic
   const selectActivityReturn = () => {
-    setActivitySelect("return")
-  }
+    setActivitySelect("return");
+    setPage(1);
+  };
 
   const selectActivityBorrow = () => {
-    setActivitySelect("")
-  }
+    setActivitySelect("");
+    setPage(1);
+  };
 
   const handleOpen = (id: number) => {
     const filtering = requestData?.find((value) => value.id === id);
@@ -289,6 +303,8 @@ export const Beranda = () => {
           p: activePage,
           rp: 5,
           a: activitySelect,
+          o: order,
+          c: category,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -315,6 +331,8 @@ export const Beranda = () => {
         params: {
           p: activePageProcure,
           rp: 5,
+          o: orderProc,
+          c: categoryProc
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -605,6 +623,106 @@ export const Beranda = () => {
       .catch((err) => {
         console.log(err.response);
       });
+  };
+
+  const selectAscend = () => {
+    setOrder("old");
+    setPage(1);
+  };
+
+  const selectDescend = () => {
+    setOrder("recent");
+    setPage(1);
+  };
+
+  const selectCategoryAll = () => {
+    setCategory("all");
+    setPage(1);
+  };
+
+  const selectCategoryCom = () => {
+    setCategory("computer");
+    setPage(1);
+  };
+
+  const selectCategoryComAcc = () => {
+    setCategory("computer-accessories");
+    setPage(1);
+  };
+
+  const selectCategoryNet = () => {
+    setCategory("networking");
+    setPage(1);
+  };
+
+  const selectCategoryUPS = () => {
+    setCategory("ups");
+    setPage(1);
+  };
+
+  const selectCategoryPrintScan = () => {
+    setCategory("printer-scanner");
+    setPage(1);
+  };
+
+  const selectCategoryElec = () => {
+    setCategory("electronics");
+    setPage(1);
+  };
+
+  const selectCategoryOther = () => {
+    setCategory("others");
+    setPage(1);
+  };
+
+  const selectAscendProc = () => {
+    setOrderProc("old");
+    setPageProcure(1);
+  };
+
+  const selectDescendProc = () => {
+    setOrderProc("recent");
+    setPageProcure(1);
+  };
+
+  const selectCategoryAllProc = () => {
+    setCategoryProc("all");
+    setPage(1);
+  };
+
+  const selectCategoryComProc = () => {
+    setCategoryProc("computer");
+    setPage(1);
+  };
+
+  const selectCategoryComAccProc = () => {
+    setCategoryProc("computer-accessories");
+    setPage(1);
+  };
+
+  const selectCategoryNetProc = () => {
+    setCategoryProc("networking");
+    setPage(1);
+  };
+
+  const selectCategoryUPSProc = () => {
+    setCategoryProc("ups");
+    setPage(1);
+  };
+
+  const selectCategoryPrintScanProc = () => {
+    setCategoryProc("printer-scanner");
+    setPage(1);
+  };
+
+  const selectCategoryElecProc = () => {
+    setCategoryProc("electronics");
+    setPage(1);
+  };
+
+  const selectCategoryOtherProc = () => {
+    setCategoryProc("others");
+    setPage(1);
   };
   // End of Admin Logic
 
@@ -926,7 +1044,7 @@ export const Beranda = () => {
                               <Td>{(activePage - 1) * 5 + index + 1}</Td>
                               <Td>
                                 {moment(value.request_date).format(
-                                  "h:mm a, DD MMM YYYY"
+                                  "h:mm A, DD MMM YYYY"
                                 )}
                               </Td>
                               <Td>
@@ -977,24 +1095,82 @@ export const Beranda = () => {
                 </Table>
               ) : role === 2 ? (
                 <Table minW='800px' size='sm' borderRadius='20px'>
+                  <TableCaption>{requestData === null ? "Tidak ada Data" : ""}</TableCaption>
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
-                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            TANGGAL PENGAJUAN
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectAscend}>Oldest</MenuItem>
+                            <MenuItem onClick={selectDescend}>Recent</MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            JENIS AKTIVITAS
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectActivityBorrow}>
+                              Peminjaman
+                            </MenuItem>
+                            <MenuItem onClick={selectActivityReturn}>
+                              Pengembalian
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'><Menu>
                           <MenuButton
                             as={Button}
-                            size="sm"
-                            colorScheme="blue"
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
                             rightIcon={<ChevronDownIcon />}>
-                            Jenis Aktivitas
+                            KATEGORI ASET
                           </MenuButton>
-                          <MenuList color="blue.500">
-                            <MenuItem onClick={selectActivityBorrow}>Peminjaman</MenuItem>
-                            <MenuItem onClick={selectActivityReturn}>Pengembalian</MenuItem>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectCategoryAll}>
+                              Semua
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryCom}>
+                              Computer
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryComAcc}>
+                              Computer Accessories
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryNet}>
+                              Networking
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryUPS}>
+                              UPS
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryPrintScan}>
+                              Printer and Scanner
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryElec}>
+                              Electronics
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryOther}>
+                              Others
+                            </MenuItem>
                           </MenuList>
                         </Menu></Th>
-                      <Th color='white'>Kategori Aset</Th>
                       <Th color='white'>Barang</Th>
                       <Th color='white'></Th>
                     </Tr>
@@ -1031,30 +1207,6 @@ export const Beranda = () => {
                       <>
                         {requestData === null ? (
                           <>
-                            {dummy.map((value: number) => (
-                              <Tr key={value}>
-                                <Td>
-                                  <Skeleton>1</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>Peminjaman Aset</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>Headphone</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>
-                                    <ButtonTertier title='Details' />
-                                  </Skeleton>
-                                </Td>
-                              </Tr>
-                            ))}
                           </>
                         ) : requestData !== undefined ? (
                           requestData.map((value, index) => (
@@ -1062,7 +1214,7 @@ export const Beranda = () => {
                               <Td>{(activePage - 1) * 5 + index + 1}</Td>
                               <Td>
                                 {moment(value.request_time).format(
-                                  "h:mm a, DD MMM YYYY"
+                                  "h:mm A, DD MMM YYYY"
                                 )}
                               </Td>
                               <Td>
@@ -1158,7 +1310,7 @@ export const Beranda = () => {
                               <Td>1</Td>
                               <Td>
                                 {moment(value.request_time).format(
-                                  "h:mm a, DD MMM YYYY"
+                                  "h:mm A, DD MMM YYYY"
                                 )}
                               </Td>
                               <Td>{value.User.name}</Td>
@@ -1258,12 +1410,63 @@ export const Beranda = () => {
             <Box overflowX='auto'>
               {role === 2 ? (
                 <Table minW='800px' size='sm' borderRadius='20px'>
+                  <TableCaption>{procureData === null ? "Tidak ada Data" : ""}</TableCaption>
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
-                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            TANGGAL PENGAJUAN
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectAscendProc}>Oldest</MenuItem>
+                            <MenuItem onClick={selectDescendProc}>Recent</MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Jenis Aktivitas</Th>
-                      <Th color='white'>Kategori Aset</Th>
+                      <Th color='white'><Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            KATEGORI ASET
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectCategoryAllProc}>
+                              Semua
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryComProc}>
+                              Computer
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryComAccProc}>
+                              Computer Accessories
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryNetProc}>
+                              Networking
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryUPSProc}>
+                              UPS
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryPrintScanProc}>
+                              Printer and Scanner
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryElecProc}>
+                              Electronics
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryOtherProc}>
+                              Others
+                            </MenuItem>
+                          </MenuList>
+                        </Menu></Th>
                       <Th color='white'>Deskripsi</Th>
                       <Th color='white'></Th>
                     </Tr>
@@ -1300,30 +1503,6 @@ export const Beranda = () => {
                       <>
                         {procureData === null ? (
                           <>
-                            {dummy.map((value: number) => (
-                              <Tr key={value}>
-                                <Td>
-                                  <Skeleton>1</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>Peminjaman Aset</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>Headphone</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
-                                </Td>
-                                <Td>
-                                  <Skeleton>
-                                    <ButtonTertier title='Details' />
-                                  </Skeleton>
-                                </Td>
-                              </Tr>
-                            ))}
                           </>
                         ) : procureData !== undefined ? (
                           procureData.map((value, index) => (

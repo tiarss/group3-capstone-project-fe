@@ -10,6 +10,7 @@ import {
   Thead,
   Tr,
   Tag,
+  TableCaption,
 } from "@chakra-ui/react";
 import { Center, Pagination } from "@mantine/core";
 import { ButtonTertier } from "../components/Button";
@@ -23,13 +24,6 @@ import { tableRequest } from "../types";
 
 export const PenggunaAset = () => {
   const [valueRadio, setValueRadio] = useState("all");
-  const [countData, setCountData] = useState({
-    all: 23,
-    new: 10,
-    used: 10,
-    rejected: 1,
-    returned: 2,
-  });
   const [isOpen, setIsOpen] = useState(false);
   const [activePage, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
@@ -43,6 +37,14 @@ export const PenggunaAset = () => {
   const [countRejected, setCountRejected] = useState<number>(0);
   const [countReturned, setCountReturned] = useState<number>(0);
 
+   //Admin State
+   const [requestData, setRequestData] = useState<tableRequest[]>();
+   const [selectedData, setSelectedData] = useState<tableRequest>();
+   const [isLoadingTable, setIsLoadingTable] = useState(true);
+   const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
+   const [activity, setActivity] = useState<string>("borrow");
+   //End Admin State
+
   let roles = localStorage.getItem("role");
 
   useEffect(() => {
@@ -52,16 +54,16 @@ export const PenggunaAset = () => {
     } else if (roles === "Manager") {
       handleGetAllManagerRequest();
     }
-  }, [activePage]);
+  }, [activePage,valueRadio]);
 
-  useEffect(() => {
-    handleActivity();
-    if (roles === "Administrator") {
-      handleGetAllRequest();
-    } else if (roles === "Manager") {
-      handleGetAllManagerRequest();
-    }
-  }, [valueRadio]);
+  // useEffect(() => {
+  //   // handleActivity();
+  //   if (roles === "Administrator") {
+  //     handleGetAllRequest();
+  //   } else if (roles === "Manager") {
+  //     handleGetAllManagerRequest();
+  //   }
+  // }, [valueRadio]);
 
   useEffect(() => {
     if (roles === "Administrator") {
@@ -95,14 +97,6 @@ export const PenggunaAset = () => {
     setPage(value);
   };
   
-  //Admin State
-  const [requestData, setRequestData] = useState<tableRequest[]>();
-  const [selectedData, setSelectedData] = useState<tableRequest>();
-  const [isLoadingTable, setIsLoadingTable] = useState(true);
-  const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
-  const [activity, setActivity] = useState<string>("");
-  //End Admin State
-
   //Logic Administrator
   const handleOpen = (id: number) => {
     const filtering = requestData?.find((value) => value.id === id);
@@ -114,13 +108,15 @@ export const PenggunaAset = () => {
     console.log(filtering)
   };
   const handleClose = () => setIsOpen(false);
-  const handleSelectReturn = () => {
-    console.log("test return")
-    setActivity("return")
-  }
 
+  const handleSelectReturn = () => {
+    setActivity("return")
+    setPage(1)
+  }
+  
   const handleSelectBorrow = () => {
     setActivity("borrow")
+    setPage(1)
   }
 
   const handleGetAllRequest = () => {
@@ -384,13 +380,13 @@ export const PenggunaAset = () => {
       });
   };
 
-  const handleActivity = () => {
-    if (valueRadio === "returned") {
-      setActivity("return")
-    } else {
-      setActivity("borrow")
-    }
-  }
+  // const handleActivity = () => {
+  //   if (valueRadio === "returned") {
+  //     setActivity("return")
+  //   } else {
+  //     setActivity("borrow")
+  //   }
+  // }
 
   //End of Logic Admin
 
@@ -519,7 +515,7 @@ export const PenggunaAset = () => {
         console.log(res);
         const temp = selectedData;
         if (temp !== undefined) {
-          setSelectedData({ ...temp, status: "Approved by Admin" });
+          setSelectedData({ ...temp, status: "Approved by Manager" });
         }
         handleGetAllRequest();
       })
@@ -545,7 +541,7 @@ export const PenggunaAset = () => {
         console.log(res);
         const temp = selectedData;
         if (temp !== undefined) {
-          setSelectedData({ ...temp, status: "Rejected by Admin" });
+          setSelectedData({ ...temp, status: "Rejected by Manager" });
         }
         handleGetAllRequest();
       })
@@ -908,7 +904,7 @@ export const PenggunaAset = () => {
                   },
                   {
                     label: (
-                      <Center>
+                      <Center onClick={handleSelectBorrow}>
                         <Box
                           transition='all 0.5s ease'
                           color={
@@ -943,6 +939,9 @@ export const PenggunaAset = () => {
           </Flex>
           <Box bgColor='white' p='50px 20px 20px' borderRadius='10px'>
             <Table minW='800px' size='sm' borderRadius='20px'>
+            <TableCaption>
+                {requestData === null ? "Tidak ada Data" : ""}
+              </TableCaption>
               <Thead bgColor='blue.500'>
                 <Tr>
                   <Th color='white'>No</Th>
@@ -986,32 +985,8 @@ export const PenggunaAset = () => {
                 ) : (
                   <>
                     {requestData === null ? (
-                      <Tr>
-                        <Td>
-                          <Skeleton>No</Skeleton>
-                        </Td>
-                        <Td>
-                          <Skeleton>Tanggal Permohonan</Skeleton>
-                        </Td>
-                        <Td>
-                          <Skeleton>Tanggal Pengembalian</Skeleton>
-                        </Td>
-                        <Td>
-                          <Skeleton>Kategori Aset</Skeleton>
-                        </Td>
-                        <Td>
-                          <Skeleton>Barang</Skeleton>
-                        </Td>
-                        <Td>
-                          <Skeleton>Sisa Waktu</Skeleton>
-                        </Td>
-                        <Td>
-                          <Skeleton>Status</Skeleton>
-                        </Td>
-                        <Td>
-                          <Skeleton></Skeleton>
-                        </Td>
-                      </Tr>
+                      <>
+                      </>
                     ) : (
                       <>
                         {requestData !== undefined ? (

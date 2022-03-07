@@ -112,32 +112,6 @@ function SliderImage() {
       });
   };
 
-  // const handleRejectRequest = (id: number) => {
-  //   axios
-  //     .put(
-  //       `/activities/${idUser}/${id}`,
-  //       {
-  //         status: "cancel",
-  //       },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${localStorage.getItem("token")}`,
-  //         },
-  //       }
-  //     )
-  //     .then((res) => {
-  //       const { data } = res.data;
-  //       console.log("respon: ", data);
-  //       getAllActivities();
-  //     })
-  //     .catch((err) => {
-  //       console.log(err.response);
-  //     })
-  //     .finally(() => {
-  //       setIsOpen(true);
-  //     });
-  // };
-
   const handleReturnEmployee = (id: number) => {
     axios
       .put(
@@ -152,8 +126,10 @@ function SliderImage() {
         }
       )
       .then((res) => {
-        const { data } = res.data;
-        // console.log("respon: ", data);
+        const temp = selectedActivities
+        if (temp !== undefined) {
+          setSelectedActivities({ ...temp, status: "Waiting approval", activity: "Return" });
+        }
         getAllActivities();
       })
       .catch((err) => {

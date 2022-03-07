@@ -158,26 +158,37 @@ export const PenggunaAset = () => {
       })
       .catch((err) => {
         const { data } = err.response;
-        const message = data.message
-          .toLowerCase()
-          .replace(/(^\w{1})|(\s{1}\w{1})/g, (m: string) => m.toUpperCase());
+        // const message = data.message
+        //   .toLowerCase()
+        //   .replace(/(^\w{1})|(\s{1}\w{1})/g, (m: string) => m.toUpperCase());
+        //   toast({
+        //     title: `${message}`,
+        //     status: "error",
+        //     duration: 9000,
+        //     isClosable: true,
+        //   });
+        if (data.message === "invalid or expired jwt") {
+          logOut();
           toast({
-            title: `${message}`,
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
             status: "error",
             duration: 9000,
             isClosable: true,
           });
-          if (data.message === "invalid or expired jwt") {
-            logOut();
-            toast({
-              title: `Sign In Expired`,
-              description: "Please re-Sign In",
-              status: "error",
-              duration: 3000,
-              isClosable: true,
-            });
-            navigate("/sign-in");
-          }
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -339,7 +350,16 @@ export const PenggunaAset = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menerima Permintaan Peminjaman Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Admin" });
@@ -347,7 +367,29 @@ export const PenggunaAset = () => {
         handleGetAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -365,7 +407,15 @@ export const PenggunaAset = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menerima Pengembalian Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Admin" });
@@ -373,7 +423,29 @@ export const PenggunaAset = () => {
         handleGetAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -391,7 +463,15 @@ export const PenggunaAset = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menolak Permintaan Peminjaman Aset",
+            status: "warning",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Rejected by Admin" });
@@ -399,7 +479,29 @@ export const PenggunaAset = () => {
         handleGetAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -418,6 +520,14 @@ export const PenggunaAset = () => {
       )
       .then((res) => {
         const { data } = res;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Mengajukan Pengembalian",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, activity: "Request to Return" });
@@ -425,18 +535,31 @@ export const PenggunaAset = () => {
         handleClose();
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
-
-  // const handleActivity = () => {
-  //   if (valueRadio === "returned") {
-  //     setActivity("return")
-  //   } else {
-  //     setActivity("borrow")
-  //   }
-  // }
-
   //End of Logic Admin
 
   //Manager Logic
@@ -565,7 +688,15 @@ export const PenggunaAset = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menerima Permintaan Peminjaman Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Manager" });
@@ -573,7 +704,29 @@ export const PenggunaAset = () => {
         handleGetAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -591,7 +744,15 @@ export const PenggunaAset = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menolak Permintaan Peminjaman Aset",
+            status: "warning",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Rejected by Manager" });
@@ -599,7 +760,29 @@ export const PenggunaAset = () => {
         handleGetAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
   //End of Logic Manager

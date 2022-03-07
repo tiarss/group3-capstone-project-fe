@@ -22,7 +22,6 @@ import {
 import { Center, Pagination } from "@mantine/core";
 import { ButtonTertier } from "../components/Button";
 import { Header } from "../components/Header";
-import { ModalActivity } from "../components/ModalActivity";
 import { SegmentedControl } from "@mantine/core";
 import moment from "moment";
 import axios from "axios";
@@ -69,14 +68,6 @@ const PengadaanAset = () => {
       handleGetManagerAllRequest();
     }
   }, [activePage, order, valueRadio, category, dates]);
-
-  // useEffect(() => {
-  //   if (roles === "Administrator") {
-  //       handleGetAllRequest();
-  //   } else if (roles === "Manager") {
-  //     handleGetManagerAllRequest();
-  //   }
-  // }, [valueRadio]);
 
   useEffect(() => {
     if (roles === "Administrator") {
@@ -624,7 +615,7 @@ const PengadaanAset = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menerima Permintaan Pengadaan Aset",
@@ -681,7 +672,7 @@ const PengadaanAset = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menolak Permintaan Peminjaman Aset",

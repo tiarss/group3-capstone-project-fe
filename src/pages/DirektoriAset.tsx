@@ -83,9 +83,9 @@ const DirektoriAset = () => {
         .get(`https://klender.xyz/assets/${short_name}` ,
         {headers : {"Authorization" : "Bearer "+ localStorage.getItem('token')}})
         .then((res) => {
-        const { data } = res.data;
-        setDetails(data);
-        handleHistory(short_name);
+            const { data } = res.data;
+            setDetails(data);
+            handleHistory(short_name);
         })
         .catch((err) => {
             const { data } = err.response;

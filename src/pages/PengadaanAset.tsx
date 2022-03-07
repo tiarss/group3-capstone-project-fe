@@ -55,7 +55,7 @@ const PengadaanAset = () => {
   const [order, setOrder] = useState("recent");
   const [category, setCategory] = useState("all");
   const [dates, setDates] = useState<string>("");
-  const [reloadNumber, setReloadNumber] = useState(0)
+  const [reloadNumber, setReloadNumber] = useState(0);
   //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -685,7 +685,7 @@ const PengadaanAset = () => {
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Rejected by Manager" });
         }
-        setReloadNumber(reloadNumber+1)
+        setReloadNumber(reloadNumber+1);
         handleGetManagerAllRequest();
       })
       .catch((err) => {

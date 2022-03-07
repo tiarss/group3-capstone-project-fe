@@ -50,20 +50,33 @@ export const PenggunaAset = () => {
     if (roles === "Administrator") {
       handleGetAllRequest();
     } else if (roles === "Manager") {
-      // handleGetAllRequest("manager");
+      handleGetAllManagerRequest();
     }
   }, [activePage]);
 
   useEffect(() => {
-    handleGetAllRequest();
+    handleActivity();
+    if (roles === "Administrator") {
+      handleGetAllRequest();
+    } else if (roles === "Manager") {
+      handleGetAllManagerRequest();
+    }
   }, [valueRadio]);
 
   useEffect(() => {
-    handleGetAll();
-    handleGetWaiting();
-    handleGetApproved();
-    handleGetRejected();
-    handleGetReturned();
+    if (roles === "Administrator") {
+      handleGetAll();
+      handleGetWaiting();
+      handleGetApproved();
+      handleGetRejected();
+      handleGetReturned();
+    } else if (roles === "Manager") {
+      handleGetManagerAll();
+      handleGetManagerWaiting();
+      handleGetManagerApproved();
+      handleGetManagerRejected();
+      handleGetManagerReturned();
+    }
   }, []);
 
   const roleCondition = () => {
@@ -107,7 +120,7 @@ export const PenggunaAset = () => {
   }
 
   const handleSelectBorrow = () => {
-    setActivity("")
+    setActivity("borrow")
   }
 
   const handleGetAllRequest = () => {
@@ -184,6 +197,7 @@ export const PenggunaAset = () => {
       .get(`/requests/admin/borrow`, {
         params: {
           s: "approved",
+          a: "borrow"
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -204,6 +218,7 @@ export const PenggunaAset = () => {
       .get(`/requests/admin/borrow`, {
         params: {
           s: "rejected",
+          a: "borrow"
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -368,7 +383,177 @@ export const PenggunaAset = () => {
         console.log(err.response);
       });
   };
+
+  const handleActivity = () => {
+    if (valueRadio === "returned") {
+      setActivity("return")
+    } else {
+      setActivity("borrow")
+    }
+  }
+
   //End of Logic Admin
+
+  //Manager Logic
+  const handleGetAllManagerRequest = () => {
+    setIsLoadingTable(true);
+    axios
+      .get(`/requests/manager/borrow?p=${activePage}&rp=${5}&s=${valueRadio}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { data } = res.data;
+        const { total_record } = res.data;
+        setRequestData(data);
+        setTotalData(total_record);
+        console.log("total: ", total_record);
+        console.log("data: ", data);
+        setIsLoadingTable(false);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerAll = () => {
+    axios
+      .get(`/requests/manager/borrow`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountAll(total_record);
+        console.log("All: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerWaiting = () => {
+    axios
+      .get(`/requests/manager/borrow?s=waiting-approval`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountWaiting(total_record);
+        console.log("Waiting: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerApproved = () => {
+    axios
+      .get(`/requests/manager/borrow?s=approved`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountApproved(total_record);
+        console.log("Approved: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerRejected = () => {
+    axios
+      .get(`/requests/manager/borrow?s=rejected`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountRejected(total_record);
+        console.log("Rejected: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetManagerReturned = () => {
+    axios
+      .get(`/requests/manager/borrow?s=returned`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountReturned(total_record);
+        console.log("Returned: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleAcceptReqManager = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: true,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Approved by Admin" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleRejectReqManager = (id: number) => {
+    axios
+      .put(
+        `/requests/borrow/${id}`,
+        {
+          approved: false,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const temp = selectedData;
+        if (temp !== undefined) {
+          setSelectedData({ ...temp, status: "Rejected by Admin" });
+        }
+        handleGetAllRequest();
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+  //End of Logic Manager
 
   return (
     <div>
@@ -403,7 +588,7 @@ export const PenggunaAset = () => {
                 }}
                 value={valueRadio}
                 onChange={setValueRadio}
-                data={[
+                data={ role===2 ? [
                   {
                     label: (
                       <Center onClick={handleSelectBorrow}>
@@ -596,6 +781,162 @@ export const PenggunaAset = () => {
                     ),
                     value: "returned",
                   },
+                ] : [
+                  {
+                    label: (
+                      <Center>
+                        <Box
+                          transition='all 0.5s ease'
+                          color={valueRadio === "all" ? "white" : "#222222"}>
+                          Semua Permohonan
+                        </Box>
+                        <Box
+                          display='flex'
+                          alignItems='center'
+                          justifyContent='center'
+                          ml='10px'
+                          bgColor={valueRadio === "all" ? "white" : "#222222"}
+                          borderRadius='20px'
+                          w='20px'
+                          h='20px'
+                          transition='all 0.5s ease'
+                          color={valueRadio === "all" ? "#3CA9DB" : "white"}>
+                          {countAll}
+                        </Box>
+                      </Center>
+                    ),
+                    value: "all",
+                  },
+                  {
+                    label: (
+                      <Center>
+                        <Box
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "waiting-approval"
+                              ? "white"
+                              : "#222222"
+                          }>
+                          Butuh Persetujuan
+                        </Box>
+                        <Box
+                          display='flex'
+                          alignItems='center'
+                          justifyContent='center'
+                          ml='10px'
+                          bgColor={
+                            valueRadio === "waiting-approval"
+                              ? "white"
+                              : "#222222"
+                          }
+                          borderRadius='20px'
+                          w='20px'
+                          h='20px'
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "waiting-approval"
+                              ? "#3CA9DB"
+                              : "white"
+                          }>
+                          {countWaiting}
+                        </Box>
+                      </Center>
+                    ),
+                    value: "waiting-approval",
+                  },
+                  {
+                    label: (
+                      <Center>
+                        <Box
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "approved" ? "white" : "#222222"
+                          }>
+                          Disetujui
+                        </Box>
+                        <Box
+                          display='flex'
+                          alignItems='center'
+                          justifyContent='center'
+                          ml='10px'
+                          bgColor={
+                            valueRadio === "approved" ? "white" : "#222222"
+                          }
+                          borderRadius='20px'
+                          w='20px'
+                          h='20px'
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "approved" ? "#3CA9DB" : "white"
+                          }>
+                          {countApproved}
+                        </Box>
+                      </Center>
+                    ),
+                    value: "approved",
+                  },
+                  {
+                    label: (
+                      <Center>
+                        <Box
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "rejected" ? "white" : "#222222"
+                          }>
+                          Ditolak
+                        </Box>
+                        <Box
+                          display='flex'
+                          alignItems='center'
+                          justifyContent='center'
+                          ml='10px'
+                          bgColor={
+                            valueRadio === "rejected" ? "white" : "#222222"
+                          }
+                          borderRadius='20px'
+                          w='20px'
+                          h='20px'
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "rejected" ? "#3CA9DB" : "white"
+                          }>
+                          {countRejected}
+                        </Box>
+                      </Center>
+                    ),
+                    value: "rejected",
+                  },
+                  {
+                    label: (
+                      <Center>
+                        <Box
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "returned" ? "white" : "#222222"
+                          }>
+                          Dikembalikan
+                        </Box>
+                        <Box
+                          display='flex'
+                          alignItems='center'
+                          justifyContent='center'
+                          ml='10px'
+                          bgColor={
+                            valueRadio === "returned" ? "white" : "#222222"
+                          }
+                          borderRadius='20px'
+                          w='20px'
+                          h='20px'
+                          transition='all 0.5s ease'
+                          color={
+                            valueRadio === "returned" ? "#3CA9DB" : "white"
+                          }>
+                          {countReturned}
+                        </Box>
+                      </Center>
+                    ),
+                    value: "returned",
+                  },
                 ]}
               />
             </Box>
@@ -693,7 +1034,43 @@ export const PenggunaAset = () => {
                               </Td>
                               <Td>Sisa Waktu</Td>
                               <Td>
-                                <Tag>{value.status}</Tag>
+                                <Tag
+                                  size='md'
+                                  variant='subtle'
+                                  colorScheme={
+                                    value.status.includes("Approved")
+                                      ? "whatsapp"
+                                      : value.status.includes("Waiting")
+                                      ? "orange"
+                                      : "red"
+                                  }
+                                >
+                                  {role === 3 ?
+                                    value.activity==="Borrow" ? 
+                                      value.status === "Waiting approval from Manager" 
+                                      ? "Menunggu Persetujuan" : 
+                                      value.status === "Approved by Manager" 
+                                      ? "Disetujui" :
+                                      value.status === "Rejected by Manager"
+                                      ? "Ditolak" : "Tidak Diketahui"
+                                    : "Dikembalikan"
+                                  : 
+                                    value.activity==="Borrow" ? 
+                                      value.status === "Waiting approval from Manager" 
+                                      ? "Menunggu Persetujuan Manager" :
+                                      value.status === "Waiting approval from Admin" 
+                                      ? "Menunggu Persetujuan Admin" :  
+                                      value.status === "Approved by Admin" 
+                                      ? "Disetujui" :
+                                      value.status === "Rejected by Manager"
+                                      ? "Ditolak Manager" : 
+                                      value.status === "Rejected by Admin"
+                                      ? "Ditolak Admin" :
+                                      "Dibatalkan"
+                                    : 
+                                      "Dikembalikan"
+                                  }
+                                </Tag>
                               </Td>
                               <Td>
                                 <ButtonTertier
@@ -753,12 +1130,12 @@ export const PenggunaAset = () => {
       role={role} 
       data={selectedData}
       handleToManager={() => handleToManager(selectedIdReq)}
-      // handleAcceptReqManager={() => handleAcceptReqManager(selectedIdReq)}
+      handleAcceptReqManager={() => handleAcceptReqManager(selectedIdReq)}
       handleAcceptReqAdmin={() => handleAcceptReqAdmin(selectedIdReq)}
       handleAjukanPengembalian={() => handleAjukanPengembalian(selectedIdReq)}
       handleAcceptReturn={() => handleAcceptReturn(selectedIdReq)}
       handleRejectReqAdmin={() => handleRejectReqAdmin(selectedIdReq)}
-      // handleRejectReqManager={() => handleRejectReqManager(selectedIdReq)} 
+      handleRejectReqManager={() => handleRejectReqManager(selectedIdReq)} 
       />
     </div>
   );

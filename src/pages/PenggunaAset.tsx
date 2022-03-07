@@ -158,15 +158,6 @@ export const PenggunaAset = () => {
       })
       .catch((err) => {
         const { data } = err.response;
-        // const message = data.message
-        //   .toLowerCase()
-        //   .replace(/(^\w{1})|(\s{1}\w{1})/g, (m: string) => m.toUpperCase());
-        //   toast({
-        //     title: `${message}`,
-        //     status: "error",
-        //     duration: 9000,
-        //     isClosable: true,
-        //   });
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -566,7 +557,7 @@ export const PenggunaAset = () => {
   const handleGetAllManagerRequest = () => {
     setIsLoadingTable(true);
     axios
-      .get(`/requests/manager/borrow?p=${activePage}&rp=${5}&s=${valueRadio}`, {
+      .get(`/requests/manager/borrow?p=${activePage}&rp=${5}&o=${order}&s=${valueRadio}&c=${category}&d=${dates}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -825,7 +816,7 @@ export const PenggunaAset = () => {
   };
 
   const selectCategoryPrintScan = () => {
-    setCategory("printer-scanner");
+    setCategory("printer-and-scanner");
     setPage(1);
   };
 

@@ -57,7 +57,8 @@ const PengadaanAset = () => {
   const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
   const [order, setOrder] = useState("recent");
   const [category, setCategory] = useState("all");
-  const [dates, setDates] = useState<string>("")
+  const [dates, setDates] = useState<string>("");
+  const [reloadNumber, setReloadNumber] = useState(0)
   //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -66,32 +67,32 @@ const PengadaanAset = () => {
     roleCondition();
     if (roles === "Administrator") {
       handleGetAllRequest();
-    } else if (roles === "Manager") {
-      handleGetManagerAllRequest();
-    }
-  }, [activePage, order, valueRadio, category,dates]);
-
-  // useEffect(() => {
-  //   if (roles === "Administrator") {
-  //       handleGetAllRequest();
-  //   } else if (roles === "Manager") {
-  //     handleGetManagerAllRequest();
-  //   }
-  // }, [valueRadio]);
-
-  useEffect(() => {
-    if (roles === "Administrator") {
       handleGetAll();
       handleGetWaiting();
       handleGetApproved();
       handleGetRejected();
     } else if (roles === "Manager") {
+      handleGetManagerAllRequest();
       handleGetManagerAll();
       handleGetManagerWaiting();
       handleGetManagerApproved();
       handleGetManagerRejected();
     }
-  }, []);
+  }, [activePage, order, valueRadio, category, dates,reloadNumber]);
+
+  // useEffect(() => {
+  //   if (roles === "Administrator") {
+  //     handleGetAll();
+  //     handleGetWaiting();
+  //     handleGetApproved();
+  //     handleGetRejected();
+  //   } else if (roles === "Manager") {
+  //     handleGetManagerAll();
+  //     handleGetManagerWaiting();
+  //     handleGetManagerApproved();
+  //     handleGetManagerRejected();
+  //   }
+  // }, []);
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -131,7 +132,7 @@ const PengadaanAset = () => {
           o: order,
           s: valueRadio,
           c: category,
-          d: dates
+          d: dates,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -231,32 +232,6 @@ const PengadaanAset = () => {
       });
   };
 
-  const handleToManager = (id: number) => {
-    axios
-      .put(
-        `/requests/procure/${id}`,
-        {
-          approved: true,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res);
-        const temp = selectedData;
-        if (temp !== undefined) {
-          setSelectedData({ ...temp, status: "Waiting approval from Manager" });
-        }
-        handleGetAllRequest();
-      })
-      .catch((err) => {
-        console.log(err.response);
-      });
-  };
-
   const selectAscend = () => {
     setOrder("old");
   };
@@ -318,7 +293,10 @@ const PengadaanAset = () => {
         params: {
           p: activePage,
           rp: 5,
+          o: order,
           s: valueRadio,
+          c: category,
+          d: dates,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -435,9 +413,10 @@ const PengadaanAset = () => {
         console.log(res);
         const temp = selectedData;
         if (temp !== undefined) {
-          setSelectedData({ ...temp, status: "Approved by Admin" });
+          setSelectedData({ ...temp, status: "Approved by Manager" });
         }
-        handleGetAllRequest();
+        setReloadNumber(reloadNumber+1)
+        handleGetManagerAllRequest();
       })
       .catch((err) => {
         console.log(err.response);
@@ -461,9 +440,10 @@ const PengadaanAset = () => {
         console.log(res);
         const temp = selectedData;
         if (temp !== undefined) {
-          setSelectedData({ ...temp, status: "Rejected by Admin" });
+          setSelectedData({ ...temp, status: "Rejected by Manager" });
         }
-        handleGetAllRequest();
+        setReloadNumber(reloadNumber+1)
+        handleGetManagerAllRequest();
       })
       .catch((err) => {
         console.log(err.response);
@@ -471,12 +451,11 @@ const PengadaanAset = () => {
   };
   //End of Logic Manager
 
-  const handleDate= (e: React.ChangeEvent<HTMLInputElement>)=>{
-    const value = e.target.value
-    console.log(value)
-    setDates(value)
-  }
-
+  const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPage(1)
+    setDates(value);
+  };
 
   return (
     <div>
@@ -489,7 +468,8 @@ const PengadaanAset = () => {
         flexDir='column'
         gap='20px'>
         <Box mb='50px'>
-          <Text textAlign='center'>Daftar Pengadaan Aset</Text>
+          <Text textAlign='center' fontSize="24px" fontWeight="bold">Pengadaan Aset</Text>
+          <Text textAlign='center' fontSize="14px">Berisi Informasi Permintaan Pengadaan Aset</Text>
         </Box>
         <Box position='relative'>
           <Flex justifyContent='center'>
@@ -640,8 +620,16 @@ const PengadaanAset = () => {
               />
             </Box>
           </Flex>
-          <Box bgColor='white' p='50px 20px 20px' borderRadius='10px'>
-              <InputText type="date" title="Filter Tanggal" onChange={handleDate}/>
+          <Box bgColor='white' p='20px' borderRadius='10px' minH="500px">
+            <Flex justify="start">
+              <Box width="300px" my="10px">
+                <InputText
+                  type='date'
+                  title='Filter Tanggal'
+                  onChange={handleDate}
+                />
+              </Box>
+            </Flex>
             <Table minW='800px' size='sm' borderRadius='20px'>
               <TableCaption>
                 {requestData === null ? "Tidak ada Data" : ""}
@@ -726,7 +714,11 @@ const PengadaanAset = () => {
                           <Skeleton>Deskripsi</Skeleton>
                         </Td>
                         <Td>
-                          <Skeleton>Status</Skeleton>
+                          <Skeleton> <Tag
+                            size='md'
+                            variant='subtle'
+                            colorScheme="orange">
+                          </Tag>Diterima</Skeleton>
                         </Td>
                         <Td>
                           <Skeleton></Skeleton>

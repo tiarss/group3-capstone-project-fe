@@ -148,7 +148,7 @@ export const InputSelect = ({
         {data !== undefined ? (
           data.map((datas, index) => (
             <option key={index} value={datas.name}>
-              {datas.name}
+              {datas.name.replace("-"," ")}
             </option>
           ))
         ) : (

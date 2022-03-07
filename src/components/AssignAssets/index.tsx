@@ -19,10 +19,10 @@ import { InputSelect, InputSelectData, InputSelectDataUser, InputText } from "..
 
 const category = [
   { id: 1, name: "Computer" },
-  { id: 2, name: "Computer Accessories" },
+  { id: 2, name: "Computer-Accessories" },
   { id: 3, name: "Networking" },
   { id: 4, name: "UPS" },
-  { id: 5, name: "Printer and Scanner" },
+  { id: 5, name: "Printer-and-Scanner" },
   { id: 6, name: "Electronics" },
   { id: 7, name: "Others" },
 ];
@@ -58,7 +58,10 @@ export const AssignAssets = ({
 
   const fetchDataAset = (value: string) => {
     axios
-      .get(`/assets?category=${value}`, {
+      .get(`/assets`, {
+        params: {
+          c: value,
+        },
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })
       .then((res) => {
@@ -92,7 +95,6 @@ export const AssignAssets = ({
 
   const handleChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    console.log(value);
     fetchDataAset(value);
   };
   return (

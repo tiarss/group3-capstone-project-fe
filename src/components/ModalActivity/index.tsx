@@ -450,7 +450,7 @@ export const ModalActivity = ({
                     />
                   </Flex>
                 )
-              ) : status === "Waiting approval" ? (
+              ) : status === "Waiting approval from Admin" ? (
                 <Flex gap='10px' justifyContent='end'>
                   {/* <ButtonSecondary
                     title='Kemb'
@@ -458,7 +458,7 @@ export const ModalActivity = ({
                     isDisabled={true}
                   /> */}
                   <ButtonPrimary
-                    title='Terima Permohonan'
+                    title='Terima Permohonans'
                     onclick={handleAcceptReturn}
                   />
                 </Flex>

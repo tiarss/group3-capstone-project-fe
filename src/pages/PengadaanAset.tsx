@@ -17,6 +17,7 @@ import {
   MenuList,
   MenuItem,
   TableCaption,
+  useToast,
 } from "@chakra-ui/react";
 import { Center, Pagination } from "@mantine/core";
 import { ButtonTertier } from "../components/Button";
@@ -29,16 +30,12 @@ import { tableProcure } from "../types";
 import { ModalProcure } from "../components/ModalActivity/Procure";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { InputText } from "../components/Input";
+import { useNavigate } from "react-router-dom";
 
 const PengadaanAset = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
   const [valueRadio, setValueRadio] = useState("all");
-  const [countData, setCountData] = useState({
-    all: 23,
-    new: 10,
-    used: 10,
-    rejected: 1,
-    returned: 2,
-  });
   const [isOpen, setIsOpen] = useState(false);
   const [activePage, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
@@ -46,6 +43,7 @@ const PengadaanAset = () => {
   const [all, setAll] = useState<any[]>();
   const idUser = localStorage.getItem("id");
   const dummy = [1, 2, 3, 4, 5];
+  //Count Number Status
   const [countAll, setCountAll] = useState<number>(0);
   const [countWaiting, setCountWaiting] = useState<number>(0);
   const [countApproved, setCountApproved] = useState<number>(0);
@@ -57,7 +55,8 @@ const PengadaanAset = () => {
   const [selectedIdReq, setSelectedIdReq] = useState<number>(0);
   const [order, setOrder] = useState("recent");
   const [category, setCategory] = useState("all");
-  const [dates, setDates] = useState<string>("")
+  const [dates, setDates] = useState<string>("");
+  const [reloadNumber, setReloadNumber] = useState(0)
   //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -66,32 +65,25 @@ const PengadaanAset = () => {
     roleCondition();
     if (roles === "Administrator") {
       handleGetAllRequest();
-    } else if (roles === "Manager") {
-      handleGetManagerAllRequest();
-    }
-  }, [activePage, order, valueRadio, category,dates]);
-
-  // useEffect(() => {
-  //   if (roles === "Administrator") {
-  //       handleGetAllRequest();
-  //   } else if (roles === "Manager") {
-  //     handleGetManagerAllRequest();
-  //   }
-  // }, [valueRadio]);
-
-  useEffect(() => {
-    if (roles === "Administrator") {
       handleGetAll();
       handleGetWaiting();
       handleGetApproved();
       handleGetRejected();
     } else if (roles === "Manager") {
+      handleGetManagerAllRequest();
       handleGetManagerAll();
       handleGetManagerWaiting();
       handleGetManagerApproved();
       handleGetManagerRejected();
     }
-  }, []);
+  }, [activePage, order, valueRadio, category, dates, reloadNumber]);
+
+  const logOut = () => {
+    localStorage.setItem("token", "");
+    localStorage.setItem("role", "");
+    localStorage.setItem("id", "");
+    localStorage.setItem("isAuth", JSON.stringify(false));
+  };
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -119,6 +111,7 @@ const PengadaanAset = () => {
     setIsOpen(true);
     console.log(filtering);
   };
+
   const handleClose = () => setIsOpen(false);
 
   const handleGetAllRequest = () => {
@@ -131,7 +124,7 @@ const PengadaanAset = () => {
           o: order,
           s: valueRadio,
           c: category,
-          d: dates
+          d: dates,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -142,12 +135,32 @@ const PengadaanAset = () => {
         const { total_record } = res.data;
         setRequestData(data);
         setTotalData(total_record);
-        console.log("total: ", total_record);
-        console.log("data: ", data);
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -167,7 +180,29 @@ const PengadaanAset = () => {
         console.log("All: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -187,7 +222,29 @@ const PengadaanAset = () => {
         console.log("Waiting: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -207,7 +264,29 @@ const PengadaanAset = () => {
         console.log("Approved: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -227,33 +306,29 @@ const PengadaanAset = () => {
         console.log("Rejected: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
-      });
-  };
-
-  const handleToManager = (id: number) => {
-    axios
-      .put(
-        `/requests/procure/${id}`,
-        {
-          approved: true,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
         }
-      )
-      .then((res) => {
-        console.log(res);
-        const temp = selectedData;
-        if (temp !== undefined) {
-          setSelectedData({ ...temp, status: "Waiting approval from Manager" });
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
         }
-        handleGetAllRequest();
-      })
-      .catch((err) => {
-        console.log(err.response);
       });
   };
 
@@ -274,6 +349,7 @@ const PengadaanAset = () => {
     setCategory("computer");
     setPage(1);
   };
+
   const selectCategoryComAcc = () => {
     setCategory("computer-accessories");
     setPage(1);
@@ -318,7 +394,10 @@ const PengadaanAset = () => {
         params: {
           p: activePage,
           rp: 5,
+          o: order,
           s: valueRadio,
+          c: category,
+          d: dates,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -329,12 +408,32 @@ const PengadaanAset = () => {
         const { total_record } = res.data;
         setRequestData(data);
         setTotalData(total_record);
-        console.log("total: ", total_record);
-        console.log("data: ", data);
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -351,10 +450,31 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountAll(total_record);
-        console.log("All: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -371,10 +491,31 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountWaiting(total_record);
-        console.log("Waiting: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -391,10 +532,31 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountApproved(total_record);
-        console.log("Approved: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -411,10 +573,31 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountRejected(total_record);
-        console.log("Rejected: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -432,15 +615,46 @@ const PengadaanAset = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menerima Permintaan Pengadaan Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
-          setSelectedData({ ...temp, status: "Approved by Admin" });
+          setSelectedData({ ...temp, status: "Approved by Manager" });
         }
-        handleGetAllRequest();
+        setReloadNumber(reloadNumber+1)
+        handleGetManagerAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -458,25 +672,55 @@ const PengadaanAset = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menolak Permintaan Peminjaman Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
-          setSelectedData({ ...temp, status: "Rejected by Admin" });
+          setSelectedData({ ...temp, status: "Rejected by Manager" });
         }
-        handleGetAllRequest();
+        setReloadNumber(reloadNumber+1)
+        handleGetManagerAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
   //End of Logic Manager
 
-  const handleDate= (e: React.ChangeEvent<HTMLInputElement>)=>{
-    const value = e.target.value
-    console.log(value)
-    setDates(value)
-  }
-
+  const handleDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setPage(1)
+    setDates(value);
+  };
 
   return (
     <div>
@@ -489,7 +733,8 @@ const PengadaanAset = () => {
         flexDir='column'
         gap='20px'>
         <Box mb='50px'>
-          <Text textAlign='center'>Daftar Pengadaan Aset</Text>
+          <Text textAlign='center' fontSize="24px" fontWeight="bold">Pengadaan Aset</Text>
+          <Text textAlign='center' fontSize="14px">Berisi Informasi Permintaan Pengadaan Aset</Text>
         </Box>
         <Box position='relative'>
           <Flex justifyContent='center'>
@@ -640,8 +885,16 @@ const PengadaanAset = () => {
               />
             </Box>
           </Flex>
-          <Box bgColor='white' p='50px 20px 20px' borderRadius='10px'>
-              <InputText type="date" title="Filter Tanggal" onChange={handleDate}/>
+          <Box bgColor='white' p='20px' borderRadius='10px' minH="500px">
+            <Flex justify="start">
+              <Box width="300px" my="10px">
+                <InputText
+                  type='date'
+                  title='Filter Tanggal'
+                  onChange={handleDate}
+                />
+              </Box>
+            </Flex>
             <Table minW='800px' size='sm' borderRadius='20px'>
               <TableCaption>
                 {requestData === null ? "Tidak ada Data" : ""}
@@ -726,7 +979,11 @@ const PengadaanAset = () => {
                           <Skeleton>Deskripsi</Skeleton>
                         </Td>
                         <Td>
-                          <Skeleton>Status</Skeleton>
+                          <Skeleton> <Tag
+                            size='md'
+                            variant='subtle'
+                            colorScheme="orange">
+                          </Tag>Diterima</Skeleton>
                         </Td>
                         <Td>
                           <Skeleton></Skeleton>

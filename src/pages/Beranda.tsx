@@ -122,7 +122,7 @@ export const Beranda = () => {
     } else {
       getAllHistory();
     }
-  }, [activePage, activitySelect, order,category]);
+  }, [activePage, activitySelect, order, category]);
 
   useEffect(() => {
     roleCondition();
@@ -166,7 +166,6 @@ export const Beranda = () => {
         const { data } = res.data;
         setSelectedDataHistory(data);
         setSelectedIdHistory(id);
-        console.log(data);
       })
       .catch((err) => {
         const { data } = err.response;
@@ -211,10 +210,20 @@ export const Beranda = () => {
         setHistoryAssets(data.histories);
         setTotalData(data.count);
         setIsLoadingTable(false);
-        console.log(data);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -233,12 +242,51 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Membuat Permintaan Peminjaman Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp: number = trigger.trig;
         setTrigger({ ...trigger, trig: temp + 1 });
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "input cannot be empty") {
+          toast({
+            title: "Input Harus Terisi Semua",
+            description: "Anda Gagal Request Pengadaan Aset",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -280,6 +328,7 @@ export const Beranda = () => {
   const handleOpenAssign = () => {
     setIsOpenAssign(true);
   };
+
   const handleCloseAssign = () => {
     setIsOpenAssign(false);
   };
@@ -315,12 +364,32 @@ export const Beranda = () => {
         const { total_record } = res.data;
         setRequestData(data);
         setTotalData(total_record);
-        console.log(total_record);
-        console.log(data);
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -332,7 +401,7 @@ export const Beranda = () => {
           p: activePageProcure,
           rp: 5,
           o: orderProc,
-          c: categoryProc
+          c: categoryProc,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -343,12 +412,21 @@ export const Beranda = () => {
         const { total_record } = res.data;
         setProcureData(data);
         setTotalDataProcure(total_record);
-        console.log(total_record);
-        console.log(data);
         setIsLoadingTableProcure(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -371,16 +449,19 @@ export const Beranda = () => {
     setAddAssetsName(value);
     console.log(value);
   };
+
   const handleAddDeskripsi = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setAddAssetsDescription(value);
     console.log(value);
   };
+
   const handleAddJumlah = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     setAddAssetsSum(value);
     console.log("sum: ", value);
   };
+
   const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.files;
     if (!value) return;
@@ -410,6 +491,7 @@ export const Beranda = () => {
     if (!value) return;
     setImageData(value[0]);
   };
+
   const handleCategoryReq = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setReqAssetsCategory(value);
@@ -435,13 +517,67 @@ export const Beranda = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.message === "success create asset") {
+          toast({
+            title: "Anda Berhasil Menambah Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
       })
       .catch((err) => {
-        console.log(err.response);
-      })
-      .finally(() => {
-        handleCloseAddAssets();
+        const { data } = err.response;
+        if (data.message === "failed to bind data") {
+          toast({
+            title: "Input Harus Terisi Semua",
+            description: "Anda Gagal Request Pengadaan Aset",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        if (data.message === "forbidden file type") {
+          toast({
+            title: `Tipe File Gambar Salah`,
+            description: "Gunakan tipe file jpeg/png",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        if (data.message === "file size too big") {
+          toast({
+            title: `Ukuran Gambar Terlalu besar`,
+            description: "Ukuran Gambar Maksimal 2mb",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -459,7 +595,15 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Meneruskan Permintaan ke Manager",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Waiting approval from Manager" });
@@ -467,7 +611,29 @@ export const Beranda = () => {
         handleGetAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -485,7 +651,15 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menerima Permintaan Peminjaman Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Admin" });
@@ -493,7 +667,29 @@ export const Beranda = () => {
         handleGetAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -511,7 +707,15 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menerima Pengembalian Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Admin" });
@@ -519,7 +723,29 @@ export const Beranda = () => {
         handleGetAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -537,7 +763,15 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menolak Permintaan Peminjaman Aset",
+            status: "warning",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Rejected by Admin" });
@@ -545,7 +779,29 @@ export const Beranda = () => {
         handleGetAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -563,7 +819,15 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res;
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Mengajukan Pengembalian",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, activity: "Request to Return" });
@@ -571,7 +835,29 @@ export const Beranda = () => {
         handleClose();
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -594,10 +880,57 @@ export const Beranda = () => {
         },
       })
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menambahkan Permintaan Pengadaan Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "input cannot be empty") {
+          toast({
+            title: "Input Harus Terisi Semua",
+            description: "Anda Gagal Request Pengadaan Aset",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        if (data.message === "forbidden file type") {
+          toast({
+            title: `Tipe File Gambar Salah`,
+            description: "Gunakan tipe file jpeg/png",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        if (data.message === "file size too big") {
+          toast({
+            title: `Ukuran Gambar Terlalu besar`,
+            description: "Ukuran Gambar Maksimal 2mb",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        console.log(data);
       });
   };
 
@@ -618,10 +951,38 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Assign Aset Ke Karyawan",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
       })
       .catch((err) => {
-        console.log(err.response);
+        const { data } = err.response;
+        if (data.message === "input cannot be empty") {
+          toast({
+            title: "Input Harus Terisi Semua",
+            description: "Anda Gagal Request Pengadaan Aset",
+            status: "error",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -746,13 +1107,35 @@ export const Beranda = () => {
         const { total_record } = res.data;
         setRequestData(data);
         setTotalData(total_record);
-        console.log(data);
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
+
   const handleGetAllProcurementManager = () => {
     setIsLoadingTableProcure(true);
     axios
@@ -770,14 +1153,35 @@ export const Beranda = () => {
         const { total_record } = res.data;
         setProcureData(data);
         setTotalDataProcure(total_record);
-        console.log(total_record);
-        console.log(data);
         setIsLoadingTableProcure(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
+
   const handleAcceptReqManager = (id: number) => {
     axios
       .put(
@@ -792,7 +1196,15 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menerima Permintaan Peminjaman Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Manager" });
@@ -800,7 +1212,29 @@ export const Beranda = () => {
         handleGetManagerReq();
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -818,7 +1252,15 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menolak Permintaan Peminjaman Aset",
+            status: "warning",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Rejected by Manager" });
@@ -826,7 +1268,29 @@ export const Beranda = () => {
         handleGetManagerReq();
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -844,14 +1308,44 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menerima Permintaan Pengadaan Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedDataProcure;
         if (temp !== undefined) {
           setSelectedDataProcure({ ...temp, status: "Approved by Manager" });
         }
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -869,14 +1363,44 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menolak Permintaan Peminjaman Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedDataProcure;
         if (temp !== undefined) {
           setSelectedDataProcure({ ...temp, status: "Rejected by Manager" });
         }
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -1095,7 +1619,9 @@ export const Beranda = () => {
                 </Table>
               ) : role === 2 ? (
                 <Table minW='800px' size='sm' borderRadius='20px'>
-                  <TableCaption>{requestData === null ? "Tidak ada Data" : ""}</TableCaption>
+                  <TableCaption>
+                    {requestData === null ? "Tidak ada Data" : ""}
+                  </TableCaption>
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
@@ -1135,7 +1661,8 @@ export const Beranda = () => {
                           </MenuList>
                         </Menu>
                       </Th>
-                      <Th color='white'><Menu>
+                      <Th color='white'>
+                        <Menu>
                           <MenuButton
                             as={Button}
                             size='sm'
@@ -1157,9 +1684,7 @@ export const Beranda = () => {
                             <MenuItem onClick={selectCategoryNet}>
                               Networking
                             </MenuItem>
-                            <MenuItem onClick={selectCategoryUPS}>
-                              UPS
-                            </MenuItem>
+                            <MenuItem onClick={selectCategoryUPS}>UPS</MenuItem>
                             <MenuItem onClick={selectCategoryPrintScan}>
                               Printer and Scanner
                             </MenuItem>
@@ -1170,7 +1695,8 @@ export const Beranda = () => {
                               Others
                             </MenuItem>
                           </MenuList>
-                        </Menu></Th>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Barang</Th>
                       <Th color='white'></Th>
                     </Tr>
@@ -1206,8 +1732,7 @@ export const Beranda = () => {
                     ) : (
                       <>
                         {requestData === null ? (
-                          <>
-                          </>
+                          <></>
                         ) : requestData !== undefined ? (
                           requestData.map((value, index) => (
                             <Tr key={value.id}>
@@ -1321,23 +1846,23 @@ export const Beranda = () => {
                               )}+..`}</Td>
                               <Td>
                                 <Tag
-                                size='md'
-                                variant='subtle'
-                                colorScheme={
-                                  value.status.includes("Approved")
-                                    ? "whatsapp"
-                                    : value.status.includes("Waiting")
-                                    ? "orange"
-                                    : "red"
-                                }
-                                >
-                                  {value.status === "Waiting approval from Manager" 
-                                      ? "Menunggu Persetujuan" : 
-                                      value.status === "Approved by Manager" 
-                                      ? "Disetujui" :
-                                      value.status === "Rejected by Manager"
-                                      ? "Ditolak" : 
-                                      "Tidak Diketahui"}
+                                  size='md'
+                                  variant='subtle'
+                                  colorScheme={
+                                    value.status.includes("Approved")
+                                      ? "whatsapp"
+                                      : value.status.includes("Waiting")
+                                      ? "orange"
+                                      : "red"
+                                  }>
+                                  {value.status ===
+                                  "Waiting approval from Manager"
+                                    ? "Menunggu Persetujuan"
+                                    : value.status === "Approved by Manager"
+                                    ? "Disetujui"
+                                    : value.status === "Rejected by Manager"
+                                    ? "Ditolak"
+                                    : "Tidak Diketahui"}
                                 </Tag>
                               </Td>
                               <Td>
@@ -1410,7 +1935,9 @@ export const Beranda = () => {
             <Box overflowX='auto'>
               {role === 2 ? (
                 <Table minW='800px' size='sm' borderRadius='20px'>
-                  <TableCaption>{procureData === null ? "Tidak ada Data" : ""}</TableCaption>
+                  <TableCaption>
+                    {procureData === null ? "Tidak ada Data" : ""}
+                  </TableCaption>
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
@@ -1425,13 +1952,18 @@ export const Beranda = () => {
                             TANGGAL PENGAJUAN
                           </MenuButton>
                           <MenuList color='blue.500'>
-                            <MenuItem onClick={selectAscendProc}>Oldest</MenuItem>
-                            <MenuItem onClick={selectDescendProc}>Recent</MenuItem>
+                            <MenuItem onClick={selectAscendProc}>
+                              Oldest
+                            </MenuItem>
+                            <MenuItem onClick={selectDescendProc}>
+                              Recent
+                            </MenuItem>
                           </MenuList>
                         </Menu>
                       </Th>
                       <Th color='white'>Jenis Aktivitas</Th>
-                      <Th color='white'><Menu>
+                      <Th color='white'>
+                        <Menu>
                           <MenuButton
                             as={Button}
                             size='sm'
@@ -1466,7 +1998,8 @@ export const Beranda = () => {
                               Others
                             </MenuItem>
                           </MenuList>
-                        </Menu></Th>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Deskripsi</Th>
                       <Th color='white'></Th>
                     </Tr>
@@ -1502,8 +2035,7 @@ export const Beranda = () => {
                     ) : (
                       <>
                         {procureData === null ? (
-                          <>
-                          </>
+                          <></>
                         ) : procureData !== undefined ? (
                           procureData.map((value, index) => (
                             <Tr key={value.id}>

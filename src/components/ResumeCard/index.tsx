@@ -33,11 +33,8 @@ export const ResumeCard = () => {
       })
       .catch((err) => {
         const { data } = err.response;
-        console.log(data);
         if (data.message === "invalid or expired jwt") {
-          console.log("test")
           localStorage.setItem("token", "");
-          localStorage.setItem("expired", "");
           localStorage.setItem("role", "");
           localStorage.setItem("id", "");
           localStorage.setItem("isAuth", JSON.stringify(false));
@@ -50,6 +47,21 @@ export const ResumeCard = () => {
           });
           navigate("/sign-in")
         }
+        if(data.message === "missing or malformed jwt"){
+          localStorage.setItem("token", "");
+          localStorage.setItem("role", "");
+          localStorage.setItem("id", "");
+          localStorage.setItem("isAuth", JSON.stringify(false));
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in")
+        }
+        
       });
   };
 

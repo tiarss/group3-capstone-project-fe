@@ -17,6 +17,7 @@ import {
   MenuList,
   MenuItem,
   TableCaption,
+  useToast,
 } from "@chakra-ui/react";
 import { Center, Pagination } from "@mantine/core";
 import { ButtonTertier } from "../components/Button";
@@ -29,16 +30,12 @@ import { tableProcure } from "../types";
 import { ModalProcure } from "../components/ModalActivity/Procure";
 import { ChevronDownIcon } from "@chakra-ui/icons";
 import { InputText } from "../components/Input";
+import { useNavigate } from "react-router-dom";
 
 const PengadaanAset = () => {
+  const toast = useToast();
+  const navigate = useNavigate();
   const [valueRadio, setValueRadio] = useState("all");
-  const [countData, setCountData] = useState({
-    all: 23,
-    new: 10,
-    used: 10,
-    rejected: 1,
-    returned: 2,
-  });
   const [isOpen, setIsOpen] = useState(false);
   const [activePage, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
@@ -46,6 +43,7 @@ const PengadaanAset = () => {
   const [all, setAll] = useState<any[]>();
   const idUser = localStorage.getItem("id");
   const dummy = [1, 2, 3, 4, 5];
+  //Count Number Status
   const [countAll, setCountAll] = useState<number>(0);
   const [countWaiting, setCountWaiting] = useState<number>(0);
   const [countApproved, setCountApproved] = useState<number>(0);
@@ -78,21 +76,14 @@ const PengadaanAset = () => {
       handleGetManagerApproved();
       handleGetManagerRejected();
     }
-  }, [activePage, order, valueRadio, category, dates,reloadNumber]);
+  }, [activePage, order, valueRadio, category, dates, reloadNumber]);
 
-  // useEffect(() => {
-  //   if (roles === "Administrator") {
-  //     handleGetAll();
-  //     handleGetWaiting();
-  //     handleGetApproved();
-  //     handleGetRejected();
-  //   } else if (roles === "Manager") {
-  //     handleGetManagerAll();
-  //     handleGetManagerWaiting();
-  //     handleGetManagerApproved();
-  //     handleGetManagerRejected();
-  //   }
-  // }, []);
+  const logOut = () => {
+    localStorage.setItem("token", "");
+    localStorage.setItem("role", "");
+    localStorage.setItem("id", "");
+    localStorage.setItem("isAuth", JSON.stringify(false));
+  };
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -120,6 +111,7 @@ const PengadaanAset = () => {
     setIsOpen(true);
     console.log(filtering);
   };
+
   const handleClose = () => setIsOpen(false);
 
   const handleGetAllRequest = () => {
@@ -143,12 +135,32 @@ const PengadaanAset = () => {
         const { total_record } = res.data;
         setRequestData(data);
         setTotalData(total_record);
-        console.log("total: ", total_record);
-        console.log("data: ", data);
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -168,7 +180,29 @@ const PengadaanAset = () => {
         console.log("All: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -188,7 +222,29 @@ const PengadaanAset = () => {
         console.log("Waiting: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -208,7 +264,29 @@ const PengadaanAset = () => {
         console.log("Approved: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -228,7 +306,29 @@ const PengadaanAset = () => {
         console.log("Rejected: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -249,6 +349,7 @@ const PengadaanAset = () => {
     setCategory("computer");
     setPage(1);
   };
+
   const selectCategoryComAcc = () => {
     setCategory("computer-accessories");
     setPage(1);
@@ -307,12 +408,32 @@ const PengadaanAset = () => {
         const { total_record } = res.data;
         setRequestData(data);
         setTotalData(total_record);
-        console.log("total: ", total_record);
-        console.log("data: ", data);
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -329,10 +450,31 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountAll(total_record);
-        console.log("All: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -349,10 +491,31 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountWaiting(total_record);
-        console.log("Waiting: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -369,10 +532,31 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountApproved(total_record);
-        console.log("Approved: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -389,10 +573,31 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountRejected(total_record);
-        console.log("Rejected: ", total_record);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -410,7 +615,15 @@ const PengadaanAset = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menerima Permintaan Pengadaan Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Approved by Manager" });
@@ -419,7 +632,29 @@ const PengadaanAset = () => {
         handleGetManagerAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
 
@@ -437,7 +672,15 @@ const PengadaanAset = () => {
         }
       )
       .then((res) => {
-        console.log(res);
+        const { data } = res.data;
+        if (data.code === 200) {
+          toast({
+            title: "Berhasil Menolak Permintaan Peminjaman Aset",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        }
         const temp = selectedData;
         if (temp !== undefined) {
           setSelectedData({ ...temp, status: "Rejected by Manager" });
@@ -446,7 +689,29 @@ const PengadaanAset = () => {
         handleGetManagerAllRequest();
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       });
   };
   //End of Logic Manager

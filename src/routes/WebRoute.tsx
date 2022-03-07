@@ -6,16 +6,15 @@ import DirektoriAset from "../pages/DirektoriAset";
 import { Profile } from "../pages/Profile";
 import { PenggunaAset } from "../pages/PenggunaAset";
 import SignIn from "../pages/SignIn";
-import { TestComponent } from "../pages/TestComponent";
 import { NotFound } from "../pages/NotFound";
 import { MaintenanceContext } from "../helper/MaintenanceContext";
 import { TriggerProvider } from "../helper/Trigger";
 import PengadaanAset from "../pages/PengadaanAset";
+import { Redirect } from "../pages/Redirect";
+import ProtectedRoute from "../helper/ProtectedRoute";
 
 export const WebRoute = () => {
-  console.log("aku duluan");
   const role = localStorage.getItem("role");
-  const isAuth = localStorage.getItem("isAuth");
   const [Maintained, setMaintained] = useState<boolean>(false);
   return (
     <BrowserRouter>
@@ -23,34 +22,90 @@ export const WebRoute = () => {
         <MaintenanceContext.Provider value={{ Maintained, setMaintained }}>
           <UserProvider>
             <Routes>
-              <Route path='/test' element={<TestComponent />} />
+              <Route path='/' element={<Redirect />} />
               <Route path='/sign-in' element={<SignIn />} />
-              {/* Employee */}
-              {isAuth ? (
-                role === "Employee" ? (
-                  <>
-                    <Route path='/beranda' element={<Beranda />} />
-                    <Route path='*' element={<NotFound />} />
-                    <Route path='/direktori-aset' element={<DirektoriAset />} />
-                  </>
-                ) : role === "Administrator" ? (
-                  <>
-                    <Route path='/pengguna-aset' element={<PenggunaAset />} />
-                    <Route path='/beranda' element={<Beranda />} />
-                    <Route path='/direktori-aset' element={<DirektoriAset />} />
-                    <Route path="/pengadaan-aset" element={<PengadaanAset />} />
-                    <Route path='*' element={<NotFound />} />
-                  </>
-                ) : (
-                  <>
-                    <Route path='/beranda' element={<Beranda />} />
-                    <Route path='/pengguna-aset' element={<PenggunaAset />} />
-                    <Route path="/pengadaan-aset" element={<PengadaanAset />} />
-                    <Route path='*' element={<NotFound />} />
-                  </>
-                )
+              {role === "Employee" ? (
+                <>
+                  <Route
+                    path='/beranda'
+                    element={
+                      <ProtectedRoute>
+                        <Beranda />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path='/direktori-aset'
+                    element={
+                      <ProtectedRoute>
+                        <DirektoriAset />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path='*' element={<NotFound />} />
+                </>
+              ) : role === "Administrator" ? (
+                <>
+                  <Route
+                    path='/beranda'
+                    element={
+                      <ProtectedRoute>
+                        <Beranda />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path='/direktori-aset'
+                    element={
+                      <ProtectedRoute>
+                        <DirektoriAset />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path='/pengguna-aset'
+                    element={
+                      <ProtectedRoute>
+                        <PenggunaAset />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path='/pengadaan-aset'
+                    element={
+                      <ProtectedRoute>
+                        <PengadaanAset />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route path='*' element={<NotFound />} />
+                </>
               ) : (
                 <>
+                  <Route
+                    path='/beranda'
+                    element={
+                      <ProtectedRoute>
+                        <Beranda />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path='/pengguna-aset'
+                    element={
+                      <ProtectedRoute>
+                        <PenggunaAset />
+                      </ProtectedRoute>
+                    }
+                  />
+                  <Route
+                    path='/pengadaan-aset'
+                    element={
+                      <ProtectedRoute>
+                        <PengadaanAset />
+                      </ProtectedRoute>
+                    }
+                  />
                   <Route path='*' element={<NotFound />} />
                 </>
               )}

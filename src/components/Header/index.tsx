@@ -10,7 +10,7 @@ import {
   MenuButton,
   MenuItem,
   MenuList,
-  Text,
+  useToast,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
@@ -19,6 +19,7 @@ import logoWhite from "../../assets/Logo-sirclo-white.png";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
+  const toast = useToast()
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(userContext);
   const [role, setRole] = useState(1);
@@ -28,6 +29,13 @@ export const Header = () => {
     roleCondition();
     handleGetUser();
   }, []);
+
+  const logOut = () => {
+    localStorage.setItem("token", "");
+    localStorage.setItem("role", "");
+    localStorage.setItem("id", "");
+    localStorage.setItem("isAuth", JSON.stringify(false));
+  };
 
   const roleCondition = () => {
     const roles = localStorage.getItem("role");
@@ -43,7 +51,7 @@ export const Header = () => {
   const handleGetUser = () => {
     const id = localStorage.getItem("id");
     axios
-      .get(`https://klender.xyz/users/${id}`, {
+      .get(`/users/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -58,7 +66,40 @@ export const Header = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        console.log(err.response);
+        const {data} = err.response
+        if (data.message === "invalid or expired jwt") {
+          logOut();
+          toast({
+            title: `Sign In Expired`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "missing or malformed jwt"){
+          logOut();
+          toast({
+            title: `Sign In Error`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
+        if(data.message === "unauthorized"){
+          logOut();
+          toast({
+            title: `Unauthorized`,
+            description: "Please re-Sign In",
+            status: "error",
+            duration: 9000,
+            isClosable: true,
+          });
+          navigate("/sign-in");
+        }
       })
       .finally(() => {
         setIsLoading(false);

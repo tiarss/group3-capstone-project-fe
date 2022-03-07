@@ -242,7 +242,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Membuat Permintaan Peminjaman Aset",
@@ -293,13 +293,12 @@ export const Beranda = () => {
   const handleAssetName = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setAssetShortName(value);
-    console.log(value);
   };
 
   const handleDescriptionRequest = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setDesciptionRequest(value);
-    console.log(value);
+
   };
 
   // End of Employee Logic
@@ -441,37 +440,31 @@ export const Beranda = () => {
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setAddAssetsCategory(value);
-    console.log(value);
   };
 
   const handleAddName = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setAddAssetsName(value);
-    console.log(value);
   };
 
   const handleAddDeskripsi = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setAddAssetsDescription(value);
-    console.log(value);
   };
 
   const handleAddJumlah = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value);
     setAddAssetsSum(value);
-    console.log("sum: ", value);
   };
 
   const handleAddImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.files;
     if (!value) return;
     setAddAssetsImage(value[0]);
-    console.log(value);
   };
 
   const handleMaintenance = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
-    console.log(value);
     setIsMaintained(value);
   };
 
@@ -495,7 +488,7 @@ export const Beranda = () => {
   const handleCategoryReq = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setReqAssetsCategory(value);
-    console.log(value);
+
   };
 
   const handleAddAssets = () => {
@@ -517,7 +510,7 @@ export const Beranda = () => {
         },
       })
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.message === "success create asset") {
           toast({
             title: "Anda Berhasil Menambah Aset",
@@ -595,7 +588,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Meneruskan Permintaan ke Manager",
@@ -651,7 +644,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menerima Permintaan Peminjaman Aset",
@@ -707,7 +700,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menerima Pengembalian Aset",
@@ -763,7 +756,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menolak Permintaan Peminjaman Aset",
@@ -819,7 +812,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Mengajukan Pengembalian",
@@ -862,9 +855,6 @@ export const Beranda = () => {
   };
 
   const handleRequestProcurement = () => {
-    console.log(ImageData);
-    console.log(reqAssetsCategory);
-    console.log(descriptionRequest);
     const formData = new FormData();
     formData.append("category", reqAssetsCategory);
     formData.append("description", descriptionRequest);
@@ -880,7 +870,7 @@ export const Beranda = () => {
         },
       })
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menambahkan Permintaan Pengadaan Aset",
@@ -930,7 +920,6 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        console.log(data);
       });
   };
 
@@ -951,7 +940,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Assign Aset Ke Karyawan",
@@ -1196,7 +1185,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menerima Permintaan Peminjaman Aset",
@@ -1252,7 +1241,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menolak Permintaan Peminjaman Aset",
@@ -1308,7 +1297,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menerima Permintaan Pengadaan Aset",
@@ -1363,7 +1352,7 @@ export const Beranda = () => {
         }
       )
       .then((res) => {
-        const { data } = res.data;
+        const { data } = res;
         if (data.code === 200) {
           toast({
             title: "Berhasil Menolak Permintaan Peminjaman Aset",

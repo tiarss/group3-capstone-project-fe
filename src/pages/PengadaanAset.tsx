@@ -112,7 +112,6 @@ const PengadaanAset = () => {
   };
 
   const handlePage = (value: number) => {
-    console.log(value);
     setPage(value);
   };
 
@@ -124,7 +123,6 @@ const PengadaanAset = () => {
       setSelectedIdReq(filtering?.id);
     }
     setIsOpen(true);
-    console.log(filtering);
   };
 
   const handleClose = () => setIsOpen(false);
@@ -192,7 +190,6 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountAll(total_record);
-        console.log("All: ", total_record);
       })
       .catch((err) => {
         const {data} = err.response
@@ -234,7 +231,6 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountWaiting(total_record);
-        console.log("Waiting: ", total_record);
       })
       .catch((err) => {
         const {data} = err.response
@@ -276,7 +272,6 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountApproved(total_record);
-        console.log("Approved: ", total_record);
       })
       .catch((err) => {
         const {data} = err.response
@@ -318,7 +313,6 @@ const PengadaanAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountRejected(total_record);
-        console.log("Rejected: ", total_record);
       })
       .catch((err) => {
         const {data} = err.response

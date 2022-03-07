@@ -67,7 +67,6 @@ export const RequestModal = ({
         const filterAvailable = data.filter(
           (value: getAllAssets) => value.stock_available !== 0
         );
-        console.log(filterAvailable);
         setAssetData(filterAvailable);
       })
       .catch((err) => {
@@ -92,7 +91,6 @@ export const RequestModal = ({
 
   const handleChangeCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
-    console.log(value);
     fetchDataAset(value);
   };
 

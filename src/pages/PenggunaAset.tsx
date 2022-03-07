@@ -107,7 +107,6 @@ export const PenggunaAset = () => {
   };
 
   const handlePage = (value: number) => {
-    console.log(value);
     setPage(value);
   };
   
@@ -119,7 +118,6 @@ export const PenggunaAset = () => {
       setSelectedIdReq(filtering?.id);
     }
     setIsOpen(true);
-    console.log(filtering)
   };
   const handleClose = () => setIsOpen(false);
 
@@ -216,7 +214,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountWaiting(total_record);
-        console.log("Waiting: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -237,7 +234,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountWaitingReturn(total_record);
-        console.log("Waiting: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -258,7 +254,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountApproved(total_record);
-        console.log("Approved: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -279,7 +274,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountRejected(total_record);
-        console.log("Rejected: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -299,7 +293,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountReturned(total_record);
-        console.log("Returned: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -460,8 +453,6 @@ export const PenggunaAset = () => {
         const { total_record } = res.data;
         setRequestData(data);
         setTotalData(total_record);
-        console.log("total: ", total_record);
-        console.log("data: ", data);
         setIsLoadingTable(false);
       })
       .catch((err) => {
@@ -490,7 +481,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountAll(total_record);
-        console.log("All: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -507,7 +497,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountWaiting(total_record);
-        console.log("Waiting: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -524,7 +513,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountApproved(total_record);
-        console.log("Approved: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -541,7 +529,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountRejected(total_record);
-        console.log("Rejected: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -558,7 +545,6 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountReturned(total_record);
-        console.log("Returned: ", total_record);
       })
       .catch((err) => {
         console.log(err.response);
@@ -620,7 +606,6 @@ export const PenggunaAset = () => {
 
   const handleDate= (e: React.ChangeEvent<HTMLInputElement>)=>{
     const value = e.target.value
-    console.log(value)
     setDates(value)
   }
 

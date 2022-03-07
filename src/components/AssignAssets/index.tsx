@@ -81,7 +81,6 @@ export const AssignAssets = ({
         const filterAvailable = data.filter(
           (value: getAllAssets) => value.stock_available !== 0
         );
-        console.log(filterAvailable);
         setAssetData(filterAvailable);
       })
       .catch((err) => {

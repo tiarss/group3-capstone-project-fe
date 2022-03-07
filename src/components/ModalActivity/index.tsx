@@ -32,7 +32,6 @@ export const ModalActivity = ({
   handleRejectReqManager,
   handleRejectReqAdmin,
 }: requestModalProps) => {
-  console.log(role);
 
   let status = "";
 
@@ -45,7 +44,6 @@ export const ModalActivity = ({
       status = data?.status;
     }
   }
-  console.log(data, "test");
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>

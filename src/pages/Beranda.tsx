@@ -1024,7 +1024,7 @@ export const Beranda = () => {
   };
 
   const selectCategoryPrintScan = () => {
-    setCategory("printer-scanner");
+    setCategory("printer-and-scanner");
     setPage(1);
   };
 
@@ -1074,7 +1074,7 @@ export const Beranda = () => {
   };
 
   const selectCategoryPrintScanProc = () => {
-    setCategoryProc("printer-scanner");
+    setCategoryProc("printer-and-scanner");
     setPage(1);
   };
 

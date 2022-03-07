@@ -36,6 +36,7 @@ export const PenggunaAset = () => {
   const [countApproved, setCountApproved] = useState<number>(0);
   const [countRejected, setCountRejected] = useState<number>(0);
   const [countReturned, setCountReturned] = useState<number>(0);
+  const [countWaitingReturn, setCountWaitingReturn] = useState<number>(0);
 
    //Admin State
    const [requestData, setRequestData] = useState<tableRequest[]>();
@@ -69,6 +70,7 @@ export const PenggunaAset = () => {
     if (roles === "Administrator") {
       handleGetAll();
       handleGetWaiting();
+      handleGetWaitingReturn();
       handleGetApproved();
       handleGetRejected();
       handleGetReturned();
@@ -173,6 +175,7 @@ export const PenggunaAset = () => {
       .get(`/requests/admin/borrow`, {
         params: {
           s: "waiting-approval",
+          a: "borrow"
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -181,6 +184,27 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { total_record } = res.data;
         setCountWaiting(total_record);
+        console.log("Waiting: ", total_record);
+      })
+      .catch((err) => {
+        console.log(err.response);
+      });
+  };
+
+  const handleGetWaitingReturn = () => {
+    axios
+      .get(`/requests/admin/borrow`, {
+        params: {
+          s: "waiting-approval",
+          a: "return"
+        },
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
+      .then((res) => {
+        const { total_record } = res.data;
+        setCountWaitingReturn(total_record);
         console.log("Waiting: ", total_record);
       })
       .catch((err) => {
@@ -678,7 +702,7 @@ export const PenggunaAset = () => {
                               ? "#3CA9DB"
                               : "white"
                           }>
-                          {countWaiting}
+                          {countWaitingReturn}
                         </Box>
                       </Center>
                     ),
@@ -1037,13 +1061,16 @@ export const PenggunaAset = () => {
                                       ? "Menunggu Persetujuan Admin" :  
                                       value.status === "Approved by Admin" 
                                       ? "Disetujui" :
+                                      value.status === "Approved by Manager" 
+                                      ? "Menunggu Persetujuan Admin" :
                                       value.status === "Rejected by Manager"
                                       ? "Ditolak Manager" : 
                                       value.status === "Rejected by Admin"
                                       ? "Ditolak Admin" :
                                       "Dibatalkan"
                                     : 
-                                      "Dikembalikan"
+                                      value.status==="Waiting approval" ? 
+                                      "Menunggu Persetujuan" : "Dikembalikan"
                                   }
                                 </Tag>
                               </Td>

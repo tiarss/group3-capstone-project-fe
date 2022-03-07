@@ -27,7 +27,6 @@ export const Profile = () => {
     if (!value) return;
 
     setUserAvatar(value[0]);
-    //  console.log(value)
   };
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,7 +107,6 @@ export const Profile = () => {
     if (expire) {
       const parse: number = parseInt(expire);
       const date = moment.unix(parse).format();
-      console.log(date);
     }
   };
 

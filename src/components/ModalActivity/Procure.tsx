@@ -23,7 +23,6 @@ export const ModalProcure = ({
   handleAcceptReqProcure,
   handleRejectReqProcure,
 }: procureModalProps) => {
-  console.log(role);
 
   let status = "";
 

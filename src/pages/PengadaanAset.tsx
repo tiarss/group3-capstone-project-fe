@@ -366,7 +366,7 @@ const PengadaanAset = () => {
   };
 
   const selectCategoryPrintScan = () => {
-    setCategory("printer-scanner");
+    setCategory("printer-and-scanner");
     setPage(1);
   };
 
@@ -1006,7 +1006,6 @@ const PengadaanAset = () => {
                       <Td>{value.category}</Td>
                       <Td>{`${value.description.substring(0, 20)}+..`}</Td>
                       <Td>
-                        <Td>
                           <Tag
                             size='md'
                             variant='subtle'
@@ -1025,7 +1024,6 @@ const PengadaanAset = () => {
                               ? "Ditolak"
                               : "Tidak Diketahui"}
                           </Tag>
-                        </Td>
                       </Td>
                       <Td>
                         <ButtonTertier

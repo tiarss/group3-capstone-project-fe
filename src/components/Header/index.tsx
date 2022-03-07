@@ -119,7 +119,7 @@ export const Header = () => {
           {role === 2 ? "Pengguna Aset" : "Permintaan Permohonan"}
         </Button>
         <Button
-          display={role === 2 || role === 3 ? "block" : "none"}
+          display={role === 2  || role === 3 ? "block" : "none"}
           fontWeight='medium'
           color='white'
           bgColor='#2296CB'

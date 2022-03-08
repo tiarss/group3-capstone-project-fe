@@ -193,7 +193,7 @@ export const Beranda = () => {
   };
 
   const handleCloseRequest = () => {
-    setIsOpenRequest(false)
+    setIsOpenRequest(false);
   };
 
   const getAllHistory = () => {
@@ -214,7 +214,7 @@ export const Beranda = () => {
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        const {data} = err.response
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -253,8 +253,8 @@ export const Beranda = () => {
             isClosable: true,
           });
         }
-        setAssetShortName("")
-        setDesciptionRequest("")
+        setAssetShortName("");
+        setDesciptionRequest("");
         const temp: number = trigger.trig;
         setTrigger({ ...trigger, trig: temp + 1 });
       })
@@ -280,7 +280,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -302,7 +302,6 @@ export const Beranda = () => {
   const handleDescriptionRequest = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setDesciptionRequest(value);
-
   };
 
   // End of Employee Logic
@@ -370,7 +369,7 @@ export const Beranda = () => {
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        const {data} = err.response
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -382,7 +381,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -418,7 +417,7 @@ export const Beranda = () => {
         setIsLoadingTableProcure(false);
       })
       .catch((err) => {
-        const {data} = err.response
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -492,7 +491,6 @@ export const Beranda = () => {
   const handleCategoryReq = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     setReqAssetsCategory(value);
-
   };
 
   const handleAddAssets = () => {
@@ -523,11 +521,11 @@ export const Beranda = () => {
             isClosable: true,
           });
         }
-        setAddAssetsName("")
-        setAddAssetsCategory("")
-        setAddAssetsDescription("")
-        setAddAssetsSum(0)
-        setIsMaintained(false)
+        setAddAssetsName("");
+        setAddAssetsCategory("");
+        setAddAssetsDescription("");
+        setAddAssetsSum(0);
+        setIsMaintained(false);
       })
       .catch((err) => {
         const { data } = err.response;
@@ -569,7 +567,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -625,7 +623,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -681,7 +679,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -737,7 +735,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -793,7 +791,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -849,7 +847,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -888,9 +886,7 @@ export const Beranda = () => {
             isClosable: true,
           });
         }
-      setReqAssetsCategory("");
-      setDesciptionRequest("");
-      handleClose();
+        handleGetAllProcurement()
       })
       .catch((err) => {
         const { data } = err.response;
@@ -961,10 +957,10 @@ export const Beranda = () => {
             isClosable: true,
           });
         }
-        setAssetShortName("")
-        setEmployeeId(0)
-        setDesciptionRequest("")
-        setReturnDate("")
+        setAssetShortName("");
+        setEmployeeId(0);
+        setDesciptionRequest("");
+        setReturnDate("");
       })
       .catch((err) => {
         const { data } = err.response;
@@ -1102,6 +1098,8 @@ export const Beranda = () => {
         params: {
           p: pageView,
           rp: 5,
+          o: order,
+          c: category,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -1115,7 +1113,7 @@ export const Beranda = () => {
         setIsLoadingTable(false);
       })
       .catch((err) => {
-        const {data} = err.response
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -1127,7 +1125,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -1148,6 +1146,8 @@ export const Beranda = () => {
         params: {
           p: activePageProcure,
           rp: 5,
+          o: orderProc,
+          c: categoryProc,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -1161,7 +1161,7 @@ export const Beranda = () => {
         setIsLoadingTableProcure(false);
       })
       .catch((err) => {
-        const {data} = err.response
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -1173,7 +1173,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -1217,7 +1217,7 @@ export const Beranda = () => {
         handleGetManagerReq();
       })
       .catch((err) => {
-        const {data} = err.response
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -1229,7 +1229,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -1273,7 +1273,7 @@ export const Beranda = () => {
         handleGetManagerReq();
       })
       .catch((err) => {
-        const {data} = err.response
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -1285,7 +1285,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -1329,8 +1329,7 @@ export const Beranda = () => {
         }
       })
       .catch((err) => {
-        const {data} = err.response
-        console.log(err)
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -1342,7 +1341,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -1385,7 +1384,7 @@ export const Beranda = () => {
         }
       })
       .catch((err) => {
-        const {data} = err.response
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -1397,7 +1396,7 @@ export const Beranda = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -1502,7 +1501,9 @@ export const Beranda = () => {
             <Box overflowX='auto'>
               {role === 1 ? (
                 <Table minW='800px' size='sm' borderRadius='20px'>
-                  <TableCaption>{historyAssets === null ? "Tidak Ada Data" : ""}</TableCaption>
+                  <TableCaption>
+                    {historyAssets === null ? "Tidak Ada Data" : ""}
+                  </TableCaption>
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
@@ -1773,12 +1774,65 @@ export const Beranda = () => {
                 </Table>
               ) : (
                 <Table size='sm' borderRadius='20px'>
+                  <TableCaption>
+                    {requestData === null ? "Tidak ada Data" : ""}
+                  </TableCaption>
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
-                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            TANGGAL PENGAJUAN
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectAscend}>Oldest</MenuItem>
+                            <MenuItem onClick={selectDescend}>Recent</MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Pemohon</Th>
-                      <Th color='white'>Kategori Aset</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            KATEGORI ASET
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectCategoryAll}>
+                              Semua
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryCom}>
+                              Computer
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryComAcc}>
+                              Computer Accessories
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryNet}>
+                              Networking
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryUPS}>UPS</MenuItem>
+                            <MenuItem onClick={selectCategoryPrintScan}>
+                              Printer and Scanner
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryElec}>
+                              Electronics
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryOther}>
+                              Others
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Barang</Th>
                       <Th color='white'>Status</Th>
                       <Th color='white'></Th>
@@ -1786,36 +1840,43 @@ export const Beranda = () => {
                   </Thead>
                   <Tbody>
                     {isLoadingTable ? (
-                      <Tr>
-                        <Td>1</Td>
-                        <Td>12:22 WIB, 11 Jan 2022</Td>
-                        <Td>Bahtiar Subrata</Td>
-                        <Td>Headphone</Td>
-                        <Td>dBe DJ80 Foldable DJ...</Td>
-                        <Td>
-                          <Tag>Menunggu Persetujuan</Tag>
-                        </Td>
-                        <Td>
-                          <ButtonTertier title='Details' />
-                        </Td>
-                      </Tr>
+                      <>
+                        {dummy.map((value: number) => (
+                          <Tr key={value}>
+                            <Td>
+                              <Skeleton>1</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>12:22 WIB, 11 Jan 2022</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Bahtiar Subrata</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Headphone</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>dBe DJ80 Foldable DJ...</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>Status</Skeleton>
+                            </Td>
+                            <Td>
+                              <Skeleton>
+                                <ButtonTertier title='Details' />
+                              </Skeleton>
+                            </Td>
+                          </Tr>
+                        ))}
+                      </>
                     ) : (
                       <>
                         {requestData === null ? (
-                          <Tr>
-                            <Td>1</Td>
-                            <Td>12:22 WIB, 11 Jan 2022</Td>
-                            <Td>Peminjaman Aset</Td>
-                            <Td>Headphone</Td>
-                            <Td>dBe DJ80 Foldable DJ...</Td>
-                            <Td>
-                              <ButtonTertier title='Details' />
-                            </Td>
-                          </Tr>
+                          <></>
                         ) : requestData !== undefined ? (
-                          requestData!.map((value) => (
+                          requestData!.map((value,index) => (
                             <Tr key={value.id}>
-                              <Td>1</Td>
+                              <Td>{(activePage - 1) * 5 + index + 1}</Td>
                               <Td>
                                 {moment(value.request_time).format(
                                   "h:mm A, DD MMM YYYY"
@@ -2079,9 +2140,61 @@ export const Beranda = () => {
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
-                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            TANGGAL PENGAJUAN
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectAscend}>Oldest</MenuItem>
+                            <MenuItem onClick={selectDescend}>Recent</MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Jenis Aktivitas</Th>
-                      <Th color='white'>Kategori Aset</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            KATEGORI ASET
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectCategoryAllProc}>
+                              Semua
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryComProc}>
+                              Computer
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryComAccProc}>
+                              Computer Accessories
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryNetProc}>
+                              Networking
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryUPSProc}>
+                              UPS
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryPrintScanProc}>
+                              Printer and Scanner
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryElecProc}>
+                              Electronics
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryOtherProc}>
+                              Others
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Deskripsi</Th>
                       <Th color='white'></Th>
                     </Tr>

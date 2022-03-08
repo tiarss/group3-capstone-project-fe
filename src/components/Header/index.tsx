@@ -1,5 +1,6 @@
 import { AddIcon, ExternalLinkIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
+  Text,
   Avatar,
   Box,
   Button,
@@ -19,7 +20,7 @@ import logoWhite from "../../assets/Logo-sirclo-white.png";
 import { useNavigate } from "react-router-dom";
 
 export const Header = () => {
-  const toast = useToast()
+  const toast = useToast();
   const navigate = useNavigate();
   const { userData, setUserData } = useContext(userContext);
   const [role, setRole] = useState(1);
@@ -66,7 +67,7 @@ export const Header = () => {
         setIsLoading(false);
       })
       .catch((err) => {
-        const {data} = err.response
+        const { data } = err.response;
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({
@@ -78,7 +79,7 @@ export const Header = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "missing or malformed jwt"){
+        if (data.message === "missing or malformed jwt") {
           logOut();
           toast({
             title: `Sign In Error`,
@@ -89,7 +90,7 @@ export const Header = () => {
           });
           navigate("/sign-in");
         }
-        if(data.message === "unauthorized"){
+        if (data.message === "unauthorized") {
           logOut();
           toast({
             title: `Unauthorized`,
@@ -160,7 +161,7 @@ export const Header = () => {
           {role === 2 ? "Pengguna Aset" : "Permintaan Permohonan"}
         </Button>
         <Button
-          display={role === 2  || role === 3 ? "block" : "none"}
+          display={role === 2 || role === 3 ? "block" : "none"}
           fontWeight='medium'
           color='white'
           bgColor='#2296CB'
@@ -171,7 +172,15 @@ export const Header = () => {
           Pengadaan Aset
         </Button>
       </Flex>
-      <Box>
+      <Box display='flex' alignItems='center'>
+        <Text mr='10px' color='white'>
+          Hi! , 
+          {userData !== undefined
+            ? userData.name === ""
+              ? "Guest"
+              : userData.name.split(" ").pop()?.toString()
+            : "Guess"}{" "}
+        </Text>
         <Menu>
           <MenuButton
             as={IconButton}
@@ -189,10 +198,11 @@ export const Header = () => {
                 // src={userData.avatar}
               />
             }
-            variant='outline'
-          />
+            variant='outline'></MenuButton>
           <MenuList>
-            <MenuItem icon={<ExternalLinkIcon />} onClick={handleLogOut} >Log Out</MenuItem>
+            <MenuItem icon={<ExternalLinkIcon />} onClick={handleLogOut}>
+              Log Out
+            </MenuItem>
           </MenuList>
         </Menu>
       </Box>

@@ -847,7 +847,8 @@ export const PenggunaAset = () => {
         flexDir='column'
         gap='20px'>
         <Box mb='50px'>
-          <Text textAlign='center'>Daftar Pengguna Aset</Text>
+          <Text textAlign='center' fontSize="24px" fontWeight="bold">{role === 2 ? "Pengguna Aset" : "Permintaan Permohonan"}</Text>
+          <Text textAlign='center' fontSize="14px">{role === 2 ? "Berisi Informasi Pengguna Aset" : "Berisi Informasi Permintaan Permohonan"}</Text>
         </Box>
         <Box position='relative'>
           <Flex justifyContent='center'>
@@ -1289,7 +1290,7 @@ export const PenggunaAset = () => {
                     </Menu>
                   </Th>
                   <Th color='white'>Barang</Th>
-                  <Th color='white'>Sisa Waktu</Th>
+                  {/* <Th color='white'>Sisa Waktu</Th> */}
                   <Th color='white'>Status</Th>
                   <Th color='white'></Th>
                 </Tr>
@@ -1312,9 +1313,9 @@ export const PenggunaAset = () => {
                     <Td>
                       <Skeleton>Barang</Skeleton>
                     </Td>
-                    <Td>
+                    {/* <Td>
                       <Skeleton>Sisa Waktu</Skeleton>
-                    </Td>
+                    </Td> */}
                     <Td>
                       <Skeleton>Status</Skeleton>
                     </Td>
@@ -1354,7 +1355,7 @@ export const PenggunaAset = () => {
                               <Td>
                                 {`${value.Asset.name.substring(0, 20)}+..`}
                               </Td>
-                              <Td>Sisa Waktu</Td>
+                              {/* <Td>Sisa Waktu</Td> */}
                               <Td>
                                 <Tag
                                   size='md'
@@ -1422,9 +1423,9 @@ export const PenggunaAset = () => {
                             <Td>
                               <Skeleton>Barang</Skeleton>
                             </Td>
-                            <Td>
+                            {/* <Td>
                               <Skeleton>Sisa Waktu</Skeleton>
-                            </Td>
+                            </Td> */}
                             <Td>
                               <Skeleton>Status</Skeleton>
                             </Td>

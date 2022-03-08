@@ -99,7 +99,17 @@ export const RequestModal = ({
     { id: 2, name: "Computer-Accessories" },
     { id: 3, name: "Networking" },
     { id: 4, name: "UPS" },
-    { id: 5, name: "Printer-Scanner" },
+    { id: 5, name: "Printer-and-Scanner" },
+    { id: 6, name: "Electronics" },
+    { id: 7, name: "Others" },
+  ];
+
+  const categoryProc = [
+    { id: 1, name: "Computer" },
+    { id: 2, name: "Computer Accessories" },
+    { id: 3, name: "Networking" },
+    { id: 4, name: "UPS" },
+    { id: 5, name: "Printer and Scanner" },
     { id: 6, name: "Electronics" },
     { id: 7, name: "Others" },
   ];
@@ -137,7 +147,7 @@ export const RequestModal = ({
             ) : (
               <Flex flexDir='column' gap='10px'>
                 <InputSelect
-                  data={category}
+                  data={categoryProc}
                   title='Kategori Aset'
                   placeholder='Pilih Kategori'
                   onChange={onChangeReqCategory}

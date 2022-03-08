@@ -888,6 +888,9 @@ export const Beranda = () => {
             isClosable: true,
           });
         }
+      setReqAssetsCategory("");
+      setDesciptionRequest("");
+      handleClose();
       })
       .catch((err) => {
         const { data } = err.response;
@@ -1311,6 +1314,7 @@ export const Beranda = () => {
       )
       .then((res) => {
         const { data } = res;
+        console.log(data);
         if (data.code === 200) {
           toast({
             title: "Berhasil Menerima Permintaan Pengadaan Aset",
@@ -1326,6 +1330,7 @@ export const Beranda = () => {
       })
       .catch((err) => {
         const {data} = err.response
+        console.log(err)
         if (data.message === "invalid or expired jwt") {
           logOut();
           toast({

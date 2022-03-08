@@ -36,10 +36,10 @@ const DirektoriAset = () => {
     const category = [
         { id: 0, name: "All", value: ""},
         { id: 1, name: "Computer", value: "Computer" },
-        { id: 2, name: "Computer Accessories", value: "Computer Accessories" },
+        { id: 2, name: "Computer Accessories", value: "Computer-Accessories" },
         { id: 3, name: "Networking", value: "Networking" },
         { id: 4, name: "UPS", value: "UPS" },
-        { id: 5, name: "Printer and Scanner", value: "Printer and Scanner" },
+        { id: 5, name: "Printer and Scanner", value: "Printer-and-Scanner" },
         { id: 6, name: "Electronics", value: "Electronics" },
         { id: 7, name: "Others", value: "Others" },
     ];

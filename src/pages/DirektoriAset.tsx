@@ -253,12 +253,12 @@ const DirektoriAset = () => {
             <Search data={category} value={selectedCategory} onChangeSearch={handleSearch} onChangeSelect={handleSelect}/>
             <Flex align="center" justify="center" mt={50}>
                 <Box bg="white" width={1080} maxHeight={605} borderRadius={7} shadow="xl" overflowY='scroll'>
-                    <Flex align="center" justify="end" marginTop={3} marginEnd={5}>
-                        <Text>Status: </Text>
-                        <InputSelectStatus title="" placeholder="" value={selectedStatus} onChange={handleStatus} data={status} isDisabled={false}/>
-                    </Flex>
                     <Flex align="center" justify="center" mt={50}>
                     <Box width={['55%', '70%', '90%']}>
+                        <Flex align="center" justify="end" marginEnd={2} marginBottom={5}>
+                            <Text style={{ fontWeight: "bold", fontSize: "14px" }} marginRight={2}>Status :</Text>
+                            <InputSelectStatus placeholder="" size="xs" value={selectedStatus} onChange={handleStatus} data={status} isDisabled={false}/>
+                        </Flex>
                         <Wrap spacing='50px'>
                         {asset.filter(
                             (el) =>

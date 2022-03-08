@@ -886,6 +886,7 @@ export const Beranda = () => {
             isClosable: true,
           });
         }
+        handleGetAllProcurement()
       })
       .catch((err) => {
         const { data } = err.response;

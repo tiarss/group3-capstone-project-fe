@@ -43,6 +43,7 @@ export type inputSelectStatusProps = {
   title?: string;
   type?: string;
   placeholder?: string;
+  size?: string;
   value?: string | number;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
   data?: searchData[];

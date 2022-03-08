@@ -287,6 +287,7 @@ export const Search = ({
 export const InputSelectStatus = ({
   title,
   placeholder,
+  size,
   value,
   onChange,
   data,
@@ -294,12 +295,14 @@ export const InputSelectStatus = ({
 }: inputSelectStatusProps) => {
   return (
     <Box>
-      <FormLabel style={{ fontWeight: "bold" }}>{title}</FormLabel>
+      {/* <FormLabel style={{ fontWeight: "bold", fontSize: "14px" }}>{title}</FormLabel> */}
+      {/* <Text style={{ fontWeight: "bold", fontSize: "14px" }}>{title}</Text> */}
       <Select
         bgColor='white'
         border='2px solid #373737'
         _focus={{ border: "2px solid #000" }}
         placeholder={placeholder}
+        size={size}
         value={value}
         onChange={onChange}
         isDisabled={isDisabled}>

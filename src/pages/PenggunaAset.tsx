@@ -786,7 +786,7 @@ export const PenggunaAset = () => {
 
   const handleDate= (e: React.ChangeEvent<HTMLInputElement>)=>{
     const value = e.target.value
-    setDates(value)
+    setDates(value);
   }
 
   const selectAscend = () => {

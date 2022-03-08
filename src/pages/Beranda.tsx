@@ -1872,9 +1872,9 @@ export const Beranda = () => {
                         {requestData === null ? (
                           <></>
                         ) : requestData !== undefined ? (
-                          requestData!.map((value) => (
+                          requestData!.map((value,index) => (
                             <Tr key={value.id}>
-                              <Td>1</Td>
+                              <Td>{(activePage - 1) * 5 + index + 1}</Td>
                               <Td>
                                 {moment(value.request_time).format(
                                   "h:mm A, DD MMM YYYY"

@@ -71,7 +71,7 @@ export const AssignAssets = ({
     axios
       .get(`/assets`, {
         params: {
-          c: value,
+          category: value,
         },
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       })

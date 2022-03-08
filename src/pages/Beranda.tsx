@@ -1097,6 +1097,8 @@ export const Beranda = () => {
         params: {
           p: pageView,
           rp: 5,
+          o: order,
+          c: category,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -1143,6 +1145,8 @@ export const Beranda = () => {
         params: {
           p: activePageProcure,
           rp: 5,
+          o: order,
+          c: category,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -1774,9 +1778,59 @@ export const Beranda = () => {
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
-                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            TANGGAL PENGAJUAN
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectAscend}>Oldest</MenuItem>
+                            <MenuItem onClick={selectDescend}>Recent</MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Pemohon</Th>
-                      <Th color='white'>Kategori Aset</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            KATEGORI ASET
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectCategoryAll}>
+                              Semua
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryCom}>
+                              Computer
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryComAcc}>
+                              Computer Accessories
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryNet}>
+                              Networking
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryUPS}>UPS</MenuItem>
+                            <MenuItem onClick={selectCategoryPrintScan}>
+                              Printer and Scanner
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryElec}>
+                              Electronics
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryOther}>
+                              Others
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Barang</Th>
                       <Th color='white'>Status</Th>
                       <Th color='white'></Th>
@@ -2084,9 +2138,61 @@ export const Beranda = () => {
                   <Thead bgColor='blue.500'>
                     <Tr>
                       <Th color='white'>No</Th>
-                      <Th color='white'>Tanggal</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            TANGGAL PENGAJUAN
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectAscend}>Oldest</MenuItem>
+                            <MenuItem onClick={selectDescend}>Recent</MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Jenis Aktivitas</Th>
-                      <Th color='white'>Kategori Aset</Th>
+                      <Th color='white'>
+                        <Menu>
+                          <MenuButton
+                            as={Button}
+                            size='sm'
+                            colorScheme='blue'
+                            fontSize='12px'
+                            rightIcon={<ChevronDownIcon />}>
+                            KATEGORI ASET
+                          </MenuButton>
+                          <MenuList color='blue.500'>
+                            <MenuItem onClick={selectCategoryAllProc}>
+                              Semua
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryComProc}>
+                              Computer
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryComAccProc}>
+                              Computer Accessories
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryNetProc}>
+                              Networking
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryUPSProc}>
+                              UPS
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryPrintScanProc}>
+                              Printer and Scanner
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryElecProc}>
+                              Electronics
+                            </MenuItem>
+                            <MenuItem onClick={selectCategoryOtherProc}>
+                              Others
+                            </MenuItem>
+                          </MenuList>
+                        </Menu>
+                      </Th>
                       <Th color='white'>Deskripsi</Th>
                       <Th color='white'></Th>
                     </Tr>

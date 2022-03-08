@@ -847,7 +847,8 @@ export const PenggunaAset = () => {
         flexDir='column'
         gap='20px'>
         <Box mb='50px'>
-          <Text textAlign='center'>Daftar Pengguna Aset</Text>
+          <Text textAlign='center' fontSize="24px" fontWeight="bold">{role === 2 ? "Pengguna Aset" : "Permintaan Permohonan"}</Text>
+          <Text textAlign='center' fontSize="14px">{role === 2 ? "Berisi Informasi Pengguna Aset" : "Berisi Informasi Permintaan Permohonan"}</Text>
         </Box>
         <Box position='relative'>
           <Flex justifyContent='center'>

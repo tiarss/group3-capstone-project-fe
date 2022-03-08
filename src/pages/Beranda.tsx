@@ -1314,7 +1314,6 @@ export const Beranda = () => {
       )
       .then((res) => {
         const { data } = res;
-        console.log(data);
         if (data.code === 200) {
           toast({
             title: "Berhasil Menerima Permintaan Pengadaan Aset",

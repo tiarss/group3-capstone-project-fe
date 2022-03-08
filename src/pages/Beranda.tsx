@@ -1145,8 +1145,8 @@ export const Beranda = () => {
         params: {
           p: activePageProcure,
           rp: 5,
-          o: order,
-          c: category,
+          o: orderProc,
+          c: categoryProc,
         },
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,

@@ -77,7 +77,7 @@ export const PenggunaAset = () => {
     } else if (roles === "Manager") {
       handleGetAllManagerRequest();
     }
-  }, [activePage, valueRadio, order, category, dates]);
+  }, [activePage, valueRadio, order, category, dates,reloadNumber]);
 
   useEffect(() => {
     if (roles === "Administrator") {

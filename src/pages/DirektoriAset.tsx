@@ -240,6 +240,7 @@ const DirektoriAset = () => {
               });
               navigate("/sign-in");
             }
+            fetchDataAset()
         });
     }
 

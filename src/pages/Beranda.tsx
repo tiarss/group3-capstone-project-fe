@@ -1091,12 +1091,11 @@ export const Beranda = () => {
   // Manager Logic
 
   const handleGetManagerReq = () => {
-    const pageView = (activePage - 1) * 5 + 1;
     setIsLoadingTable(true);
     axios
       .get(`/requests/manager/borrow`, {
         params: {
-          p: pageView,
+          p: activePage,
           rp: 5,
           o: order,
           c: category,

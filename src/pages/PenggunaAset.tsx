@@ -56,6 +56,7 @@ export const PenggunaAset = () => {
    const [category, setCategory] = useState("all");
    const [dates, setDates] = useState<string>("");
    const [reloadNumber, setReloadNumber] = useState(0);
+   const [orientation, setOrientation] = useState<any>("horizontal")
    //End Admin State
 
   let roles = localStorage.getItem("role");
@@ -66,6 +67,23 @@ export const PenggunaAset = () => {
     localStorage.setItem("id", "");
     localStorage.setItem("isAuth", JSON.stringify(false));
   };
+
+  useEffect(()=> {
+    const lebar = window.innerWidth;
+    if (lebar < 992 ) {
+      setOrientation("vertical");
+    } else {
+      setOrientation("horizontal");
+    }
+
+    window.addEventListener("resize", function () {
+      if(this.window.innerWidth < 992 ) {
+        setOrientation("vertical");
+      } else {
+        setOrientation("horizontal");
+      }
+    })
+  }, [])
 
   useEffect(() => {
     roleCondition();
@@ -857,6 +875,8 @@ export const PenggunaAset = () => {
           <Flex justifyContent='center'>
             <Box w='fit-content' position='absolute' top='-25px'>
               <SegmentedControl
+                fullWidth
+                orientation= {orientation}
                 transitionDuration={500}
                 transitionTimingFunction='linear'
                 styles={{
@@ -1227,7 +1247,7 @@ export const PenggunaAset = () => {
             </Box>
           </Flex>
           <Box bgColor='white' minHeight="500px" p='50px 20px 20px' borderRadius='10px' overflow="auto">
-            <Flex align="center" justify="start" marginTop={3} marginEnd={5}>
+            <Flex align="center" justify="start" marginTop={{base: "130px", lg: "10px"}} marginEnd={5}>
               <Box width="300px" my="10px">
                 <InputText type="date" title="Filter Tanggal" onChange={handleDate}/>
               </Box>

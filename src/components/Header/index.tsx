@@ -1,4 +1,4 @@
-import { ExternalLinkIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Text,
   Avatar,
@@ -18,6 +18,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { userContext } from "../../helper/UserContext";
 import logoWhite from "../../assets/Logo-sirclo-white.png";
 import { useNavigate } from "react-router-dom";
+import "@fontsource/open-sans";
 
 export const Header = () => {
   const toast = useToast();
@@ -59,12 +60,12 @@ export const Header = () => {
       })
       .then((res) => {
         const { data } = res.data;
-        console.log(data)
+        console.log(data);
         setUserData({
           name: data.name,
           avatar: data.avatar,
           id: data.id,
-          role: data.role
+          role: data.role,
         });
         setIsLoading(false);
       })
@@ -130,64 +131,116 @@ export const Header = () => {
       alignItems='center'>
       <Flex gap='5px'>
         <Image src={logoWhite} w='100px' mr='20px' />
-        <Button
-          color='white'
-          fontWeight='normal'
-          bgColor='#2296CB'
-          onClick={() => navigate("/beranda")}
-          _hover={{ bgColor: "#3CA9DB" }}
-          _focus={{ border: "none" }}
-          _active={{ bgColor: "#1788BB" }}>
-          Beranda
-        </Button>
-        <Button
-          display={role === 1 || role === 2 ? "block" : "none"}
-          fontWeight='medium'
-          color='white'
-          bgColor='#2296CB'
-          onClick={() => navigate("/direktori-aset")}
-          _hover={{ bgColor: "#3CA9DB" }}
-          _focus={{ border: "none" }}
-          _active={{ bgColor: "#1788BB" }}>
-          Direktori Aset
-        </Button>
-        <Button
-          display={role === 2 ? "block" : "none"}
-          fontWeight='medium'
-          color='white'
-          bgColor='#2296CB'
-          onClick={() => navigate("/pengguna-aset")}
-          _hover={{ bgColor: "#3CA9DB" }}
-          _focus={{ border: "none" }}
-          _active={{ bgColor: "#1788BB" }}>
-          {"Pengguna Aset"}
-        </Button>
-        <Button
-          display={role === 3 ? "block" : "none"}
-          fontWeight='medium'
-          color='white'
-          bgColor='#2296CB'
-          onClick={() => navigate("/permohonan")}
-          _hover={{ bgColor: "#3CA9DB" }}
-          _focus={{ border: "none" }}
-          _active={{ bgColor: "#1788BB" }}>
-          {"Permintaan Permohonan"}
-        </Button>
-        <Button
-          display={role === 2 || role === 3 ? "block" : "none"}
-          fontWeight='medium'
-          color='white'
-          bgColor='#2296CB'
-          onClick={() => navigate("/pengadaan-aset")}
-          _hover={{ bgColor: "#3CA9DB" }}
-          _focus={{ border: "none" }}
-          _active={{ bgColor: "#1788BB" }}>
-          Pengadaan Aset
-        </Button>
+        <Box display={{ base: "block", lg: "none" }}>
+          <Menu>
+            <MenuButton
+              as={Button}
+              bgColor='#2296CB'
+              padding='10px 15px'
+              letterSpacing='1px'
+              fontSize='15px'
+              fontWeight='medium'
+              color='white'
+              fontFamily='open sans'
+              transition='all 0.5s ease'
+              _hover={{
+                bgColor: "#3CA9DB",
+              }}
+              _focus={{
+                border: "none",
+              }}
+              _active={{
+                border: "none",
+                bgColor: "#1788BB",
+              }}
+              rightIcon={<ChevronDownIcon />}>
+              MENU
+            </MenuButton>
+            <MenuList color='blue.500'>
+              <MenuItem onClick={() => navigate("/beranda")}>Beranda</MenuItem>
+              <MenuItem
+                onClick={() => navigate("/direktori-aset")}
+                display={role === 1 || role === 2 ? "block" : "none"}>
+                Direktori Aset
+              </MenuItem>
+              <MenuItem
+                onClick={() => navigate("/pengguna-aset")}
+                display={role === 2 ? "block" : "none"}>
+                Pengguna Aset
+              </MenuItem>
+              <MenuItem
+                onClick={() => navigate("/permohonan")}
+                display={role === 3 ? "block" : "none"}>
+                Permohonan Permintaan
+              </MenuItem>
+              <MenuItem
+                onClick={() => navigate("/pengadaan-aset")}
+                display={role === 2 || role === 3 ? "block" : "none"}>
+                Pengadaan Aset
+              </MenuItem>
+            </MenuList>
+          </Menu>
+        </Box>
+        <Flex display={{ base: "none", lg: "flex" }}>
+          <Button
+            color='white'
+            fontWeight='normal'
+            bgColor='#2296CB'
+            onClick={() => navigate("/beranda")}
+            _hover={{ bgColor: "#3CA9DB" }}
+            _focus={{ border: "none" }}
+            _active={{ bgColor: "#1788BB" }}>
+            Beranda
+          </Button>
+          <Button
+            display={role === 1 || role === 2 ? "block" : "none"}
+            fontWeight='medium'
+            color='white'
+            bgColor='#2296CB'
+            onClick={() => navigate("/direktori-aset")}
+            _hover={{ bgColor: "#3CA9DB" }}
+            _focus={{ border: "none" }}
+            _active={{ bgColor: "#1788BB" }}>
+            Direktori Aset
+          </Button>
+          <Button
+            display={role === 2 ? "block" : "none"}
+            fontWeight='medium'
+            color='white'
+            bgColor='#2296CB'
+            onClick={() => navigate("/pengguna-aset")}
+            _hover={{ bgColor: "#3CA9DB" }}
+            _focus={{ border: "none" }}
+            _active={{ bgColor: "#1788BB" }}>
+            {"Pengguna Aset"}
+          </Button>
+          <Button
+            display={role === 3 ? "block" : "none"}
+            fontWeight='medium'
+            color='white'
+            bgColor='#2296CB'
+            onClick={() => navigate("/permohonan")}
+            _hover={{ bgColor: "#3CA9DB" }}
+            _focus={{ border: "none" }}
+            _active={{ bgColor: "#1788BB" }}>
+            {"Permintaan Permohonan"}
+          </Button>
+          <Button
+            display={role === 2 || role === 3 ? "block" : "none"}
+            fontWeight='medium'
+            color='white'
+            bgColor='#2296CB'
+            onClick={() => navigate("/pengadaan-aset")}
+            _hover={{ bgColor: "#3CA9DB" }}
+            _focus={{ border: "none" }}
+            _active={{ bgColor: "#1788BB" }}>
+            Pengadaan Aset
+          </Button>
+        </Flex>
       </Flex>
       <Box display='flex' alignItems='center'>
         <Text mr='10px' color='white'>
-          Hi! , 
+          Hi! ,
           {userData !== undefined
             ? userData.name === ""
               ? "Guest"

@@ -4,23 +4,35 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import "slick-carousel/slick/slick.css"; 
+import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import axios from "axios";
+import { MantineProvider } from "@mantine/core";
 
 const theme = extendTheme({
-  fonts:{
+  fonts: {
     heading: "Open Sans",
-    body:  "Open Sans"
-  }
-})
+    body: "Open Sans",
+  },
+});
 
 axios.defaults.baseURL = "https://klender.xyz";
 
 ReactDOM.render(
   <React.StrictMode>
     <ChakraProvider theme={theme}>
-      <App />
+      <MantineProvider
+        theme={{
+          breakpoints: {
+            xs: 500,
+            sm: 800,
+            md: 1000,
+            lg: 1200,
+            xl: 1400,
+          },
+        }}>
+        <App />
+      </MantineProvider>
     </ChakraProvider>
   </React.StrictMode>,
   document.getElementById("root")

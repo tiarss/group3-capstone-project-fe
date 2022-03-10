@@ -1,4 +1,4 @@
-import {
+ import {
   Box,
   Button,
   Flex,
@@ -45,6 +45,7 @@ import { HistoryModal } from "../components/HistoryModal";
 import { ModalProcure } from "../components/ModalActivity/Procure";
 import { useNavigate } from "react-router-dom";
 import { ChevronDownIcon } from "@chakra-ui/icons";
+import SlideShow from "../components/SlideShow";
 
 export const Beranda = () => {
   const toast = useToast();
@@ -1428,13 +1429,13 @@ export const Beranda = () => {
           flexDir={{ base: "column", lg: "row" }}
           gap='20px'>
           <Box
-            bgColor='white'
+            display='flex'
+            justifyContent='center'
+            alignItems="center"
             height='200px'
-            width='100%'
-            padding='20px'
+            width={{base:'100%', lg:"76%"}}
             borderRadius='10px'>
-            <Text fontSize='24px'>Welcome To</Text>
-            <Text>Employee Assets Management</Text>
+            <SlideShow />
           </Box>
           <Box
             bgColor='white'

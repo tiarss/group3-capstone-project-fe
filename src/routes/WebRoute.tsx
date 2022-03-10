@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { UserProvider } from "../helper/UserContext";
 import { Beranda } from "../pages/Beranda";
 import DirektoriAset from "../pages/DirektoriAset";
-import { Profile } from "../pages/Profile";
 import { PenggunaAset } from "../pages/PenggunaAset";
 import SignIn from "../pages/SignIn";
 import { NotFound } from "../pages/NotFound";
@@ -14,12 +13,24 @@ import { Redirect } from "../pages/Redirect";
 import ProtectedRoute from "../helper/ProtectedRoute";
 
 export const WebRoute = () => {
-  const role = localStorage.getItem("role");
+  //const role = localStorage.getItem("role");
   const [Maintained, setMaintained] = useState<boolean>(false);
+  const [role, setRole] = useState<string | null>("Employee");
+
+  const handleRole = () => {
+    const role = localStorage.getItem('role');
+    setRole(role);
+  }
+
+  useEffect(()=> {
+    handleRole();
+  }, [])
+  
   return (
     <BrowserRouter>
       <TriggerProvider>
         <MaintenanceContext.Provider value={{ Maintained, setMaintained }}>
+          {console.log(role)}
           <UserProvider>
             <Routes>
               <Route path='/' element={<Redirect />} />

@@ -39,6 +39,13 @@ type searchData = {
   value: string;
 };
 
+export type searchProps = {
+  data: searchData[];
+  value: string;
+  onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+};
+
 export type inputSelectStatusProps = {
   title?: string;
   type?: string;
@@ -49,6 +56,23 @@ export type inputSelectStatusProps = {
   data?: searchData[];
   isDisabled?: boolean;
 };
+
+export type detailAdminProps = {
+  nama: string | undefined;
+  total_aset: number | undefined;
+  deskripsi: string | undefined;
+  kategori: string | undefined;
+  backgroundImage?: string | undefined;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export type detailEmployeeProps = {
+  nama: string | undefined;
+  total_aset: number | undefined;
+  deskripsi: string | undefined;
+  kategori: string | undefined;
+  backgroundImage?: string | undefined;
+}
 
 export type inputSelectProps = {
   title?: string;
@@ -277,3 +301,18 @@ export type selectHistoryDataType = {
   id: number
   request_date: string
 }
+
+type userType = {
+  id: number;
+  name: string;
+  avatar: string;
+};
+
+export type userContextType = {
+  userData: userType;
+  setUserData: React.Dispatch<React.SetStateAction<userType>>;
+};
+
+export type userContextProviderProps = {
+  children: React.ReactNode;
+};

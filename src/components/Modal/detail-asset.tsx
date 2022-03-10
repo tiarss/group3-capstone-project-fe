@@ -1,5 +1,4 @@
 import { Button, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,  Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react";
-import React, { useState } from "react";
 import { modalProps } from "../../types";
 import DetailAdmin from "./admin/detail-asset-admin";
 import DetailEmployee from "./employee/detail-asset-employee";

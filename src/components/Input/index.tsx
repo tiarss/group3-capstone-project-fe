@@ -14,9 +14,8 @@ import {
   NumberInputField,
   NumberInputStepper,
   Select,
-  Text,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   inputPasswordProps,
   inputProps,
@@ -24,10 +23,12 @@ import {
   inputSelectDataUserProps,
   inputSelectProps,
   inputSelectStatusProps,
+  searchProps
 } from "../../types";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 import { SearchIcon } from "@chakra-ui/icons";
+
 
 export const InputText = ({
   title,
@@ -223,20 +224,6 @@ export const InputSelectDataUser = ({
   );
 };
 
-
-type searchData = {
-  id: number;
-  name: string;
-  value: string;
-};
-
-type searchProps = {
-  data: searchData[];
-  value: string;
-  onChangeSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  onChangeSelect: (e: React.ChangeEvent<HTMLSelectElement>) => void;
-};
-
 export const Search = ({
   data,
   value,
@@ -285,7 +272,6 @@ export const Search = ({
 };
 
 export const InputSelectStatus = ({
-  title,
   placeholder,
   size,
   value,
@@ -295,8 +281,6 @@ export const InputSelectStatus = ({
 }: inputSelectStatusProps) => {
   return (
     <Box>
-      {/* <FormLabel style={{ fontWeight: "bold", fontSize: "14px" }}>{title}</FormLabel> */}
-      {/* <Text style={{ fontWeight: "bold", fontSize: "14px" }}>{title}</Text> */}
       <Select
         bgColor='white'
         border='2px solid #373737'

@@ -19,7 +19,7 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import { Pagination } from "@mantine/core";
-import React, { ChangeEvent, useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   ButtonPrimary,
   ButtonSecondary,
@@ -39,7 +39,7 @@ import {
 } from "../types";
 import moment from "moment";
 import ModalAddAssets from "../components/Modal/tambah-asset";
-import { Trigger, triggerType } from "../helper/Trigger";
+import { Trigger } from "../helper/Trigger";
 import { AssignAssets } from "../components/AssignAssets";
 import { HistoryModal } from "../components/HistoryModal";
 import { ModalProcure } from "../components/ModalActivity/Procure";

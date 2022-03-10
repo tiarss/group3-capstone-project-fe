@@ -1,18 +1,9 @@
-import { Box, Button, FormControl, FormLabel, ModalBody, ModalFooter, Switch } from "@chakra-ui/react";
-import axios from "axios";
+import { Box, FormControl, FormLabel, Switch } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { detailAdminProps } from "../../../types";
 import { InputSelect, InputText } from "../../Input";
 
-type detailAdminProps = {
-    nama: string | undefined;
-    total_aset: number | undefined;
-    deskripsi: string | undefined;
-    kategori: string | undefined;
-    backgroundImage?: string | undefined;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-const DetailAdmin = ({nama, total_aset, deskripsi, kategori, backgroundImage, onChange}: detailAdminProps) => {
+const DetailAdmin = ({nama, total_aset, deskripsi, onChange}: detailAdminProps) => {
     const [ namaAset, setNamaAset ] = useState<string | undefined>(nama);
     const [ deskripsiAset, setDeskripsiAset ] = useState<string | undefined>(deskripsi);
     const [ kategoriAset, setKategoriAset ] = useState<{id: number, name: string}[]>([{id:1, name: "Laptop"}, {id:2, name:"Alat"}]);

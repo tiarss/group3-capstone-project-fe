@@ -1,8 +1,7 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import {
   Box,
   Text,
-  Button,
   Flex,
   Modal,
   ModalBody,

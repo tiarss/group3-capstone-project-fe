@@ -113,6 +113,7 @@ export const Beranda = () => {
   //End Admin State
 
   let roles = localStorage.getItem("role");
+  
   useEffect(() => {
     roleCondition();
     if (roles === "Administrator") {
@@ -364,6 +365,7 @@ export const Beranda = () => {
       .then((res) => {
         const { data } = res.data;
         const { total_record } = res.data;
+        console.log(data)
         setRequestData(data);
         setTotalData(total_record);
         setIsLoadingTable(false);
@@ -830,7 +832,7 @@ export const Beranda = () => {
         }
         const temp = selectedData;
         if (temp !== undefined) {
-          setSelectedData({ ...temp, activity: "Request to Return" });
+          setSelectedData({ ...temp, activity: "Request to Return"});
         }
         handleClose();
       })

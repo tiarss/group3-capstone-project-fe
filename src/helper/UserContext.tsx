@@ -4,6 +4,7 @@ type userType = {
   id: number;
   name: string;
   avatar: string;
+  role: string;
 };
 
 type userContextType = {
@@ -19,6 +20,7 @@ const setDefaultValue = {
   id: 0,
   name: "Guest",
   avatar: "",
+  role: "Employee"
 };
 
 export const userContext = createContext({} as userContextType);

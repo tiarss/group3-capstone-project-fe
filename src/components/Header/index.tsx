@@ -59,10 +59,12 @@ export const Header = () => {
       })
       .then((res) => {
         const { data } = res.data;
+        console.log(data)
         setUserData({
           name: data.name,
           avatar: data.avatar,
           id: data.id,
+          role: data.role
         });
         setIsLoading(false);
       })
@@ -150,7 +152,7 @@ export const Header = () => {
           Direktori Aset
         </Button>
         <Button
-          display={role === 2 || role === 3 ? "block" : "none"}
+          display={role === 2 ? "block" : "none"}
           fontWeight='medium'
           color='white'
           bgColor='#2296CB'
@@ -158,7 +160,18 @@ export const Header = () => {
           _hover={{ bgColor: "#3CA9DB" }}
           _focus={{ border: "none" }}
           _active={{ bgColor: "#1788BB" }}>
-          {role === 2 ? "Pengguna Aset" : "Permintaan Permohonan"}
+          {"Pengguna Aset"}
+        </Button>
+        <Button
+          display={role === 3 ? "block" : "none"}
+          fontWeight='medium'
+          color='white'
+          bgColor='#2296CB'
+          onClick={() => navigate("/permohonan")}
+          _hover={{ bgColor: "#3CA9DB" }}
+          _focus={{ border: "none" }}
+          _active={{ bgColor: "#1788BB" }}>
+          {"Permintaan Permohonan"}
         </Button>
         <Button
           display={role === 2 || role === 3 ? "block" : "none"}

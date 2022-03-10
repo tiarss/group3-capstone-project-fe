@@ -76,6 +76,8 @@ export const PenggunaAset = () => {
       handleGetAllRequest();
     } else if (roles === "Manager") {
       handleGetAllManagerRequest();
+    }else{
+      navigate("/not-found")
     }
   }, [activePage, valueRadio, order, category, dates,reloadNumber]);
 
@@ -93,11 +95,12 @@ export const PenggunaAset = () => {
       handleGetManagerApproved();
       handleGetManagerRejected();
       handleGetManagerReturned();
+    }else{
+      navigate("/not-found")
     }
   }, [activePage, order, valueRadio, category, dates, reloadNumber]);
 
   const roleCondition = () => {
-    const roles = localStorage.getItem("role");
     if (roles === "Employee") {
       setRole(1);
     } else if (roles === "Administrator") {
@@ -118,6 +121,7 @@ export const PenggunaAset = () => {
     if (filtering !== undefined) {
       setSelectedIdReq(filtering?.id);
     }
+    console.log(filtering)
     setIsOpen(true);
   };
   const handleClose = () => setIsOpen(false);
@@ -153,6 +157,7 @@ export const PenggunaAset = () => {
       .then((res) => {
         const { data } = res.data;
         const { total_record } = res.data;
+        console.log(data)
         setRequestData(data);
         setTotalData(total_record);
         setIsLoadingTable(false);
@@ -527,7 +532,8 @@ export const PenggunaAset = () => {
         if (temp !== undefined) {
           setSelectedData({ ...temp, activity: "Request to Return" });
         }
-        handleClose();
+        setReloadNumber(reloadNumber+1);
+        handleGetAllRequest();
       })
       .catch((err) => {
         const { data } = err.response;

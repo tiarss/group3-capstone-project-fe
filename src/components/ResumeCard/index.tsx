@@ -1,7 +1,8 @@
 import { Box, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Trigger } from "../../helper/Trigger";
 
 export const ResumeCard = () => {
   const toast = useToast()

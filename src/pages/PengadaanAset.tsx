@@ -66,6 +66,8 @@ const PengadaanAset = () => {
       handleGetAllRequest();
     } else if (roles === "Manager") {
       handleGetManagerAllRequest();
+    } else{
+      navigate('/not-found')
     }
   }, [activePage, order, valueRadio, category, dates]);
 
@@ -81,6 +83,8 @@ const PengadaanAset = () => {
       handleGetManagerWaiting();
       handleGetManagerApproved();
       handleGetManagerRejected();
+    }else{
+      navigate('/not-found')
     }
   }, [activePage, order, valueRadio, category, dates, reloadNumber]);
 

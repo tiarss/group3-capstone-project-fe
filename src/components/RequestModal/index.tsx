@@ -86,6 +86,7 @@ export const RequestModal = ({
       })
       .catch((err) => {
         console.log(err.response);
+        console.log("test")
       });
   };
 

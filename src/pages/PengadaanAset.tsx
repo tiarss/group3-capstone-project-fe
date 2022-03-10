@@ -899,6 +899,9 @@ const PengadaanAset = () => {
                 />
               </Box>
             </Flex>
+            <Box overflowX='auto'>
+
+            
             <Table minW='800px' size='sm' borderRadius='20px'>
               <TableCaption>
                 {requestData === null ? "Tidak ada Data" : ""}
@@ -1071,6 +1074,7 @@ const PengadaanAset = () => {
                 onChange={handlePage}
               />
             </Flex>
+            </Box>
           </Box>
         </Box>
       </Box>

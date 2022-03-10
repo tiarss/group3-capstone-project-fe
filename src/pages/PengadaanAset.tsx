@@ -54,9 +54,27 @@ const PengadaanAset = () => {
   const [category, setCategory] = useState("all");
   const [dates, setDates] = useState<string>("");
   const [reloadNumber, setReloadNumber] = useState(0);
+  const [orientation, setOrientation] = useState<any>("horizontal")
   //End Admin State
 
   let roles = localStorage.getItem("role");
+
+  useEffect(()=> {
+    const lebar = window.innerWidth;
+    if (lebar < 768 ) {
+      setOrientation("vertical");
+    } else {
+      setOrientation("horizontal");
+    }
+
+    window.addEventListener("resize", function () {
+      if(this.window.innerWidth < 768 ) {
+        setOrientation("vertical");
+      } else {
+        setOrientation("horizontal");
+      }
+    })
+  }, [])
 
   useEffect(() => {
     roleCondition();
@@ -739,9 +757,11 @@ const PengadaanAset = () => {
           <Text textAlign='center' fontSize="14px">Berisi Informasi Permintaan Pengadaan Aset</Text>
         </Box>
         <Box position='relative'>
-          <Flex justifyContent='center'>
+          <Flex justifyContent='center' >
             <Box w='fit-content' position='absolute' top='-25px'>
               <SegmentedControl
+                fullWidth
+                orientation= {orientation}
                 transitionDuration={500}
                 transitionTimingFunction='linear'
                 styles={{
@@ -887,8 +907,8 @@ const PengadaanAset = () => {
               />
             </Box>
           </Flex>
-          <Box bgColor='white' p='20px' borderRadius='10px' minH="500px">
-            <Flex justify="start">
+          <Box bgColor='white' p='50px 20px 20px' borderRadius='10px' minH="500px" overflow="auto">
+            <Flex justify="start" marginTop={{base: "130px", lg: "10px"}}>
               <Box width="300px" my="10px">
                 <InputText
                   type='date'

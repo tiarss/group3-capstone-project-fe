@@ -31,7 +31,6 @@ export const ModalActivity = ({
   handleRejectReqManager,
   handleRejectReqAdmin,
 }: requestModalProps) => {
-
   let status = "";
 
   if (role === 1) {
@@ -144,7 +143,7 @@ export const ModalActivity = ({
                     Status Pengajuan
                   </Text>
                   <Tag
-                    mt="5px"
+                    mt='5px'
                     size='sm'
                     variant='subtle'
                     colorScheme={
@@ -190,8 +189,12 @@ export const ModalActivity = ({
                           : status === "Rejected by Admin"
                           ? "Ditolak Admin"
                           : "Dibatalkan"
-                        : status === "Waiting approval"
-                        ? "Menunggu Persetujuan Pengembalian"
+                        : data?.activity === "Return"
+                        ? status === "Waiting approval"
+                          ? "Menunggu Persetujuan Pengembalian"
+                          : "Dikembalikan"
+                        : status === "Approved by Admin"
+                        ? "Permohonan Pengembalian"
                         : "Dikembalikan"
                       : status === "Waiting approval from Manager"
                       ? "Menunggu Persetujuan Manager"
@@ -453,27 +456,47 @@ export const ModalActivity = ({
                     />
                   </Flex>
                 )
-              ) : status === "Waiting approval from Admin" ? (
-                <Flex gap='10px' justifyContent='end'>
-                  {/* <ButtonSecondary
+              ) : data?.activity === "Return" ? (
+                status === "Waiting approval from Admin" ? (
+                  <Flex gap='10px' justifyContent='end'>
+                    {/* <ButtonSecondary
                     title='Kemb'
                     onclick={onClose}
                     isDisabled={true}
                   /> */}
+                    <ButtonPrimary
+                      title='Terima Permohonan'
+                      onclick={handleAcceptReturn}
+                    />
+                  </Flex>
+                ) : (
+                  <Flex gap='10px' justifyContent='end'>
+                    <ButtonSecondary title='Kembali' onclick={onClose} />
+                    <ButtonPrimary
+                      title='Terima Permohonan'
+                      isDisabled={true}
+                    />
+                  </Flex>
+                )
+              ) : status === "Approved by Admin" ? (
+                <Flex gap='10px' justifyContent='end'>
+                  <ButtonSecondary title='Kembali' onclick={onClose} />
                   <ButtonPrimary
-                    title='Terima Permohonan'
-                    onclick={handleAcceptReturn}
+                    title='Ajukan Pengembalian'
+                    isDisabled={true}
                   />
                 </Flex>
               ) : (
                 <Flex gap='10px' justifyContent='end'>
                   <ButtonSecondary title='Kembali' onclick={onClose} />
-                  <ButtonPrimary title='Terima Permohonan' isDisabled={true} />
+                  <ButtonPrimary
+                    title='Ajukan Pengembalian'
+                    isDisabled={true}
+                  />
                 </Flex>
-
-                // Punya manajer
               )
-            ) : status === "Waiting approval from Manager" ? (
+            ) : // Punya manajer
+            status === "Waiting approval from Manager" ? (
               <Flex gap='10px' justifyContent='end'>
                 <ButtonSecondary
                   title='Tolak'

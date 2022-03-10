@@ -113,6 +113,7 @@ export const Beranda = () => {
   //End Admin State
 
   let roles = localStorage.getItem("role");
+  
   useEffect(() => {
     roleCondition();
     if (roles === "Administrator") {
@@ -364,6 +365,7 @@ export const Beranda = () => {
       .then((res) => {
         const { data } = res.data;
         const { total_record } = res.data;
+        console.log(data)
         setRequestData(data);
         setTotalData(total_record);
         setIsLoadingTable(false);
@@ -830,7 +832,7 @@ export const Beranda = () => {
         }
         const temp = selectedData;
         if (temp !== undefined) {
-          setSelectedData({ ...temp, activity: "Request to Return" });
+          setSelectedData({ ...temp, activity: "Request to Return"});
         }
         handleClose();
       })
@@ -1091,12 +1093,11 @@ export const Beranda = () => {
   // Manager Logic
 
   const handleGetManagerReq = () => {
-    const pageView = (activePage - 1) * 5 + 1;
     setIsLoadingTable(true);
     axios
       .get(`/requests/manager/borrow`, {
         params: {
-          p: pageView,
+          p: activePage,
           rp: 5,
           o: order,
           c: category,
@@ -1314,7 +1315,6 @@ export const Beranda = () => {
       )
       .then((res) => {
         const { data } = res;
-        console.log(data);
         if (data.code === 200) {
           toast({
             title: "Berhasil Menerima Permintaan Pengadaan Aset",

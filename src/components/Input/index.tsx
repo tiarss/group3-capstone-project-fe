@@ -15,7 +15,7 @@ import {
   NumberInputStepper,
   Select,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   inputPasswordProps,
   inputProps,

@@ -1,15 +1,17 @@
 import { Box, Flex, Image, Text, useToast } from "@chakra-ui/react";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { ButtonPrimary } from "../components/Button";
 import { InputPassword, InputText } from "../components/Input";
 import bgLogin from "../assets/login.png";
 import logoBlue from "../assets/Logo-sirclo.png";
 import { useNavigate } from "react-router-dom";
+import { userContext } from "../helper/UserContext";
 
 const SignIn = () => {
   const toast = useToast()
   const navigate = useNavigate()
+  const {userData, setUserData} = useContext(userContext)
   const [userLogin, setUserLogin] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
 
@@ -34,7 +36,8 @@ const SignIn = () => {
         localStorage.setItem("token", data.token);
         localStorage.setItem("expired", data.expire);
         localStorage.setItem('role', data.role);
-        localStorage.setItem('id', data.id)
+        localStorage.setItem('id', data.id);
+        localStorage.setItem('reload', "1");
         localStorage.setItem("isAuth", JSON.stringify(true));
         console.log(data)
         if (code === 200) {

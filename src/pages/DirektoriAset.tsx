@@ -293,10 +293,10 @@ const DirektoriAset = () => {
           onChangeSearch={handleSearch}
           onChangeSelect={handleSelect}
         />
-        <Flex align='center' justify='center' mt={50}>
+        <Flex align='center' justify='center' mt={50} padding={{ base: "50px 25px", md: "50px", lg: "50px 100px" }}>
           <Box
             bg='white'
-            width={1080}
+            // width={1080}
             maxHeight={605}
             borderRadius={7}
             shadow='xl'
@@ -322,7 +322,7 @@ const DirektoriAset = () => {
                     isDisabled={false}
                   />
                 </Flex>
-                <Wrap spacing='50px'>
+                <Flex flexWrap="wrap" justifyContent={{base:"center", md:"space-between"}} gap={{base:"30px", md:'50px'}}>
                   {asset
                     .filter(
                       (el) =>
@@ -343,7 +343,7 @@ const DirektoriAset = () => {
                         onClick={() => handleDetail(item.short_name)}
                       />
                     ))}
-                </Wrap>
+                </Flex>
               </Box>
             </Flex>
           </Box>

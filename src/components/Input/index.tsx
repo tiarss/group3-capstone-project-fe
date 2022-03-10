@@ -232,7 +232,7 @@ export const Search = ({
 }: searchProps) => {
   return (
     <Flex align='center' justify='center' mt={9}>
-      <Flex>
+      <Flex bgColor="white" borderRadius="10px">
         <Select
           bg='#2296CB'
           borderColor='#2296CB'
@@ -259,7 +259,9 @@ export const Search = ({
             children={<SearchIcon color='#2296CB' />}
           />
           <Input
-            width={700}
+          width={{base:"250px", md:"450px", lg:"700px"}}
+            outline="none"
+            border="none"
             bg='white'
             type='text'
             placeholder='Cari Barang'

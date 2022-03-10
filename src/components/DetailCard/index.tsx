@@ -1,5 +1,4 @@
-import { Box, Button, Flex, Spacer, Text } from "@chakra-ui/react";
-import React from "react";
+import { Box, Flex, Spacer, Text } from "@chakra-ui/react";
 import { CardDetailProps } from "../../types";
 import { ButtonSecondary } from "../Button";
 

@@ -1,14 +1,8 @@
 import { Box, FormLabel, Text } from "@chakra-ui/react";
 import React, { useContext } from "react";
 import { MaintenanceContext } from "../../../helper/MaintenanceContext";
+import { detailEmployeeProps } from "../../../types";
 
-type detailEmployeeProps = {
-    nama: string | undefined;
-    total_aset: number | undefined;
-    deskripsi: string | undefined;
-    kategori: string | undefined;
-    backgroundImage?: string | undefined;
-}
 const DetailEmployee = ({nama, total_aset, deskripsi, kategori, backgroundImage}: detailEmployeeProps) => {
     const {Maintained, setMaintained} = useContext(MaintenanceContext);
     return(

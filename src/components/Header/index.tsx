@@ -1,4 +1,4 @@
-import { AddIcon, ExternalLinkIcon, HamburgerIcon } from "@chakra-ui/icons";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 import {
   Text,
   Avatar,

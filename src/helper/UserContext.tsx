@@ -1,19 +1,5 @@
 import React, { createContext, useState } from "react";
-
-type userType = {
-  id: number;
-  name: string;
-  avatar: string;
-};
-
-type userContextType = {
-  userData: userType;
-  setUserData: React.Dispatch<React.SetStateAction<userType>>;
-};
-
-type userContextProviderProps = {
-  children: React.ReactNode;
-};
+import { userContextProviderProps, userContextType } from "../types";
 
 const setDefaultValue = {
   id: 0,

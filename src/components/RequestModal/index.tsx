@@ -1,8 +1,5 @@
 import {
-  Box,
-  Button,
   Flex,
-  HTMLChakraComponents,
   Modal,
   ModalBody,
   ModalCloseButton,
@@ -10,9 +7,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Switch,
-  Text,
-  useDisclosure,
 } from "@chakra-ui/react";
 import axios from "axios";
 import React, { useEffect, useState } from "react";

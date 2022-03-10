@@ -1,17 +1,6 @@
 import { Box, Table, Tbody, Td, Text, Th, Thead, Tr } from "@chakra-ui/react";
 import moment from "moment";
-import React from "react";
-import { history, modalProps } from "../../../types";
-
-// type historyProps = {
-//     category: string | undefined;
-//     asset_name: string | undefined;
-//     asset_image: string | undefined;
-//     id: number | undefined;
-//     user_name: string | undefined;
-//     request_date: string | undefined;
-//     status: string | undefined;
-// }
+import { history } from "../../../types";
 
 const HistoryAset = ({category, asset_name, asset_image, users}: history) => {
     return(

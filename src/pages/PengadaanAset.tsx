@@ -39,8 +39,6 @@ const PengadaanAset = () => {
   const [activePage, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
   const [role, setRole] = useState(1);
-  const [all, setAll] = useState<any[]>();
-  const idUser = localStorage.getItem("id");
   const dummy = [1, 2, 3, 4, 5];
   //Count Number Status
   const [countAll, setCountAll] = useState<number>(0);

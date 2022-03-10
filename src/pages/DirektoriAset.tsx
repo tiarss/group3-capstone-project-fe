@@ -1,11 +1,10 @@
-import { SearchIcon } from "@chakra-ui/icons";
-import { Box, Flex, HStack, Input, InputGroup, InputLeftElement, Select, Spacer, Text, useDisclosure, useToast, Wrap } from "@chakra-ui/react";
+import { Box, Flex, Text, useToast, Wrap } from "@chakra-ui/react";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CardDetail from "../components/DetailCard";
 import { Header } from "../components/Header";
-import { InputSelect, InputSelectStatus, Search } from "../components/Input";
+import { InputSelectStatus, Search } from "../components/Input";
 import ModalDetailAsset from "../components/Modal/detail-asset";
 import { MaintenanceContext } from "../helper/MaintenanceContext";
 
@@ -283,27 +282,3 @@ const DirektoriAset = () => {
     )
 }
 export default DirektoriAset;
-
-// {data
-//     .filter(
-//       (el) =>
-//         el.content //content bisa di ganti name
-//           .toLowerCase()
-//           .includes(textSearch.toLowerCase()) ||
-//         el.description // description tetep description
-//           .toLowerCase()
-//           .includes(textSearch.toLowerCase())
-//     )
-//     .map((value) => (
-//       <Todo
-//         key={value.id}
-//         title={value.content}
-//         description={value.description}
-//         completed={value.completed}
-//         loading={this.state.isLoading}
-//         onClickDeleted={() => this.handleDelete(value.id)}
-//         onClickEdited={() => this.handleEdited(value.id)}
-//         onClickCompleted={() => this.handleCompleted(value.id)}
-//         onClickDetails={() => this.handleDetails(value.id)}
-//       />
-//     ))}

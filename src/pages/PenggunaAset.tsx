@@ -39,9 +39,6 @@ export const PenggunaAset = () => {
   const [activePage, setPage] = useState(1);
   const [totalData, setTotalData] = useState(0);
   const [role, setRole] = useState(1);
-  const [all, setAll] = useState<any[]>();
-  const idUser = localStorage.getItem("id");
-  const dummy = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const [countAll, setCountAll] = useState<number>(0);
   const [countWaiting, setCountWaiting] = useState<number>(0);
   const [countApproved, setCountApproved] = useState<number>(0);

@@ -156,7 +156,7 @@ export const Header = () => {
               rightIcon={<ChevronDownIcon />}>
               MENU
             </MenuButton>
-            <MenuList color='blue.500'>
+            <MenuList color='blue.500' zIndex={3}>
               <MenuItem onClick={() => navigate("/beranda")}>Beranda</MenuItem>
               <MenuItem
                 onClick={() => navigate("/direktori-aset")}

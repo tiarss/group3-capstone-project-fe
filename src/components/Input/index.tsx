@@ -259,7 +259,7 @@ export const Search = ({
             children={<SearchIcon color='#2296CB' />}
           />
           <Input
-          width={{base:"250px", md:"450px", lg:"700px"}}
+          width={{base:"190px", sm:"250px", md:"450px", lg:"700px"}}
             outline="none"
             border="none"
             bg='white'

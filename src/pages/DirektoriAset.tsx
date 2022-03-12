@@ -296,7 +296,7 @@ const DirektoriAset = () => {
         <Flex align='center' justify='center' mt={50} padding={{ base: "50px 25px", md: "50px", lg: "50px 100px" }}>
           <Box
             bg='white'
-            // width={1080}
+            minHeight={604}
             maxHeight={605}
             borderRadius={7}
             shadow='xl'

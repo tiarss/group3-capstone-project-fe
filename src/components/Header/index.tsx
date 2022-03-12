@@ -139,6 +139,7 @@ export const Header = () => {
               padding='10px 15px'
               letterSpacing='1px'
               fontSize='15px'
+              size={{base:"sm", md:"md"}}
               fontWeight='medium'
               color='white'
               fontFamily='open sans'
@@ -239,7 +240,7 @@ export const Header = () => {
         </Flex>
       </Flex>
       <Box display='flex' alignItems='center'>
-        <Text mr='10px' color='white'>
+        <Text mr='10px' color='white' display={{ base: "none", lg: "block" }}>
           Hi! ,
           {userData !== undefined
             ? userData.name === ""
@@ -266,6 +267,7 @@ export const Header = () => {
             }
             variant='outline'></MenuButton>
           <MenuList>
+            <Text p="10px" fontSize="14px">Hi, {userData.name}</Text>
             <MenuItem icon={<ExternalLinkIcon />} onClick={handleLogOut}>
               Log Out
             </MenuItem>

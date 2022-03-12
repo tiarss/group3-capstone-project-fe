@@ -208,14 +208,14 @@ function SliderImage() {
             justifyContent='center'
             padding='10px 20px'>
             <Box
-              width='250px'
-              height='175px'
+              width={{base: "180px" ,md:'250px'}}
+              height={{base: "150",md:'175px'}}
               bgColor='white'
               borderRadius='10px'
               overflow="hidden"
               boxShadow='rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px'>
               <Flex
-                height='125px'
+                height={{base:"100px",md:'125px'}}
                 padding='10px'
                 position='relative'
                 flexDir='column'
@@ -286,39 +286,18 @@ function SliderImage() {
                     ? "Permintaan Pengembalian"
                     : "Dikembalikan"}
                 </Tag>
-                {/* <Text
-                  borderRadius='5px'
-                  fontSize='12px'
-                  padding='5px 7px'
-                  fontWeight='semibold'
-                  color="white"
-                  bgColor={value.status.includes("Approved") ? "#009D77" : value.status.includes("Waiting") ? "#E97500" : "#CF3030"}
-                  >
-                  {value.activity_type === "Borrow"
-                        ? value.status === "Waiting approval"
-                          ? "Menunggu Persetujuan"
-                          : value.status === "Approved by Manager"
-                          ? "Diterima Manager"
-                          : value.status === "Rejected by Manager"
-                          ? "Ditolak Manager"
-                          : value.status === "Approved by Admin"
-                          ? "Diterima"
-                          : value.status === "Rejected by Admin"
-                          ? "Ditolak Admin"
-                          : "Dibatalkan"
-                        : value.status === "Waiting approval"
-                        ? "Proses Pengembalian"
-                        : "Dikembalikan"}
-                </Text> */}
-                <Tooltip label='Details' placement='top'>
+                <Box ml="10px">
+
+                <Tooltip label='Details' placement='top' >
                   <InfoIcon
                     onClick={() => handleOpen(value.id)}
                     cursor='pointer'
                     transition='all 0.3s ease'
                     _hover={{ color: "#222222" }}
                     _active={{ color: "#2A2A2A" }}
-                  />
+                    />
                 </Tooltip>
+                    </Box>
               </Flex>
             </Box>
           </Box>
